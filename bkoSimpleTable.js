@@ -69,15 +69,11 @@
                 series: [{
                   type: 'pie',
                   name: jsObj.columnNames[2], //CHANGE Key name EX: Employees
-                  data: convertToArray(jsObj, jsObj.columnNames.length-1, jsObj.values.length) //CHANGE
+                  data: dataArr //CHANGE
 
                 }]
               });
               //};
-
-
-
-
             }
         };
     });
