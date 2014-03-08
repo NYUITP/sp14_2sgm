@@ -3,20 +3,42 @@
     beaker.bkoDirective("SimpleTable", function () {
         return {
             template: '<div>'
-            +   '<form ng-submit="link">'
+            //+   '<form ng-sumbit="scope.myFunction()">'
             +   'Chart Title: <input id="title" type="text"><br>'
             +   'Unit:        <input id="unit" type="text"><br>'
+            //+   '<input type="button" value="Submit" onclick="link.myFunction()">'
             +   '<input type="submit" value="Submit">'
-            +   '</form>'
+            //+   '</form>'
             + '<div id="container"></div>'
             + '</div>',
-            
+            //CHANGE: Select Category Column and Number Column (only 2 columns work)
             link: function (scope, element, attrs) {
-              //scope.x=document.getElementById("container")  //Find the element
-              //scope.x.innerHTML="Hello JavaScript";  
+ 
               var title = document.getElementById("title").value;  
               var unit = document.getElementById("unit").value;
 
+              function convertToArray(obj, col, row){
+                var arr = new Array();
+                for(var i = 0; i < row; i++) {
+                  arr[i] = new Array();
+                  for(var j = 0; j < col; j++) {
+                    var out=jsObj.values[i][j+1].trim();
+                    if(j==1) out=parseInt(out); //CHANGE int/float user input
+                    arr[i][j] = out;
+                    console.log("arr["+i+"]["+j+"] = [" + arr[i][j]+"]\n");
+                  }
+                }
+                return arr;
+              }
+
+              var jsObj = scope.model.getCellModel();
+              console.log(jsObj);
+              console.log(jsObj.columnNames.length-1);
+              console.log(jsObj.values.length);
+              var dataArr = convertToArray(jsObj, jsObj.columnNames.length-1, jsObj.values.length);
+              console.log(dataArr);
+
+              //function myFunction (){ 
               $('#container').highcharts({
                 chart: {
                   plotBackgroundColor: null,
@@ -24,13 +46,13 @@
                   plotShadow: false
                 },
                 title: {
-                  text: 'Browser market shares at a specific website, 2010' //CHANGE
+                  text: 'Pie Chart'//CHANGE
                 },
-                /* Default to <span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>
+                // Default to <span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>
                 tooltip: {
-                  pointFormat: '{series.name}: <b>{point.percentage:.1f}</b>' //CHANGE Value Unit: {point.percentage:.1f} unit EX: Employee
+                  pointFormat: '{series.name}: <b>{point.y}</b>' //CHANGE Value Unit: {point.percentage:.1f} unit EX: Employee
                 },
-                */
+                
                 plotOptions: {
                   pie: {
                     allowPointSelect: true,
@@ -39,24 +61,23 @@
                       enabled: true,
                       color: '#000000',
                       connectorColor: '#000000',
-                      format: '<b>{point.name}</b>: {point.y}' //CHANGE Value unit: {point.y} unit EX: Employee
+                      format: '<b>{point.name}</b>: {point.y} '+jsObj.columnNames[2] //CHANGE Value unit: {point.y} unit EX: Employee
                       
                     }
                   }
                 },
                 series: [{
                   type: 'pie',
-                  name: 'Browser share', //CHANGE Key name EX: City
-                  data: [ //CHANGE
-                    ['Firefox',   45.0],
-                    ['IE',       26.8],
-                    ['Chrome',  12.8],
-                    ['Safari',    8.5],
-                    ['Opera',     6.2],
-                    ['Others',   0.7]
-                  ]
+                  name: jsObj.columnNames[2], //CHANGE Key name EX: Employees
+                  data: convertToArray(jsObj, jsObj.columnNames.length-1, jsObj.values.length) //CHANGE
+
                 }]
               });
+              //};
+
+
+
+
             }
         };
     });
