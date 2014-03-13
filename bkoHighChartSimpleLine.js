@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    beaker.bkoDirective("SimpleLine", function () {
+    beaker.bkoDirective("HighChart_LineChart", function () {
  return {
 	template: '<div id="container"></div>',
 	link: function (scope, element, attrs) {
