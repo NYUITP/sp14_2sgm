@@ -21,7 +21,7 @@
                 for(var i = 0; i < row; i++) {
                   arr[i] = new Array();
                   for(var j = 0; j < col; j++) {
-		    var out = jsObj.values[i][j].trim();
+		    var out = obj.values[i][j].trim();
                     arr[i][j] = out;
                   }
                 }
