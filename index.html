@@ -1,36 +1,17 @@
-//Author Di Wu
-(function () {
-    'use strict';
-    beaker.bkoDirective("d3_bubble", function () {
-      return {
-        template: '<div id="container"></div>',
-        link: function (scope, element, attrs) {
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
 
-          var jsObj = scope.model.getCellModel();
-          var colName = jsObj.columnNames[2];
-          var myjsonHead = '{"name": "' + colName + '","children": [';
-          var myjsonTail = ']}';
-          //console.log(myjsonHead + myjsonTail);
-          var myjsonBody = formJSONbody(jsObj.values.length);
-          //console.log(myjsonBody);
-          var myjson = myjsonHead + myjsonBody + myjsonTail;
-          console.log(myjson);
+text {
+  font: 10px sans-serif;
+}
 
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
 
-          function formJSONbody(row) {
-            var str = '';
-            for(var i = 0; i < row; i++) {
-              var arr = jsObj.values[i];
-              str += '{"name": ' + '"' + jsObj.values[i][1].trim() + '"' + ', "size": ' + jsObj.values[i][2].trim() + "},";
-            }
-            return str.substring(0, str.length-1);
-          }
-          
-
-//var myjson = '{"name": "flare","children": [{"name": "MergeEdge", "size": 10 }]}';
-
-
-var diameter = 250,
+var diameter = 960,
     format = d3.format(",d"),
     color = d3.scale.category20c();
 
@@ -39,14 +20,12 @@ var bubble = d3.layout.pack()
     .size([diameter, diameter])
     .padding(1.5);
 
-var svg = d3.select("#container").append("svg")
+var svg = d3.select("body").append("svg")
     .attr("width", diameter)
     .attr("height", diameter)
     .attr("class", "bubble");
 
-var root = JSON.parse(myjson);
-
-//d3.json("flare.json", function(error, root) {
+d3.json("http://localhost:3000/flare.json", function(error, root) {
   var node = svg.selectAll(".node")
       .data(bubble.nodes(classes(root))
       .filter(function(d) { return !d.children; }))
@@ -65,7 +44,7 @@ var root = JSON.parse(myjson);
       .attr("dy", ".3em")
       .style("text-anchor", "middle")
       .text(function(d) { return d.className.substring(0, d.r / 3); });
-//});
+});
 
 // Returns a flattened hierarchy containing all leaf nodes under the root.
 function classes(root) {
@@ -82,13 +61,4 @@ function classes(root) {
 
 d3.select(self.frameElement).style("height", diameter + "px");
 
-
-
-
-
-
-
-        }
-      };
-    });
-})();
+</script>
