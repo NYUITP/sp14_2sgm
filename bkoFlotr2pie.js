@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    beaker.bkoDirective("pie43", function () {
+    beaker.bkoDirective("flotr2_pie", function () {
  return {
 	template: '<div id="container" style="width:600px;height:384px;margin:8px auto"></div>',
 	link: function (scope, element, attrs) {
