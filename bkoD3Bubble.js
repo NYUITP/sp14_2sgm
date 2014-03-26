@@ -1,3 +1,4 @@
+//author: Di Wu
 (function () {
     'use strict';
     beaker.bkoDirective("d3_bubble", function () {
@@ -28,6 +29,15 @@
 
 //var myjson = '{"name": "flare","children": [{"name": "MergeEdge", "size": 10 }]}';
 
+var myData = {"name": "flare","children": [{"name": "MergeEdge", "size": 10 }]};
+
+var myData = {};
+
+for () {
+  myData.name = "flare"
+  myData.children = [];
+}
+
 
 var diameter = 250,
     format = d3.format(",d"),
@@ -45,7 +55,8 @@ var svg = d3.select("#container").append("svg")
 
 var root = JSON.parse(myjson);
 
-//d3.json("flare.json", function(error, root) {
+//d3.json("flare.json", 
+  var myFunc = function(error, root) {
   var node = svg.selectAll(".node")
       .data(bubble.nodes(classes(root))
       .filter(function(d) { return !d.children; }))
@@ -64,7 +75,9 @@ var root = JSON.parse(myjson);
       .attr("dy", ".3em")
       .style("text-anchor", "middle")
       .text(function(d) { return d.className.substring(0, d.r / 3); });
+    };
 //});
+myFunc(null, myData);
 
 // Returns a flattened hierarchy containing all leaf nodes under the root.
 function classes(root) {
