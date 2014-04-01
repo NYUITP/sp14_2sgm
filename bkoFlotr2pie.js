@@ -78,37 +78,23 @@
 		var jsObj = scope.model.getCellModel();
 		getColumnValues(jsObj, jsObj.columnNames.length-1, jsObj.values.length);
 		var arr1, arr2, arr3;
-		if((x==1) && (y==2)) { arr1 = arrCol1.slice(); arr2 = arrCol2.slice(); arr3 = arrCol3.slice(); }
-      		else if((x==1) && (y==3)) { arr1 = arrCol1.slice(); arr2 = arrCol2.slice(); arr3 = arrCol3.slice(); }			 
-      		//else if((x==2) && (y==1)) { arr1 = arrCol2.slice(); arr2 = arrCol1.slice(); arr3 = arrCol3.slice(); }	
-      		//else if((x==2) && (y==3)) { arr1 = arrCol2.slice(); arr2 = arrCol3.slice(); arr3 = arrCol1.slice(); }
-      		//else if((x==3) && (y==1)) { arr1 = arrCol3.slice(); arr2 = arrCol1.slice(); arr3 = arrCol2.slice(); }	
-      		//else if((x==3) && (y==2)) { arr1 = arrCol3.slice(); arr2 = arrCol2.slice(); arr3 = arrCol1.slice(); }	       
+		if((x==1) && (y==2)) { arr1 = arrCol1.slice(); arr2 = arrCol2.slice();}
+      		else if((x==1) && (y==3)) { arr1 = arrCol1.slice(); arr2 = arrCol3.slice();}			 
+      		else if((x==2) && (y==1)) { arr1 = arrCol2.slice(); arr2 = arrCol1.slice();}	
+      		else if((x==2) && (y==3)) { arr1 = arrCol2.slice(); arr2 = arrCol3.slice();}
+      		else if((x==3) && (y==1)) { arr1 = arrCol3.slice(); arr2 = arrCol1.slice();}	
+      		else if((x==3) && (y==2)) { arr1 = arrCol3.slice(); arr2 = arrCol2.slice();}       
 	
 	console.log(arr1);
 	console.log(arr2);
-	console.log(arr3);
-	
+		
 	var data=[],a,value,display;
-	if((x==1) && (y==2))
-	{
 	for(a=0 ; a<jsObj.values.length ;a++)
 	{
 		value = [[0,arr2[a][1]]];
 		display = arr1[a][1];
 		data.push({data:value,label:display});
-	}
-	}
-	else if((x==1) && (y==3))
-	{
-	for(a=0 ; a<jsObj.values.length ;a++)
-	{
-		value = [[0,arr3[a][1]]];
-		display = arr1[a][1];
-		data.push({data:value,label:display});
-	}
-	}
-		
+	}	
 	console.log(data);
 	
 		var container = document.getElementById("container");
