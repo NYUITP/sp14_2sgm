@@ -17,17 +17,18 @@
               var 
                   outputType = document.getElementById("selectedOutput"),
                   type = outputType.options[outputType.selectedIndex].value;
-
+/*
                 if(type=="bubble"){
-                  beaker.registerOutputDisplay("TableDisplay", ['flotr2_bubble'], 0);
+                  //beaker.registerOutputDisplay("TableDisplay", ['flotr2_bubble'], 0);
                 }
                 else if(type=="pie") {
-                  beaker.registerOutputDisplay("TableDisplay", ['flotr2_pie'], 0);
+                  //beaker.registerOutputDisplay("TableDisplay", ['flotr2_pie'], 0);
                 }
                 else if(type=="line") {
-                  beaker.registerOutputDisplay("TableDisplay", ['flotr2_line'], 0);
+                  //beaker.registerOutputDisplay("TableDisplay", ['flotr2_line'], 0);
                 }
               }  
+*/              
           }        
 
 
