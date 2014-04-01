@@ -78,15 +78,26 @@ scope.getOutputDisplay=function(){
     yaxis = document.getElementById("selectY"),
     colXIndex = parseInt(xaxis.options[xaxis.selectedIndex].value),
     colYIndex = parseInt(yaxis.options[yaxis.selectedIndex].value),
-    data = getData(colXIndex, colYIndex); // First data series
+    data = getData(colXIndex, colYIndex), // First data series
+    xvals = checkRangeInput("X Range", document.getElementById("xmin").value, document.getElementById("xmax").value, document.getElementById("xinterval").value), //[xmin, xmax, xticks]
+    yvals = checkRangeInput("Y Range", document.getElementById("ymin").value, document.getElementById("ymax").value, document.getElementById("yinterval").value); //ymin, ymax, yticks
+    console.log(yvals);
+    console.log(xvals);
+
 
   graph = Flotr.draw(container, [ data ], {
     title: graphTitle,
     xaxis: {
-      title: colNames[colXIndex]
+      title: colNames[colXIndex],
+      min: xvals[0],
+      max: xvals[1],
+      noTicks: xvals[2]
     }, 
     yaxis: {
-      title: colNames[colYIndex]
+      title: colNames[colYIndex],
+      min: yvals[0],
+      max: yvals[1],
+      noTicks: yvals[2]
     },
     grid: {
       
@@ -95,6 +106,21 @@ scope.getOutputDisplay=function(){
       track: true
     }
   });
+}
+
+function checkRangeInput(range, min, max, interval) {
+  console.log(range + " " +  min + " " + max + " " + interval );
+  if(!isNumber(min) || !isNumber(max) || !isNumber(interval) )
+    alert(range + " Error: Please enter numeric min, max and interval.");
+  min = parseFloat(min);
+  max = parseFloat(max);
+  interval = parseFloat(interval);
+  if(min > max)
+    alert(range + " Error: max is smaller than min.");
+  if(interval <= 0)
+    alert(range + " Error: interval cannot be smaller or equals to zero.");
+  var ticks = Math.ceil(Math.abs(max - min) / interval);
+  return [min, max, ticks];
 }
 
 function getData(x, y) {
