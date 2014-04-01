@@ -4,14 +4,16 @@
     beaker.bkoDirective("flotr2_line", function () {
       return {
             template: '<div>'
-            + '<b>X Axis\t</b>'
+            + '<b>Title</b> <input type="text" id="title" size="15"><br>'
+            + '<b>X Axis</b>'
             + '<select id=selectX>'
-            + '</select></br>'
-            + '<b>Y Axis\t</b>'
+            + '</select><br>'
+            + '<b>Y Axis</b>'
             + '<select id=selectY>'
-            + '</select></br>'
-            //+ '<b>X range</b>     Min: <input type="text" id="xmin">     Max: <input type="text" id="ymin"> '
-            //+ 
+            + '</select><br>'
+            + '<b>X Range</b>     Min: <input type="text" id="xmin" size="4">     Max: <input type="text" id="xmax" size="4"> Interval: <input type="text" id="xinterval" size="4"><br>'
+            + '<b>Y Range</b>     Min: <input type="text" id="ymin" size="4">     Max: <input type="text" id="ymax" size="4"> Interval: <input type="text" id="yinterval" size="4"><br>'
+            + 'Set X and Y ranges automatically <input type="checkbox" id="autoRange"><br>'
             + '<input type="button" ng-click="getOutputDisplay()" value="Run">'
             + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div>'
             + '</div>',
