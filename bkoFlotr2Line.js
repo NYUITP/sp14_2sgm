@@ -33,7 +33,7 @@ var
     isNumCol = checkNumCol(); //test which columns are numerical (numerical: true)
 
 colNames[0] = "Index";
-console.log(colNames);
+//console.log(colNames);
 
 function checkNumCol() {
   var boolArr = [true], col, row;
@@ -83,7 +83,7 @@ scope.getOutputDisplay=function(){
     xvals, //[xmin, xmax, xticks]
     yvals; //ymin, ymax, yticks
 
-console.log(autoRange);
+//console.log(autoRange);
 
 if(autoRange) {
   xvals = [null, null, 5];
@@ -148,7 +148,7 @@ function getData(x, y) {
   for(row = 0; row < numRecords; row++) {
     data.push([records[row][x], records[row][y]]);
   }
-  console.log(data);
+  //console.log(data);
   return data;
 }
 
