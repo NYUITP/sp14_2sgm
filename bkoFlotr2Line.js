@@ -1,46 +1,104 @@
+//author: Di Wu
 (function () {
     'use strict';
-    beaker.bkoDirective("flotr2_Line", function () {
+    beaker.bkoDirective("flotr2_line", function () {
       return {
-        template: '<div id="container"></div>',
+            template: '<div>'
+            + '<b>X Axis\t</b>'
+            + '<select id=selectX>'
+            + '</select></br>'
+            + '<b>Y Axis\t</b>'
+            + '<select id=selectY>'
+            + '</select></br>'
+            //+ '<b>X range</b>     Min: <input type="text" id="xmin">     Max: <input type="text" id="ymin"> '
+            //+ 
+            + '<input type="button" ng-click="getOutputDisplay()" value="Run">'
+            + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div>'
+            + '</div>',
         link: function (scope, element, attrs) {
 
 
 
 
+var
+    container = document.getElementById('container'),
+    graph,
+    jsObj = scope.model.getCellModel(),
+    colNames = jsObj.columnNames,
+    numCol = colNames.length,
+    records = jsObj.values,
+    numRecords = records.length,
+    isNumCol = checkNumCol(); //test which columns are numerical (numerical: true)
+
+function checkNumCol() {
+  var boolArr = [true], col, row;
+  for(col = 1; col < numCol; col++) {
+    for(row = 0; row < numRecords; row++) {
+      if(!isNumber(records[row][col])) {
+        boolArr.push(false);
+        break;
+      }
+    }
+    if(row==numRecords)
+      boolArr.push(true);
+  }
+  console.log(boolArr);
+  return boolArr;
+}
+
+fillDropdown("selectX");
+fillDropdown("selectY");
+
+function fillDropdown(id) {
+  var 
+    element = document.getElementById(id),
+    html = '<option value="0">Index</option>',
+    i;
+    for(i = 1; i < numCol; i++) {
+      if(isNumCol[i]){
+        html = html + '<option value="' + i + '">' + colNames[i] + '</option>';
+      }
+    }
+    element.innerHTML = html;
+    console.log(html);
+}
 
 
-        var
-          container = document.getElementById('container'),
-          start = (new Date).getTime(),
-          data, graph, offset, i;
+//data = [[0, 3], [4, 8], [8, 5], [9, 13]]
+// Draw Graph
+scope.getOutputDisplay=function(){
+  var 
+    xaxis = document.getElementById("selectX"),
+    yaxis = document.getElementById("selectY"),
+    colXIndex = parseInt(xaxis.options[xaxis.selectedIndex].value),
+    colYIndex = parseInt(yaxis.options[yaxis.selectedIndex].value),
+    data = getData(colXIndex, colYIndex); // First data series
 
-        // Draw a sine curve at time t
-        function animate (t) {
+  graph = Flotr.draw(container, [ data ], {
+    xaxis: {
+      minorTickFreq: 4
+    }, 
+    grid: {
+      minorVerticalLines: true
+    }
+  });
+}
 
-          data = [];
-          offset = 2 * Math.PI * (t - start) / 10000;
+function getData(x, y) {
+  var
+    data = [],
+    row;
 
-          // Sample the sine function
-          for (i = 0; i < 4 * Math.PI; i += 0.2) {
-            data.push([i, Math.sin(i - offset)]);
-          }
+  for(row = 0; row < numRecords; row++) {
+    data.push([records[row][x], records[row][y]]);
+  }
+  console.log(data);
+  return data;
+}
 
-          // Draw Graph
-          graph = Flotr.draw(container, [ data ], {
-            yaxis : {
-              max : 2,
-              min : -2
-            }
-          });
-
-          // Animate
-          setTimeout(function () {
-            animate((new Date).getTime());
-          }, 50);
-        }
-
-        animate(start);
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
 
 
 
