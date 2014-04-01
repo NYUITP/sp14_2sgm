@@ -32,6 +32,9 @@ var
     numRecords = records.length,
     isNumCol = checkNumCol(); //test which columns are numerical (numerical: true)
 
+colNames[0] = "Index";
+console.log(colNames);
+
 function checkNumCol() {
   var boolArr = [true], col, row;
   for(col = 1; col < numCol; col++) {
@@ -44,7 +47,7 @@ function checkNumCol() {
     if(row==numRecords)
       boolArr.push(true);
   }
-  console.log(boolArr);
+  //console.log(boolArr);
   return boolArr;
 }
 
@@ -54,15 +57,15 @@ fillDropdown("selectY");
 function fillDropdown(id) {
   var 
     element = document.getElementById(id),
-    html = '<option value="0">Index</option>',
+    html = '',
     i;
-    for(i = 1; i < numCol; i++) {
+    for(i = 0; i < numCol; i++) {
       if(isNumCol[i]){
         html = html + '<option value="' + i + '">' + colNames[i] + '</option>';
       }
     }
     element.innerHTML = html;
-    console.log(html);
+    //console.log(html);
 }
 
 
@@ -70,6 +73,7 @@ function fillDropdown(id) {
 // Draw Graph
 scope.getOutputDisplay=function(){
   var 
+    graphTitle = document.getElementById("title").value,
     xaxis = document.getElementById("selectX"),
     yaxis = document.getElementById("selectY"),
     colXIndex = parseInt(xaxis.options[xaxis.selectedIndex].value),
@@ -77,11 +81,18 @@ scope.getOutputDisplay=function(){
     data = getData(colXIndex, colYIndex); // First data series
 
   graph = Flotr.draw(container, [ data ], {
+    title: graphTitle,
     xaxis: {
-      minorTickFreq: 4
+      title: colNames[colXIndex]
     }, 
+    yaxis: {
+      title: colNames[colYIndex]
+    },
     grid: {
-      minorVerticalLines: true
+      
+    },
+    mouse: {
+      track: true
     }
   });
 }
