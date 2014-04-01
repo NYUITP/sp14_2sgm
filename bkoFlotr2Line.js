@@ -79,11 +79,20 @@ scope.getOutputDisplay=function(){
     colXIndex = parseInt(xaxis.options[xaxis.selectedIndex].value),
     colYIndex = parseInt(yaxis.options[yaxis.selectedIndex].value),
     data = getData(colXIndex, colYIndex), // First data series
-    xvals = checkRangeInput("X Range", document.getElementById("xmin").value, document.getElementById("xmax").value, document.getElementById("xinterval").value), //[xmin, xmax, xticks]
-    yvals = checkRangeInput("Y Range", document.getElementById("ymin").value, document.getElementById("ymax").value, document.getElementById("yinterval").value); //ymin, ymax, yticks
-    console.log(yvals);
-    console.log(xvals);
+    autoRange = document.getElementById("autoRange").checked,
+    xvals, //[xmin, xmax, xticks]
+    yvals; //ymin, ymax, yticks
 
+console.log(autoRange);
+
+if(autoRange) {
+  xvals = [null, null, 5];
+  yvals = xvals;
+}
+else {
+  xvals = checkRangeInput("X Range", document.getElementById("xmin").value, document.getElementById("xmax").value, document.getElementById("xinterval").value); 
+  yvals = checkRangeInput("Y Range", document.getElementById("ymin").value, document.getElementById("ymax").value, document.getElementById("yinterval").value); 
+}
 
   graph = Flotr.draw(container, [ data ], {
     title: graphTitle,
@@ -109,18 +118,26 @@ scope.getOutputDisplay=function(){
 }
 
 function checkRangeInput(range, min, max, interval) {
-  console.log(range + " " +  min + " " + max + " " + interval );
-  if(!isNumber(min) || !isNumber(max) || !isNumber(interval) )
-    alert(range + " Error: Please enter numeric min, max and interval.");
+  //console.log(range + " " +  min + " " + max + " " + interval );
+  if(!isNumber(min) || !isNumber(max) || !isNumber(interval) ) 
+    abortJS(range + " Error: Please enter numeric min, max and interval.");
+
   min = parseFloat(min);
   max = parseFloat(max);
   interval = parseFloat(interval);
-  if(min > max)
-    alert(range + " Error: max is smaller than min.");
-  if(interval <= 0)
-    alert(range + " Error: interval cannot be smaller or equals to zero.");
+  if(min > max) 
+    abortJS(range + " Error: max is smaller than min.");
+  
+  if(interval <= 0) 
+    abortJS(range + " Error: interval cannot be smaller or equals to zero.");
+  
   var ticks = Math.ceil(Math.abs(max - min) / interval);
   return [min, max, ticks];
+}
+
+function abortJS(err) {
+  alert(err);
+  throw new Error(err);
 }
 
 function getData(x, y) {
