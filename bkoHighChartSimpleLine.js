@@ -1,4 +1,4 @@
-//Author: Di Wu 
+//@Autho: Pallavi Mane
 (function () {
     'use strict';
     beaker.bkoDirective("HighChart_LineChart", function () {
