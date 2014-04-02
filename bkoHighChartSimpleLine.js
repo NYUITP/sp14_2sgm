@@ -1,4 +1,4 @@
-//@Autho: Pallavi Mane
+//@Author: Pallavi Mane
 (function () {
     'use strict';
     beaker.bkoDirective("HighChart_LineChart", function () {
