@@ -1,3 +1,4 @@
+//Author: Di Wu
 (function () {
     'use strict';
     beaker.bkoDirective("HighChart_PieChart", function () {

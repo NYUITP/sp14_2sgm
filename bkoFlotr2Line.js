@@ -5,12 +5,15 @@
       return {
             template: '<div>'
             + '<b>Title</b> <input type="text" id="title" size="15"><br>'
-            + '<b>X Axis</b>'
-            + '<select id=selectX>'
-            + '</select><br>'
-            + '<b>Y Axis</b>'
-            + '<select id=selectY>'
-            + '</select><br>'
+            + '<input type="hidden" value="0" id="numGroups">'
+            + '<b>Lines:&nbsp;&nbsp;</b><input type="button" ng-click="addLine()" value="Add Line"><br><br>'
+            + '<div id="groups"></div>'
+            +   '<b>X Axis</b>'
+            +     '<select id=selectX>'
+            +     '</select>'
+            +   '<b>Y Axis</b>'
+            +     '<select id=selectY>'
+            +     '</select><br>'
             + '<b>X Range</b>     Min: <input type="text" id="xmin" size="4">     Max: <input type="text" id="xmax" size="4"> Interval: <input type="text" id="xinterval" size="4"><br>'
             + '<b>Y Range</b>     Min: <input type="text" id="ymin" size="4">     Max: <input type="text" id="ymax" size="4"> Interval: <input type="text" id="yinterval" size="4"><br>'
             + 'Set X and Y ranges automatically <input type="checkbox" id="autoRange"><br>'
@@ -115,6 +118,20 @@ else {
       track: true
     }
   });
+}
+
+scope.addLine=function(){
+  var parent = document.getElementById("groups");
+  var hidden = document.getElementById("numGroups");
+  var childNum = hidden.value + 1;
+  hidden.value = childNum;
+
+  var newChild = document.createElement('div');
+  var childIdName = 'line' + childNum;
+  newChild.setAttribute('id', childIdName);
+
+  newChild.innerHTML = 'New Child!!';
+  parent.appendChild(newChild);
 }
 
 function checkRangeInput(range, min, max, interval) {
