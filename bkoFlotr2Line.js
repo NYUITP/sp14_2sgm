@@ -4,173 +4,56 @@
     beaker.bkoDirective("flotr2_line", function () {
       return {
             template: '<div>'
-            + '<b>Title</b> <input type="text" id="title" size="15"><br>'
-            + '<input type="hidden" value="0" id="numGroups">'
-            + '<b>Lines:&nbsp;&nbsp;</b><input type="button" ng-click="addLine()" value="Add Line"><br><br>'
-            + '<div id="groups"></div>'
-            +   '<b>X Axis</b>'
-            +     '<select id=selectX>'
-            +     '</select>'
-            +   '<b>Y Axis</b>'
-            +     '<select id=selectY>'
-            +     '</select><br>'
-            + '<b>X Range</b>     Min: <input type="text" id="xmin" size="4">     Max: <input type="text" id="xmax" size="4"> Interval: <input type="text" id="xinterval" size="4"><br>'
-            + '<b>Y Range</b>     Min: <input type="text" id="ymin" size="4">     Max: <input type="text" id="ymax" size="4"> Interval: <input type="text" id="yinterval" size="4"><br>'
-            + 'Set X and Y ranges automatically <input type="checkbox" id="autoRange"><br>'
-            + '<input type="button" ng-click="getOutputDisplay()" value="Run">'
+            + '<b>Title&nbsp;</b> <input type="text" ng-model="title"  size="30" placeholder="Add graph title here"></br>'
+            + '<b>X Axis&nbsp;</b><select ng-model="xaxis" ng-options="colOption for colOption in colOptions"><option value="">-- choose x-axis --</option></select>' 
+            + '<b>Y Axis&nbsp;</b><select ng-model="yaxis" ng-options="colOption for colOption in colOptions"><option value="">-- choose y-axis --</option></select>' 
+            + '<input type="button" value="Add Line" ng-click="addLine()"></br>'
+            + '<b>Line Groups [x,y]:</b></br>'
+            + '<ul>'
+            +   '<li ng-repeat="line in lineGroup">'
+            +      '<input type="button" value="Remove" ng-click="removeLine()">'
+            +     '&nbsp;&nbsp;[{{line.x}}&nbsp;,&nbsp;{{line.y}}]'
+            +   '</li>'
+            + '</ul>'
             + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div>'
             + '</div>',
-        link: function (scope, element, attrs) {
-
+controller: function($scope) {
 
 
 
 var
     container = document.getElementById('container'),
     graph,
-    jsObj = scope.model.getCellModel(),
+    jsObj = $scope.model.getCellModel(),
     colNames = jsObj.columnNames,
     numCol = colNames.length,
     records = jsObj.values,
-    numRecords = records.length,
-    isNumCol = checkNumCol(); //test which columns are numerical (numerical: true)
+    numRecords = records.length; //test which columns are numerical (numerical: true)
 
-colNames[0] = "Index";
-//console.log(colNames);
+$scope.colOptions = [];
+checkNumCol();
 
 function checkNumCol() {
-  var boolArr = [true], col, row;
-  for(col = 1; col < numCol; col++) {
+  var col, row, colOptions=[];
+  for(col = 0; col < numCol; col++) {
     for(row = 0; row < numRecords; row++) {
       if(!isNumber(records[row][col])) {
-        boolArr.push(false);
         break;
       }
     }
     if(row==numRecords)
-      boolArr.push(true);
+      $scope.colOptions.push(colNames[col]);
   }
-  //console.log(boolArr);
-  return boolArr;
 }
-
-fillDropdown("selectX");
-fillDropdown("selectY");
-
-function fillDropdown(id) {
-  var 
-    element = document.getElementById(id),
-    html = '',
-    i;
-    for(i = 0; i < numCol; i++) {
-      if(isNumCol[i]){
-        html = html + '<option value="' + i + '">' + colNames[i] + '</option>';
-      }
-    }
-    element.innerHTML = html;
-    //console.log(html);
-}
-
-
-//data = [[0, 3], [4, 8], [8, 5], [9, 13]]
-// Draw Graph
-scope.getOutputDisplay=function(){
-  var 
-    graphTitle = document.getElementById("title").value,
-    xaxis = document.getElementById("selectX"),
-    yaxis = document.getElementById("selectY"),
-    colXIndex = parseInt(xaxis.options[xaxis.selectedIndex].value),
-    colYIndex = parseInt(yaxis.options[yaxis.selectedIndex].value),
-    data = getData(colXIndex, colYIndex), // First data series
-    autoRange = document.getElementById("autoRange").checked,
-    xvals, //[xmin, xmax, xticks]
-    yvals; //ymin, ymax, yticks
-
-//console.log(autoRange);
-
-if(autoRange) {
-  xvals = [null, null, 5];
-  yvals = xvals;
-}
-else {
-  xvals = checkRangeInput("X Range", document.getElementById("xmin").value, document.getElementById("xmax").value, document.getElementById("xinterval").value); 
-  yvals = checkRangeInput("Y Range", document.getElementById("ymin").value, document.getElementById("ymax").value, document.getElementById("yinterval").value); 
-}
-
-  graph = Flotr.draw(container, [ data ], {
-    title: graphTitle,
-    xaxis: {
-      title: colNames[colXIndex],
-      min: xvals[0],
-      max: xvals[1],
-      noTicks: xvals[2]
-    }, 
-    yaxis: {
-      title: colNames[colYIndex],
-      min: yvals[0],
-      max: yvals[1],
-      noTicks: yvals[2]
-    },
-    grid: {
-      
-    },
-    mouse: {
-      track: true
-    }
-  });
-}
-
-scope.addLine=function(){
-  var parent = document.getElementById("groups");
-  var hidden = document.getElementById("numGroups");
-  var childNum = hidden.value + 1;
-  hidden.value = childNum;
-
-  var newChild = document.createElement('div');
-  var childIdName = 'line' + childNum;
-  newChild.setAttribute('id', childIdName);
-
-  newChild.innerHTML = 'New Child!!';
-  parent.appendChild(newChild);
-}
-
-function checkRangeInput(range, min, max, interval) {
-  //console.log(range + " " +  min + " " + max + " " + interval );
-  if(!isNumber(min) || !isNumber(max) || !isNumber(interval) ) 
-    abortJS(range + " Error: Please enter numeric min, max and interval.");
-
-  min = parseFloat(min);
-  max = parseFloat(max);
-  interval = parseFloat(interval);
-  if(min > max) 
-    abortJS(range + " Error: max is smaller than min.");
-  
-  if(interval <= 0) 
-    abortJS(range + " Error: interval cannot be smaller or equals to zero.");
-  
-  var ticks = Math.ceil(Math.abs(max - min) / interval);
-  return [min, max, ticks];
-}
-
-function abortJS(err) {
-  alert(err);
-  throw new Error(err);
-}
-
-function getData(x, y) {
-  var
-    data = [],
-    row;
-
-  for(row = 0; row < numRecords; row++) {
-    data.push([records[row][x], records[row][y]]);
-  }
-  //console.log(data);
-  return data;
-}
-
 function isNumber(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+$scope.lineGroup=[];
+$scope.addLine = function(){
+  if($scope.xaxis!=undefined && $scope.yaxis!=undefined) {
+    $scope.lineGroup.push({x:$scope.xaxis, y:$scope.yaxis});
+  }
 }
 
 
