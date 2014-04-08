@@ -73,14 +73,16 @@ function checkRangeInput(range, min, max, interval) {
 }
 
 function checkLineInput(){
+  var xaxis;
   if($scope.lineGroup.length==0) abortJS("Error: must have at least one line.");
   else {
-    var xaxis = $scope.lineGroup[0].x;
+    xaxis = $scope.lineGroup[0].x;
     for(var i = 0; i < $scope.lineGroup.length; i++) {
       if($scope.lineGroup[i].x != xaxis)
-        abortJS("Error: all lines must have same x-axis");
+        abortJS("Error: all lines must have same x-axis.");
     }
   }
+  return xaxis;
 }
 
 function abortJS(err) {
@@ -88,7 +90,17 @@ function abortJS(err) {
   throw new Error(err);
 }
 
-function getData(x, y) {
+function getData() {
+  var data = [];
+
+  for (var i = 0; i < $scope.lineGroup.length; i++) {
+    data.push( getOneLineData($scope.lineGroup[i].x.colIndex, $scope.lineGroup[i].y.colIndex) );
+  }
+  console.log(data);
+  return data;
+}
+
+function getOneLineData(x, y) {
   var
     data = [],
     row;
@@ -121,10 +133,10 @@ $scope.removeLine = function(rx, ry) {
 }
 $scope.getOutputDisplay=function(){
   var 
-    data = [[0, 3], [4, 8], [8, 5], [9, 13]],//data = getData(lineGroup), // First data series
+    data = getData(), // First data series
     xvals, //[xmin, xmax, xticks]
     yvals; //ymin, ymax, yticks
-  checkLineInput();
+  var xaxis=checkLineInput();
   if($scope.autoRange) {
     xvals = [null, null, 5];
     yvals = xvals;
@@ -134,10 +146,10 @@ $scope.getOutputDisplay=function(){
     yvals = checkRangeInput("Y Range", $scope.ymin, $scope.ymax, $scope.yinterval); 
   }
 
-  graph = Flotr.draw(container, [ data ], {
+  graph = Flotr.draw(container, data, {
     title: $scope.title,
     xaxis: {
-      //title: colNames[colXIndex],
+      title: xaxis.colName,
       min: xvals[0],
       max: xvals[1],
       noTicks: xvals[2]
