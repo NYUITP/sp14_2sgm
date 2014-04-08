@@ -72,6 +72,17 @@ function checkRangeInput(range, min, max, interval) {
   return [min, max, ticks];
 }
 
+function checkLineInput(){
+  if($scope.lineGroup.length==0) abortJS("Error: must have at least one line.");
+  else {
+    var xaxis = $scope.lineGroup[0].x;
+    for(var i = 0; i < $scope.lineGroup.length; i++) {
+      if($scope.lineGroup[i].x != xaxis)
+        abortJS("Error: all lines must have same x-axis");
+    }
+  }
+}
+
 function abortJS(err) {
   alert(err);
   throw new Error(err);
@@ -107,6 +118,43 @@ $scope.removeLine = function(rx, ry) {
       break;
     }
   }
+}
+$scope.getOutputDisplay=function(){
+  var 
+    data = [[0, 3], [4, 8], [8, 5], [9, 13]],//data = getData(lineGroup), // First data series
+    xvals, //[xmin, xmax, xticks]
+    yvals; //ymin, ymax, yticks
+  checkLineInput();
+  if($scope.autoRange) {
+    xvals = [null, null, 5];
+    yvals = xvals;
+  }
+  else {
+    xvals = checkRangeInput("X Range", $scope.xmin, $scope.xmax, $scope.xinterval); 
+    yvals = checkRangeInput("Y Range", $scope.ymin, $scope.ymax, $scope.yinterval); 
+  }
+
+  graph = Flotr.draw(container, [ data ], {
+    title: $scope.title,
+    xaxis: {
+      //title: colNames[colXIndex],
+      min: xvals[0],
+      max: xvals[1],
+      noTicks: xvals[2]
+    }, 
+    yaxis: {
+      //title: colNames[colYIndex],
+      min: yvals[0],
+      max: yvals[1],
+      noTicks: yvals[2]
+    },
+    grid: {
+      
+    },
+    mouse: {
+      track: true
+    }
+  });
 }
 
 
