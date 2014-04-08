@@ -7,6 +7,7 @@
             + '<b>Title&nbsp;</b> <input type="text" ng-model="title"  size="30" placeholder="Add graph title here"></br>'
             + '<b>X Axis&nbsp;</b><select ng-model="xaxis" ng-options="colOption.colName for colOption in colOptions"><option value="">-- choose x-axis --</option></select>' 
             + '<b>Y Axis&nbsp;</b><select ng-model="yaxis" ng-options="colOption.colName for colOption in colOptions"><option value="">-- choose y-axis --</option></select>' 
+            + '<b>Line Label</b><input type="text" ng-model="lineName" placeholder="Enter line name here">'
             + '<input type="button" value="Add Line" ng-click="addLine()"></br>'
             + '<b>Line Groups [x,y]:</b></br>'
             + '<ul>'
@@ -18,12 +19,10 @@
             + '<b>X Range</b>     Min: <input type="text" ng-model="xmin" size="4">     Max: <input type="text" ng-model="xmax" size="4"> Interval: <input type="text" ng-model="xinterval" size="4"><br>'
             + '<b>Y Range</b>     Min: <input type="text" ng-model="ymin" size="4">     Max: <input type="text" ng-model="ymax" size="4"> Interval: <input type="text" ng-model="yinterval" size="4"><br>'
             + 'Set X and Y ranges automatically <input type="checkbox" ng-model="autoRange"><br>'
-            + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div>'
             + '<input type="button" ng-click="getOutputDisplay()" value="Run">'
+            + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div>'
             + '</div>',
 controller: function($scope) {
-
-
 
 var
     container = document.getElementById('container'),
@@ -94,7 +93,7 @@ function getData() {
   var data = [];
 
   for (var i = 0; i < $scope.lineGroup.length; i++) {
-    data.push( getOneLineData($scope.lineGroup[i].x.colIndex, $scope.lineGroup[i].y.colIndex) );
+    data.push( {data:getOneLineData($scope.lineGroup[i].x.colIndex, $scope.lineGroup[i].y.colIndex), label: $scope.lineGroup[i].name, lines:{show:true}, points:{show:true}});
   }
   console.log(data);
   return data;
@@ -112,14 +111,18 @@ function getOneLineData(x, y) {
   return data;
 }
 
-
-
-
 $scope.lineGroup=[];
 $scope.addLine = function(){
   if($scope.xaxis!=undefined && $scope.yaxis!=undefined) {
-    $scope.lineGroup.push({x:$scope.xaxis, y:$scope.yaxis});
+    for(var i = 0; i < $scope.lineGroup.length; i++)
+      if($scope.lineGroup[i].x==$scope.xaxis && $scope.lineGroup[i].y==$scope.yaxis)
+        abortJS("Error: Duplicate line.");
+    //console.log($scope.lineName + "/" + $scope.yaxis.colName);
+    if($scope.lineName==undefined||$scope.lineName=="")
+      $scope.lineName = $scope.yaxis.colName;
+    $scope.lineGroup.push({x:$scope.xaxis, y:$scope.yaxis, name:$scope.lineName});
   }
+  $scope.lineName="";
 }
 
 $scope.removeLine = function(rx, ry) {
