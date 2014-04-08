@@ -11,7 +11,7 @@
             + '<b>Line Groups [x,y]:</b></br>'
             + '<ul>'
             +   '<li ng-repeat="line in lineGroup">'
-            +      '<input type="button" value="Remove" ng-click="removeLine()">'
+            +      '<input type="button" value="Remove" ng-click="removeLine(line.x, line.y)">'
             +     '&nbsp;&nbsp;[{{line.x}}&nbsp;,&nbsp;{{line.y}}]'
             +   '</li>'
             + '</ul>'
@@ -53,6 +53,16 @@ $scope.lineGroup=[];
 $scope.addLine = function(){
   if($scope.xaxis!=undefined && $scope.yaxis!=undefined) {
     $scope.lineGroup.push({x:$scope.xaxis, y:$scope.yaxis});
+  }
+}
+
+$scope.removeLine = function(rx, ry) {
+  var i;
+  for(i = 0; i < $scope.lineGroup.length; i++) {
+    if($scope.lineGroup[i].x==rx && $scope.lineGroup[i].y==ry){
+      $scope.lineGroup.splice(i, 1);
+      break;
+    }
   }
 }
 
