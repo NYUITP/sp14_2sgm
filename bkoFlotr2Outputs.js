@@ -1,10 +1,10 @@
 //author: Di Wu
 (function () {
     'use strict';
-    beaker.bkoDirective("flotr2", function () {
+    beaker.bkoDirective("flotr2Outputs", function () {
       return {
             template: '<div id="html">'
-            + '<select id=selectedOutput>'
+            + '<select ng-model=selectedOutput>'
             +   '<option value="bubble">Bubble Chart</option>'
             +   '<option value="pie">Pie Chart</option>'
             +   '<option value="line">Line Chart</option>'

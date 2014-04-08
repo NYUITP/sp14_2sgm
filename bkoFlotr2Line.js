@@ -1,7 +1,7 @@
 //author: Di Wu
 (function () {
     'use strict';
-    beaker.bkoDirective("flotr2_line", function () {
+    beaker.bkoDirective("flotr2Line", function () {
       return {
             template: '<div>'
             + '<b>Title&nbsp;</b> <input type="text" ng-model="title"  size="30" placeholder="Add graph title here"></br>'

@@ -2,7 +2,7 @@
 //Date: 03/25/2014
 (function () {
     'use strict';
-    beaker.bkoDirective("flotr2_bubble", function () {
+    beaker.bkoDirective("flotr2Bubble", function () {
  return {
 	template: '<div>'
             +   '<div style="float:left;width:20%;display:inline-block"><h4>X-Axis</h4><input type="radio" id ="r1" name="col" value="col1" checked="checked">Column 1<tab></tab><input type="radio" id ="r2" name="col"'

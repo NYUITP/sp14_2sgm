@@ -2,7 +2,7 @@
 
 (function () {
     'use strict';
-    beaker.bkoDirective("flotr2_pie", function () {
+    beaker.bkoDirective("flotr2Pie", function () {
  return {
 	template: '<div>'
             + '<b>Title</b> <input type="text" id="title" size="15"><br>'
