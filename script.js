@@ -1,7 +1,5 @@
 //author: Di Wu
-(function () {
-    'use strict';
-    beaker.bkoDirective("flotr2Outputs", function () {
+beaker.bkoDirective("flotr2Outputs", function() {
       return {
             template: '<div>'
             +  '<b>Select Chart Type</b>'
@@ -16,24 +14,6 @@
           scope.getChartType = function(){
             return scope.chartType; 
           }        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
       };
-    });
-})();
+});
