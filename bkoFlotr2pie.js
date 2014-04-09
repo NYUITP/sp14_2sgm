@@ -1,20 +1,28 @@
 //Author: Priyanka Inani
-//Date: 04/08/2014
+//two pie chart
 
 (function () {
     'use strict';
     beaker.bkoDirective("flotr2Pie", function () {
  return {
 	template: '<div>'
-            + '<b>Title</b> <input type="text" id="title" size="15"><br>'
-            + '<b>Value</b>'
+            + '<b>Title1</b> <input type="text" id="title" size="15"><br>'
+            + '<b>Value1</b>'
             + '<select id=selectvalue>'
             + '</select><br>'
-            + '<b>Label</b>'
+            + '<b>Label1</b>'
             + '<select id=selectlabel>'
+            + '</select><br>'
+	    + '<b>Title2</b> <input type="text" id="title2" size="15"><br>'
+            + '<b>Value2</b>'
+            + '<select id=selectvalue2>'
+            + '</select><br>'
+            + '<b>Label2</b>'
+            + '<select id=selectlabel2>'
             + '</select><br>'
             + '<input type="button" ng-click="getOutputDisplay()" value="Run">'
             + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div>'
+	    + '<div id="container2" style="width:600px;height:384px;margin:8px auto"></div>'
             + '</div>',
 	link: function (scope, element, attrs) {
 
@@ -48,6 +56,8 @@
 
 		fillDropdown("selectvalue");
 		fillDropdownLabel("selectlabel");
+		fillDropdown("selectvalue2");
+		fillDropdownLabel("selectlabel2");
 
 		function fillDropdown(id) {
   		var 
@@ -80,10 +90,39 @@
     label = document.getElementById("selectlabel"),
     colXIndex = parseInt(value.options[value.selectedIndex].value),
     colYIndex = parseInt(label.options[label.selectedIndex].value),
-    data = getData(colXIndex, colYIndex); 
-    
-graph = Flotr.draw(container, data, {
+    data = getData(colXIndex, colYIndex);
+
+  
+var 
+    graphTitle2 = document.getElementById("title2").value,
+    value2 = document.getElementById("selectvalue2"),
+    label2 = document.getElementById("selectlabel2"),
+    colXIndex2 = parseInt(value2.options[value2.selectedIndex].value),
+    colYIndex2 = parseInt(label2.options[label2.selectedIndex].value),
+    data2 = getData(colXIndex2, colYIndex2);
+  
+graph = Flotr.draw(container, data,{
 		title: graphTitle,
+    		HtmlText : false,
+    		grid : {
+      		verticalLines : false,
+      		horizontalLines : false
+    		},
+    		xaxis : { showLabels : false },
+	        yaxis : { showLabels : false },
+    		pie : {
+      		show : true, 
+      		explode : 6
+   		 },
+    		mouse : { track : true },
+    		legend : {
+      		position : 'se',
+      		backgroundColor : '#D2E8FF'
+    		}
+		});
+
+	graph = Flotr.draw(container2, data2,{
+		title: graphTitle2,
     		HtmlText : false,
     		grid : {
       		verticalLines : false,
