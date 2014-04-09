@@ -96,35 +96,35 @@
 	    		 largestX = Math.max.apply(null, xArr);
 			 smallestY = Math.min.apply(null, yArr),
 	    		 largestY = Math.max.apply(null, yArr);
-			//  xvals = [null, null, 5];
-			 // yvals = xvals;
-				graph = Flotr.draw(container, [data], {
-				    title: graphTitle,
-				    bubbles : { show : true, baseRadius : 3 },
-				    xaxis   : {title: colNames[colXIndex], min: smallestX - largestX, max: (2*largestX), noTicks: numRecords},
-				    yaxis   : {title: colNames[colYIndex], min: smallestY - largestY, max: (2*largestY), noTicks: numRecords},
-				    mouse: {
-		      			track: true
-		    			}
-				});
+  			 graph = Flotr.draw(container, [data], {
+			    title: graphTitle,
+			    bubbles : { show : true, baseRadius : 3 },
+			    xaxis   : {title: colNames[colXIndex], min: smallestX - largestX, max: (2*largestX), noTicks: numRecords},
+			    yaxis   : {title: colNames[colYIndex], min: smallestY - largestY, max: (2*largestY), noTicks: numRecords},
+			    mouse: {
+	      			     track: true
+	    			   }
+			 });
 		}
 		else {
 		  xvals = checkRangeInput("X Range", document.getElementById("xmin").value, document.getElementById("xmax").value, document.getElementById("xinterval").value); 
 		  yvals = checkRangeInput("Y Range", document.getElementById("ymin").value, document.getElementById("ymax").value, document.getElementById("yinterval").value); 
 
-			graph = Flotr.draw(container, [data], {
-				    title: graphTitle,
-				    bubbles : { show : true, baseRadius : 3 },
-				    xaxis   : {title: colNames[colXIndex], min: xvals[0], max: xvals[1], noTicks: xvals[2]},
-				    yaxis   : {title: colNames[colYIndex], min: yvals[0], max: yvals[1], noTicks: yvals[2]},
-				    mouse: {
-		      			track: true
-		    			}
-				});
-		     }
+        	    graph = Flotr.draw(container, [data], {
+	 		    title: graphTitle,
+			    bubbles : { show : true, baseRadius : 3 },
+			    xaxis   : {title: colNames[colXIndex], min: xvals[0], max: xvals[1], noTicks: xvals[2]},
+			    yaxis   : {title: colNames[colYIndex], min: yvals[0], max: yvals[1], noTicks: yvals[2]},
+			    mouse: {
+	 	    			track: true
+	 	   		    }
+		});
+		   }
 
-		}
 
+	       }
+	
+	
 
 	function checkRangeInput(range, min, max, interval) {
 	  //console.log(range + " " +  min + " " + max + " " + interval );
@@ -156,13 +156,24 @@
 	    point,
 	    row;
 
-	  for(row = 0; row < numRecords; row++) {
-		point = [records[row][x], records[row][y], (records[row][z])/2];
+          var totalColValue = getColumnTotal(z);
 
-	    data.push(point);
+	  for(row = 0; row < numRecords; row++) {
+		point = [records[row][x], records[row][y], parseInt(((records[row][z])/totalColValue)*100)];
+		data.push(point);
 	  }
-	  console.log(data);
 	  return data;
+	}
+
+
+	function getColumnTotal(z)
+	{
+	    var total;
+	    var value = 0;
+  	    for(var row = 0; row < numRecords; row++) {
+		value = value + parseInt(records[row][z]);
+   	    }
+	    return value;
 	}
 
 	function isNumber(n) {
