@@ -5,8 +5,11 @@
       return {
             template: '<div>'
             + '<b>Title&nbsp;</b> <input type="text" ng-model="title"  size="30" placeholder="Add graph title here"></br>'
-            + '<b>X Axis&nbsp;</b><select ng-model="xaxis" ng-options="colOption.colName for colOption in colOptions"><option value="">-- choose x-axis --</option></select>' 
-            + '<b>Y Axis&nbsp;</b><select ng-model="yaxis" ng-options="colOption.colName for colOption in colOptions"><option value="">-- choose y-axis --</option></select>' 
+            + '<b>X Axis&nbsp;</b><select ng-model="xaxis" ng-options="colOption.colName for colOption in colOptions"><option value="">-- choose x-axis --</option></select></br>' 
+            + '<b>Y Axis&nbsp;</b>'
+            + '<ul class="unstyled">' 
+            +   '<li ng-repeat="yOption in yAxisOptions">{{yOption.colName}}<input type="checkbox" ng-model="yOption.colSelected"></li>'
+            + '</ul>'
             + '<b>Line Label</b><input type="text" ng-model="lineName" placeholder="Enter line name here">'
             + '<input type="button" value="Add Line" ng-click="addLine()"></br>'
             + '<b>Line Groups [x,y]:</b></br>'
@@ -35,7 +38,6 @@ var
 
 $scope.colOptions = [];
 checkNumCol();
-
 function checkNumCol() {
   var col, row;
   for(col = 0; col < numCol; col++) {
@@ -47,6 +49,14 @@ function checkNumCol() {
     if(row==numRecords)
       $scope.colOptions.push({colIndex:col, colName:colNames[col]});
   }
+}
+
+$scope.yAxisOptions = [];
+initializeYAxisOptions();
+function initializeYAxisOptions(){
+  
+  for(var i = 0; i < $scope.colOptions.length; i++)
+    $scope.yAxisOptions.push({colIndex:$scope.colOptions[i].colIndex, colName:$scope.colOptions[i].colName, colSelected:false});
 }
 
 function isNumber(n) {
@@ -178,4 +188,4 @@ $scope.getOutputDisplay=function(){
         }
       };
     });
-})();
+})(); 
