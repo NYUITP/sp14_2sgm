@@ -3,7 +3,9 @@
     'use strict';
     beaker.bkoDirective("flotr2Line", function () {
       return {
-            template: '<div>'
+            template: 
+               '<button class="btn btn-primary" ng-click="toggleConf()">&nbsp; {{hideOrShow}} &nbsp;<i class="icon-cog"></i></button>'
+            + '<div id="configuration" style={{displayConf}}>'
             + '<b>Title&nbsp;</b> <input type="text" ng-model="title"  size="30" placeholder="Add graph title here"></br>'
             + '<b>X Axis&nbsp;</b><select ng-model="xaxis" ng-options="colOption.colName for colOption in colOptions"><option value="">-- choose x-axis --</option></select></br>' 
             + '<b>Y Axis&nbsp;</b>'
@@ -23,8 +25,8 @@
             + '<b>Y Range</b>     Min: <input type="text" ng-model="ymin" size="4">     Max: <input type="text" ng-model="ymax" size="4"> Interval: <input type="text" ng-model="yinterval" size="4"><br>'
             + 'Set X and Y ranges automatically <input type="checkbox" ng-model="autoRange"><br>'
             + '<input type="button" ng-click="getOutputDisplay()" value="Run">'
-            + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div>'
-            + '</div>',
+            + '</div>'
+            + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div>',
 controller: function($scope) {
 
 var
@@ -35,6 +37,19 @@ var
     numCol = colNames.length,
     records = jsObj.values,
     numRecords = records.length; //test which columns are numerical (numerical: true)
+
+$scope.hideOrShow = "Hide";
+$scope.displayConf = "display:block"
+$scope.toggleConf = function() {
+  if($scope.displayConf=="display:block") {
+    $scope.displayConf = "display:none";
+    $scope.hideOrShow = "Show";
+  }
+  else {
+    $scope.displayConf = "display:block";
+    $scope.hideOrShow = "Hide";
+  }
+}
 
 $scope.colOptions = [];
 checkNumCol();
