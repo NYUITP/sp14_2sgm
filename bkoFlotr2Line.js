@@ -3,28 +3,37 @@
     'use strict';
     beaker.bkoDirective("flotr2Line", function () {
       return {
-            template: 
-               '<button class="btn btn-primary" ng-click="toggleConf()">&nbsp; {{hideOrShow}} &nbsp;<i class="icon-cog"></i></button>'
-            + '<div id="configuration" style={{displayConf}}>'
-            + '<b>Title&nbsp;</b> <input type="text" ng-model="title"  size="30" placeholder="Add graph title here"></br>'
-            + '<b>X Axis&nbsp;</b><select ng-model="xaxis" ng-options="colOption.colName for colOption in colOptions"><option value="">-- choose x-axis --</option></select></br>' 
-            + '<b>Y Axis&nbsp;</b>'
-            + '<ul class="unstyled">' 
-            +   '<li ng-repeat="yOption in yAxisOptions">{{yOption.colName}}<input type="checkbox" ng-model="yOption.colSelected"></li>'
-            + '</ul>'
-            + '<b>Line Label</b><input type="text" ng-model="lineName" placeholder="Enter line name here">'
-            + '<input type="button" value="Add Line" ng-click="addLine()"></br>'
-            + '<b>Line Groups [x,y]:</b></br>'
-            + '<ul>'
-            +   '<li ng-repeat="line in lineGroup">'
-            +      '<input type="button" value="Remove" ng-click="removeLine(line.x, line.y)">'
-            +     '&nbsp;&nbsp;[{{line.x.colName}}&nbsp;,&nbsp;{{line.y.colName}}]'
-            +   '</li>'
-            + '</ul>'
-            + '<b>X Range</b>     Min: <input type="text" ng-model="xmin" size="4">     Max: <input type="text" ng-model="xmax" size="4"> Interval: <input type="text" ng-model="xinterval" size="4"><br>'
-            + '<b>Y Range</b>     Min: <input type="text" ng-model="ymin" size="4">     Max: <input type="text" ng-model="ymax" size="4"> Interval: <input type="text" ng-model="yinterval" size="4"><br>'
-            + 'Set X and Y ranges automatically <input type="checkbox" ng-model="autoRange"><br>'
-            + '<input type="button" ng-click="getOutputDisplay()" value="Run">'
+            template: '<button class="btn btn-primary" ng-click="toggleConf()">&nbsp; {{hideOrShow}} &nbsp;<i class="icon-cog"></i></button>'
+            + '<div class="tabbable" id="configuration" style={{displayConf}}>'
+            +   '<ul class="nav nav-tabs">'
+            +     '<li class="active"><a href="#tab1" data-toggle="tab">Line Group</a></li>'
+            +     '<li><a href="#tab2" data-toggle="tab">Axis</a></li>'
+            +   '</ul>'
+            +   '<div class="tab-content">'
+            +     '<div class="tab-pane active" id="tab1">'
+            +       '<b>Title&nbsp;</b> <input type="text" ng-model="title"  size="30" placeholder="Add graph title here"></br>'
+            +       '<b>X Axis&nbsp;</b><select ng-model="xaxis" ng-options="colOption.colName for colOption in colOptions"><option value="">-- choose x-axis --</option></select></br>' 
+            +       '<b>Y Axis&nbsp;</b>'
+            +       '<ul class="unstyled">' 
+            +         '<li ng-repeat="yOption in yAxisOptions">{{yOption.colName}}<input type="checkbox" ng-model="yOption.colSelected"></li>'
+            +       '</ul>'
+            +       '<b>Line Label</b><input type="text" ng-model="lineName" placeholder="Enter line name here">'
+            +       '<input type="button" value="Add Line" ng-click="addLine()"></br>'
+            +       '<b>Line Groups [x,y]:</b></br>'
+            +       '<ul>'
+            +         '<li ng-repeat="line in lineGroup">'
+            +           '<input type="button" value="Remove" ng-click="removeLine(line.x, line.y)">'
+            +           '&nbsp;&nbsp;[{{line.x.colName}}&nbsp;,&nbsp;{{line.y.colName}}]'
+            +         '</li>'
+            +       '</ul>'
+            +     '</div>'
+            +     '<div class="tab-pane" id="tab2">'
+            +       '<b>X Range</b>     Min: <input type="text" ng-model="xmin" size="4">     Max: <input type="text" ng-model="xmax" size="4"> Interval: <input type="text" ng-model="xinterval" size="4"><br>'
+            +       '<b>Y Range</b>     Min: <input type="text" ng-model="ymin" size="4">     Max: <input type="text" ng-model="ymax" size="4"> Interval: <input type="text" ng-model="yinterval" size="4"><br>'
+            +       'Set X and Y ranges automatically <input type="checkbox" ng-model="autoRange"><br>'
+            +       '<input type="button" ng-click="getOutputDisplay()" value="Run">'
+            +     '</div>'
+            +   '</div>'
             + '</div>'
             + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div>',
 controller: function($scope) {
@@ -38,16 +47,16 @@ var
     records = jsObj.values,
     numRecords = records.length; //test which columns are numerical (numerical: true)
 
-$scope.hideOrShow = "Hide";
-$scope.displayConf = "display:block"
+$scope.hideOrShow = " Hide ";
+$scope.displayConf = "display:block;";
 $scope.toggleConf = function() {
-  if($scope.displayConf=="display:block") {
-    $scope.displayConf = "display:none";
+  if($scope.displayConf=="display:block;") {
+    $scope.displayConf = "display:none;";
     $scope.hideOrShow = "Show";
   }
   else {
-    $scope.displayConf = "display:block";
-    $scope.hideOrShow = "Hide";
+    $scope.displayConf = "display:block;";
+    $scope.hideOrShow = " Hide ";
   }
 }
 
