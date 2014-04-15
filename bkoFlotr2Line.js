@@ -82,14 +82,16 @@ $scope.showGraph=function() {
   }
   //if($scope.xaxis==undefined) abortJS("Error: please select x axis.");
   //if($scope.yaxis.length==0) abortJS("Error: please select at least one y axis.");
-  
+  getOutputDisplay();
 }
 
 function getData() {
   var data = [];
 
   for (var i = 0; i < $scope.yaxis.length; i++) {
-    data.push( {data:getOneLineData($scope.xaxis.colIndex, $scope.yaxis[i].colIndex), label: $scope.yaxis[i].colLabel, lines:{show:true}, points:{show:true}});
+    var lb = $scope.yaxis[i].colLabel;
+    if(lb==undefined || lb=="") lb = $scope.yaxis[i].colName;
+    data.push( {data:getOneLineData($scope.xaxis.colIndex, $scope.yaxis[i].colIndex), label: lb, lines:{show:true}, points:{show:true}});
   }
   console.log(data);
   return data;
@@ -134,12 +136,12 @@ function abortJS(err) {
   throw new Error(err);
 }
 
-$scope.getOutputDisplay=function(){
+function getOutputDisplay(){
   var 
     data = getData(), // First data series
     xvals, //[xmin, xmax, xticks]
     yvals; //ymin, ymax, yticks
-  var xaxis= $scope.xaxis;
+  var xaxis = $scope.xaxis;
   if($scope.autoRange) {
     xvals = [null, null, 5];
     yvals = xvals;
