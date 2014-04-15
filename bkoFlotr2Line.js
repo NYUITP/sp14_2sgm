@@ -3,7 +3,8 @@
     'use strict';
     beaker.bkoDirective("flotr2Line", function () {
       return {
-            template: '<button class="btn btn-primary" ng-click="toggleConf()">&nbsp; {{hideOrShow}} &nbsp;<i class="icon-cog"></i></button>'
+            template: 
+              '<button class="btn btn-primary" ng-click="toggleConf()">&nbsp; {{hideOrShow}} &nbsp;<i class="icon-cog"></i></button>'
             + '<div class="tabbable" id="configuration" style={{displayConf}}>'
             +   '<ul class="nav nav-tabs">'
             +     '<li class="active"><a href="#tab1" data-toggle="tab">Line Group</a></li>'
@@ -14,28 +15,18 @@
             +       '<b>Title&nbsp;</b> <input type="text" ng-model="title"  size="30" placeholder="Add graph title here"></br>'
             +       '<b>X Axis&nbsp;</b><select ng-model="xaxis" ng-options="colOption.colName for colOption in colOptions"><option value="">-- choose x-axis --</option></select></br>' 
             +       '<b>Y Axis&nbsp;</b>'
-            +       '<ul class="unstyled">' 
-            +         '<li ng-repeat="yOption in yAxisOptions">{{yOption.colName}}<input type="checkbox" ng-model="yOption.colSelected"></li>'
-            +       '</ul>'
-            +       '<b>Line Label</b><input type="text" ng-model="lineName" placeholder="Enter line name here">'
-            +       '<input type="button" value="Add Line" ng-click="addLine()"></br>'
-            +       '<b>Line Groups [x,y]:</b></br>'
-            +       '<ul>'
-            +         '<li ng-repeat="line in lineGroup">'
-            +           '<input type="button" value="Remove" ng-click="removeLine(line.x, line.y)">'
-            +           '&nbsp;&nbsp;[{{line.x.colName}}&nbsp;,&nbsp;{{line.y.colName}}]'
-            +         '</li>'
-            +       '</ul>'
+            +         '<table>' 
+            +           '<tr ng-repeat="yOption in yAxisOptions"><td><input type="checkbox" ng-model="yOption.colSelected"></td><td>{{yOption.colName}}</td><td><input type="text" ng-model="yOption.colLabel" placeholder="Enter Line Label"></td></tr>'
+            +         '</table>'
             +     '</div>'
             +     '<div class="tab-pane" id="tab2">'
             +       '<b>X Range</b>     Min: <input type="text" ng-model="xmin" size="4">     Max: <input type="text" ng-model="xmax" size="4"> Interval: <input type="text" ng-model="xinterval" size="4"><br>'
             +       '<b>Y Range</b>     Min: <input type="text" ng-model="ymin" size="4">     Max: <input type="text" ng-model="ymax" size="4"> Interval: <input type="text" ng-model="yinterval" size="4"><br>'
             +       'Set X and Y ranges automatically <input type="checkbox" ng-model="autoRange"><br>'
-            +       '<input type="button" ng-click="getOutputDisplay()" value="Run">'
             +     '</div>'
             +   '</div>'
             + '</div>'
-            + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div>',
+            + '<div id="container" style="width:600px;height:384px;margin:8px auto">{{showGraph()}}</div>',
 controller: function($scope) {
 
 var
@@ -78,56 +69,27 @@ function checkNumCol() {
 $scope.yAxisOptions = [];
 initializeYAxisOptions();
 function initializeYAxisOptions(){
-  
   for(var i = 0; i < $scope.colOptions.length; i++)
-    $scope.yAxisOptions.push({colIndex:$scope.colOptions[i].colIndex, colName:$scope.colOptions[i].colName, colSelected:false});
+    $scope.yAxisOptions.push({colIndex:$scope.colOptions[i].colIndex, colName:$scope.colOptions[i].colName, colSelected:false, colLabel:undefined});
 }
 
-function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
 
-function checkRangeInput(range, min, max, interval) {
-  //console.log(range + " " +  min + " " + max + " " + interval );
-  if(!isNumber(min) || !isNumber(max) || !isNumber(interval) ) 
-    abortJS(range + " Error: Please enter numeric min, max and interval.");
-
-  min = parseFloat(min);
-  max = parseFloat(max);
-  interval = parseFloat(interval);
-  if(min > max) 
-    abortJS(range + " Error: max is smaller than min.");
-  
-  if(interval <= 0) 
-    abortJS(range + " Error: interval cannot be smaller or equals to zero.");
-  
-  var ticks = Math.ceil(Math.abs(max - min) / interval);
-  return [min, max, ticks];
-}
-
-function checkLineInput(){
-  var xaxis;
-  if($scope.lineGroup.length==0) abortJS("Error: must have at least one line.");
-  else {
-    xaxis = $scope.lineGroup[0].x;
-    for(var i = 0; i < $scope.lineGroup.length; i++) {
-      if($scope.lineGroup[i].x != xaxis)
-        abortJS("Error: all lines must have same x-axis.");
-    }
+$scope.showGraph=function() {
+  $scope.yaxis = [];
+  for(var i in $scope.yAxisOptions) {
+    if($scope.yAxisOptions[i].colSelected)
+      $scope.yaxis.push($scope.yAxisOptions[i]);
   }
-  return xaxis;
-}
-
-function abortJS(err) {
-  alert(err);
-  throw new Error(err);
+  //if($scope.xaxis==undefined) abortJS("Error: please select x axis.");
+  //if($scope.yaxis.length==0) abortJS("Error: please select at least one y axis.");
+  
 }
 
 function getData() {
   var data = [];
 
-  for (var i = 0; i < $scope.lineGroup.length; i++) {
-    data.push( {data:getOneLineData($scope.lineGroup[i].x.colIndex, $scope.lineGroup[i].y.colIndex), label: $scope.lineGroup[i].name, lines:{show:true}, points:{show:true}});
+  for (var i = 0; i < $scope.yaxis.length; i++) {
+    data.push( {data:getOneLineData($scope.xaxis.colIndex, $scope.yaxis[i].colIndex), label: $scope.yaxis[i].colLabel, lines:{show:true}, points:{show:true}});
   }
   console.log(data);
   return data;
@@ -145,35 +107,39 @@ function getOneLineData(x, y) {
   return data;
 }
 
-$scope.lineGroup=[];
-$scope.addLine = function(){
-  if($scope.xaxis!=undefined && $scope.yaxis!=undefined) {
-    for(var i = 0; i < $scope.lineGroup.length; i++)
-      if($scope.lineGroup[i].x==$scope.xaxis && $scope.lineGroup[i].y==$scope.yaxis)
-        abortJS("Error: Duplicate line.");
-    //console.log($scope.lineName + "/" + $scope.yaxis.colName);
-    if($scope.lineName==undefined||$scope.lineName=="")
-      $scope.lineName = $scope.yaxis.colName;
-    $scope.lineGroup.push({x:$scope.xaxis, y:$scope.yaxis, name:$scope.lineName});
-  }
-  $scope.lineName="";
+
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-$scope.removeLine = function(rx, ry) {
-  var i;
-  for(i = 0; i < $scope.lineGroup.length; i++) {
-    if($scope.lineGroup[i].x==rx && $scope.lineGroup[i].y==ry){
-      $scope.lineGroup.splice(i, 1);
-      break;
-    }
-  }
+function checkRangeInput(range, min, max, interval) {
+  if(!isNumber(min) || !isNumber(max) || !isNumber(interval) ) 
+    abortJS(range + " Error: Please enter numeric min, max and interval.");
+
+  min = parseFloat(min);
+  max = parseFloat(max);
+  interval = parseFloat(interval);
+  if(min > max) 
+    abortJS(range + " Error: max is smaller than min.");
+  
+  if(interval <= 0) 
+    abortJS(range + " Error: interval cannot be smaller or equals to zero.");
+  
+  var ticks = Math.ceil(Math.abs(max - min) / interval);
+  return [min, max, ticks];
 }
+
+function abortJS(err) {
+  alert(err);
+  throw new Error(err);
+}
+
 $scope.getOutputDisplay=function(){
   var 
     data = getData(), // First data series
     xvals, //[xmin, xmax, xticks]
     yvals; //ymin, ymax, yticks
-  var xaxis=checkLineInput();
+  var xaxis= $scope.xaxis;
   if($scope.autoRange) {
     xvals = [null, null, 5];
     yvals = xvals;
