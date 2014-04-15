@@ -1,4 +1,5 @@
 //author: Di Wu
+//Need to check empty input, then correct calculateAutoRange()
 (function () {
     'use strict';
     beaker.bkoDirective("flotr2Line", function () {
@@ -30,7 +31,7 @@
             +     '</div>'
             +   '</div>'
             + '</div>'
-            + '<div id="container" style="width:600px;height:384px;margin:8px auto">{{showGraph()}}</div>',
+            + '<div id="container" style="width:600px;height:384px;margin:8px auto">{{showGraph(autoRange)}}</div>',
 controller: function($scope) {
 
 var
@@ -41,7 +42,7 @@ var
     numCol = colNames.length,
     records = jsObj.values,
     numRecords = records.length,
-    autoXMin=-10, autoXMax=10, autoYMin=-10, autoYMax=10, autoInterval=5, //test which columns are numerical (numerical: true)
+    currXMin=-10, currXMax=10, currYMin=-10, currYMax=10, currXTick=5, currYTick=5, //test which columns are numerical (numerical: true)
     errors = ["Please select the X axis.", "Please select at least one Y axis.", "X/Y Axis: Please enter numeric Min, Max and Interval values.", "X/Y Axis: Max is smaller than Min.", "X/Y Axis: Interval cannot be smaller or equals to zero."],
     commitErrors = [0, 0, 0, 0, 0];
 
@@ -49,18 +50,17 @@ var
 $scope.autoRange = true;
 setDefaultRange();
 function setDefaultRange() {
-  $scope.xmin = autoXMin;
-  $scope.xmax = autoXMax;
-  $scope.xinterval = autoInterval;
-  $scope.ymin = autoYMin;
-  $scope.ymax = autoYMax;
-  $scope.yinterval = autoInterval;
+  $scope.xmin = currXMin;
+  $scope.xmax = currXMax;
+  $scope.xinterval = (currXMax-currXMin)/currXTick;
+  $scope.ymin = currYMin;
+  $scope.ymax = currYMax;
+  $scope.yinterval = (currYMax-currYMin)/currYTick;
 }
 
 $scope.toggleAutoRange = function(){
-  if(autoRange) {
+  if($scope.autoRange) {
     setDefaultRange();
-
   }
 }
 
@@ -100,7 +100,7 @@ function initializeYAxisOptions(){
 }
 
 
-$scope.showGraph=function() {
+$scope.showGraph=function(autoRange) {
   var readyToGraph = true;
   commitErrors = [0, 0, 0, 0, 0];
   /*Check Errors in X, Y column selection*/
@@ -110,37 +110,93 @@ $scope.showGraph=function() {
       $scope.yaxis.push($scope.yAxisOptions[i]);
   }
   if($scope.xaxis==undefined){
-    commitErrors[0] = 1;//"Please select the X axis."
+    commitErrors[0] = 1;//
+    //console.log("Please select the X axis.");
     readyToGraph = false;
   }
   if($scope.yaxis.length==0) {
-    commitErrors[1] = 1;//"Please select at least one Y axis."
+    commitErrors[1] = 1;//
+    //console.log("Please select at least one Y axis.");
     readyToGraph = false;
   }
-  //if(readyToGraph) {
-    //calculateAutoRange();
-  //}
+  if(readyToGraph) {
+    if(autoRange) {
+      calculateAutoRange();
+      setDefaultRange();
+    }
+    else {
+      if(!properRangeInput($scope.xmin, $scope.xmax, $scope.xinterval, $scope.ymin, $scope.ymax, $scope.yinterval)) readyToGraph=false;
+    }
+  }
 
 
   if(readyToGraph)
     getOutputDisplay();
 }
 
-function checkRangeInput(min, max, interval) {
-  if(!isNumber(min) || !isNumber(max) || !isNumber(interval) ) 
-    commitErrors[2] = 1;//"X/Y Axis: Please enter numeric min, max and interval values."
+function calculateAutoRange() {
+  currXTick=5;
+  currYTick=5;
 
-  min = parseFloat(min);
-  max = parseFloat(max);
-  interval = parseFloat(interval);
-  if(min > max) 
-    commitErrors[3] = 1;//"X/Y Axis: Max is smaller than Min."
+  var xMinMax = getColMinMax($scope.xaxis.colIndex);
+  var yMinMax = getColMinMax($scope.yaxis[0].colIndex);
+  for(var i = 1; i < $scope.yaxis.length; i++) {
+    var tmpYMinMax = getColMinMax($scope.yaxis[i].colIndex);
+    yMinMax[0] = Math.min(yMinMax[0], tmpYMinMax[0]);
+    yMinMax[1] = Math.max(yMinMax[1], tmpYMinMax[1]);
+  }
+  currXMin=xMinMax[0];
+  currXMax=xMinMax[1];
+  currYMin=yMinMax[0];
+  currYMax=yMinMax[1];
+}
+
+function getColMinMax(col) {
+  var max=records[0][col], min=max;
+  for(var row = 1; row < numRecords; row++) {
+    max = Math.max(max, records[row][col]);
+    min = Math.min(min, records[row][col]);
+  }
+  return [min, max];
+}
+
+
+function properRangeInput(xmin, xmax, xinterval, ymin, ymax, yinterval) {
+  var isProper=true;
+  if(!isNumber(xmin) || !isNumber(xmax) || !isNumber(xinterval) || !isNumber(ymin) || !isNumber(ymax) || !isNumber(yinterval) ){
+    commitErrors[2] = 1;
+    //console.log("X/Y Axis: Please enter numeric min, max and interval values.");
+    return false;
+  }
+
+  xmin = parseFloat(xmin);
+  xmax = parseFloat(xmax);
+  xinterval = parseFloat(xinterval);
+  ymin = parseFloat(ymin);
+  ymax = parseFloat(ymax);
+  yinterval = parseFloat(yinterval);
+
+  if(xmin > xmax || ymin > ymax) {
+    commitErrors[3] = 1;
+    //console.log("X/Y Axis: Max is smaller than Min.");
+    isProper=false; 
+  }
   
-  if(interval <= 0) 
-    commitErrors[4] = 1;//"X/Y Axis: Interval cannot be smaller or equals to zero."
-  
-  var ticks = Math.ceil(Math.abs(max - min) / interval);
-  return [min, max, ticks];
+  if(xinterval <= 0 || yinterval <= 0) {
+    commitErrors[4] = 1;
+    //console.log("X/Y Axis: Interval cannot be smaller or equals to zero.");
+    isProper=false;
+  }
+
+  if(isProper) {
+    currXMin=xmin, currXMax=xmax, currYMin=ymin, currYMax=ymax,
+    currXTick = Math.ceil(Math.abs(xmax - xmin) / xinterval);
+    currYTick = Math.ceil(Math.abs(ymax - ymin) / yinterval);
+    return true;
+  }
+  else {
+    return false;
+  }
 }
 
 function needReset(varStr) {
@@ -169,16 +225,13 @@ function getOneLineData(x, y) {
   return data;
 }
 
-
 function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
+  return n!=undefined && !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 function getOutputDisplay(){
   var 
     data = getData(), // First data series
-    xvals, //[xmin, xmax, xticks]
-    yvals, //ymin, ymax, yticks
     finalTitle, finalXTitle, finalYTitle; 
 
   var xaxis = $scope.xaxis;
@@ -190,28 +243,19 @@ function getOutputDisplay(){
   if(needReset($scope.ytitle)) finalYTitle="Y";
   else finalYTitle=$scope.ytitle;
 
-  if($scope.autoRange) {
-    xvals = [null, null, 5];
-    yvals = xvals;
-  }
-  else {
-    xvals = checkRangeInput($scope.xmin, $scope.xmax, $scope.xinterval); 
-    yvals = checkRangeInput($scope.ymin, $scope.ymax, $scope.yinterval); 
-  }
-
   graph = Flotr.draw(container, data, {
     title: finalTitle,
     xaxis: {
       title: finalXTitle,
-      min: xvals[0],
-      max: xvals[1],
-      noTicks: xvals[2]
+      min: currXMin,
+      max: currXMax,
+      noTicks: currXTick
     }, 
     yaxis: {
       title: finalYTitle,
-      min: yvals[0],
-      max: yvals[1],
-      noTicks: yvals[2]
+      min: currYMin,
+      max: currYMax,
+      noTicks: currYTick
     },
     grid: {
       
