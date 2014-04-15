@@ -5,8 +5,9 @@
     beaker.bkoDirective("flotr2Line", function () {
       return {
             template: 
-              '<button class="btn btn-primary" ng-click="toggleConf()">&nbsp; {{hideOrShow}} &nbsp;<i class="icon-cog"></i></button>'
-            + '<div class="{{checkInputs()}}"></div>'
+              '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} &nbsp;</button>'
+            + '<button class="btn btn-primary" ng-click="toggleMsg()">&nbsp; {{hideOrShowMsg}} Error &nbsp;</button>'
+            + '<div class="{{msgClass}} id="msg" style={{displayMsg}}"><h4>{{msgType}}</h4><ul><li ng-repeat="err in currErrors">{{err}}</br></li></ul></div>'
             + '<div class="tabbable" id="configuration" style={{displayConf}}>'
             +   '<ul class="nav nav-tabs">'
             +     '<li class="active"><a href="#tab1" data-toggle="tab">Line Group</a></li>'
@@ -64,17 +65,47 @@ $scope.toggleAutoRange = function(){
   }
 }
 
-$scope.hideOrShow = " Hide ";
+$scope.hideOrShowConf = " Hide ";
 $scope.displayConf = "display:block;";
 $scope.toggleConf = function() {
   if($scope.displayConf=="display:block;") {
     $scope.displayConf = "display:none;";
-    $scope.hideOrShow = "Show";
+    $scope.hideOrShowConf = "Show";
   }
   else {
     $scope.displayConf = "display:block;";
-    $scope.hideOrShow = " Hide ";
+    $scope.hideOrShowConf = " Hide ";
   }
+}
+
+$scope.hideOrShowMsg = "Show ";
+$scope.displayMsg = "display:none;";
+$scope.toggleMsg = function() {
+  if($scope.displayMsg=="display:block;") {
+    $scope.displayMsg = "display:none;";
+    $scope.hideOrShowMsg = "Show ";
+  }
+  else {
+    generateMessages();
+    $scope.displayMsg = "display:block;";
+    $scope.hideOrShowMsg = " Hide ";
+  }
+}
+
+function generateMessages() {
+  $scope.currErrors = [];
+  for(var i = 0; i < errors.length; i++) {
+    if(commitErrors[i]==1) $scope.currErrors.push(errors[i]);
+  }
+  if($scope.currErrors.length==0) {
+    $scope.msgClass="alert alert-success";
+    $scope.msgType="Success!";
+  }
+  else {
+    $scope.msgClass="alert alert-error";
+    $scope.msgType="Error!";
+  }
+  //console.log($scope.currErrors);
 }
 
 $scope.colOptions = [];
@@ -128,8 +159,8 @@ $scope.showGraph=function(autoRange) {
       if(!properRangeInput($scope.xmin, $scope.xmax, $scope.xinterval, $scope.ymin, $scope.ymax, $scope.yinterval)) readyToGraph=false;
     }
   }
-
-
+  if($scope.displayMsg=="display:block;")
+    generateMessages() 
   if(readyToGraph)
     getOutputDisplay();
 }
