@@ -7,28 +7,26 @@
             template: 
               '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Setting&nbsp;</button>'
             + '<button class="btn btn-primary" ng-click="toggleMsg()">&nbsp; {{hideOrShowMsg}} Error &nbsp;</button>'
-            + '<div class="{{msgClass}} id="msg" style={{displayMsg}}"><h4>{{msgType}}</h4><ul><li ng-repeat="err in currErrors">{{err}}</br></li></ul></div>'
-            + '<div class id="configuration" style={{displayConf}}>'
+            + '<div class={{msgClass}} id="msg" style={{displayMsg}}><h4>{{msgType}}</h4><ul><li ng-repeat="err in currErrors">{{err}}</br></li></ul></div>'
+            + '<div id="configuration" style={{displayConf}}>'
             +   '<b>Number of Pie: &nbsp;</b><input type="text" ng-model="numPie" placeholder="Enter number of pie"></br>'
             +   '<b>Pie Setting&nbsp;</b>'
             +      '<table>' 
             +         '<tr><th>Title</th><th>Data</th><th>Label</th></tr>'
             +         '<tr ng-repeat="pie in getPieGroup(numPie)">'
             +           '<td><input type="text" ng-model="pie.title" placeholder="Enter pie title"></td>'
-            +           '<td><select ng-model="pie.data" ng-options="dataOption.colName for dataOptions in dataOptions"><option value="">-- choose data --</option></select></td>'
-            +           '<td><select ng-model="pie.label" ng-options="labelOption.colName for labelOptions in labelOptions"><option value="">-- choose label --</option></select><</td>'
+            +           '<td><select ng-model="pie.data" ng-options="dataOption.colName for dataOption in dataOptions"><option value="-- choose data --"></option></select></td>'
+            +           '<td><select ng-model="pie.label" ng-options="labelOption.colName for labelOption in labelOptions"><option value="-- choose label --"></option></select></td>'
             +         '</tr>'
             +      '</table>'
             + '</div>'
             + '<div id="graphs">'
-            +   '<ul><li ng-repeat="pie in getPieGroup(numPie)"><div id="pie.id" style="width:600px;height:384px;margin:8px auto">{{showGraph(pie.id)}}</div></li></ul>'
-            + '</div>'
-            ,
+            +   '<ul><li ng-repeat="pie in getPieGroup(numPie)"><div id="{{pie.id}}" style="width:600px;height:384px;margin:8px auto">{{showGraph(pie.id)}}</div></li></ul>'
+            + '</div>',
 controller: function($scope) {
 
+
 var
-    container,
-    graph,
     jsObj = $scope.model.getCellModel(),
     colNames = jsObj.columnNames,
     numCol = colNames.length,
@@ -98,9 +96,14 @@ function checkNumCol() {
 $scope.labelOptions = [];
 checkLabelCol();
 function checkLabelCol(){
+  var col;
   for(col = 0; col < numCol; col++) {
     $scope.labelOptions.push({colIndex:col, colName:colNames[col]});
   }
+}
+
+function isNumber(n) {
+  return n!=undefined && !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 var validUserInput = checkUserInput();
@@ -110,6 +113,7 @@ function checkUserInput() {
   }
   return true;
 }
+
 
 $scope.getPieGroup=function(numPie) {
   if(!validUserInput) return pieGroup;
@@ -135,6 +139,10 @@ $scope.getPieGroup=function(numPie) {
   return pieGroup;
 }
 
+function needReset(varStr) {
+  return (varStr==undefined||varStr==null||varStr=="");
+}
+
 function isNormalInteger(str) {
     var n = ~~Number(str);
     return String(n) === str && n > 0;
@@ -151,62 +159,60 @@ $scope.showGraph=function(pieIndex) {
 }
 
 
-function needReset(varStr) {
-  return (varStr==undefined||varStr==null||varStr=="");
-}
-
-function getOneLineData(data, label) {
+function getOnePieData(dt, label) {
+  //console.log(dt + " " + label);
+  
   var
-    data = [],
-    row;
+    finalData = [], row;
 
   for(row = 0; row < numRecords; row++) {
-    data.push({[0,parseFloat(records[row][data]]), label:records[row][label]});
+    finalData.push( { data: [[ 0, parseFloat(records[row][dt]) ]], label:records[row][label] } );
   }
-  return data;
+  console.log(finalData);
+  return finalData;
+  
 }
 
-function isNumber(n) {
-  return n!=undefined && !isNaN(parseFloat(n)) && isFinite(n);
-}
 
 function getOutputDisplay(){
-  var data, finalTitle;
-  for(var p = 0; p < $scope.numPie; p++) {
-    data = getOnePieData(pieGroup[p].data.colIndex, pieGroup[p].label.colIndex);
+  var data, finalTitle, p, pie, container, graph;
+  for(p = 0; p < $scope.numPie; p++) {
+    pie = pieGroup[p];
+    data = getOnePieData(pie.data.colIndex, pie.label.colIndex);
 
-  //Set title
-  if(needReset(pieGroup[p].title)) finalTitle="Pie Graph " + pieGroup[p].id;
-  else finalTitle=pieGroup[p].title;
+    //Set title
+    if(needReset(pie.title)) finalTitle="Pie Graph " + pie.id;
+    else finalTitle=pie.title;
 
-  container = document.getElementById(pieGroup[p].id);
+    container = document.getElementById(pie.id);
 
-  graph = Flotr.draw(container, data, {
-    title: finalTitle,
-    HtmlText: false,
-    pie:{
-      show: true,
-      explode: 6
-    },
-    xaxis: {
-      showLabels: false
-    }, 
-    yaxis: {
-      showLabels: false
-    },
-    grid: {
-      verticalLines: false;
-      horizontalLines : false;
-    },
-    mouse: {
-      track: true
-    },
-    legend: {
-      position: 'se',
-      backgroundColor: '#D2E8FF'
-    }
-  });
-}
+    graph = Flotr.draw(container, data, {
+      title: finalTitle,
+      HtmlText: false,
+      pie:{
+        show: true,
+        explode: 6
+      },
+      xaxis: {
+        showLabels: false
+      }, 
+      yaxis: {
+        showLabels: false
+      },
+      grid: {
+        verticalLines: false,
+        horizontalLines : false
+      },
+      mouse: {
+        track: true
+      },
+      legend: {
+        position: 'se',
+        backgroundColor: '#D2E8FF'
+      }
+    });
+
+  }
 }
 
 

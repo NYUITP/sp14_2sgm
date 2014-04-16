@@ -8,7 +8,7 @@
             template: 
               '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Setting&nbsp;</button>'
             + '<button class="btn btn-primary" ng-click="toggleMsg()">&nbsp; {{hideOrShowMsg}} Error &nbsp;</button>'
-            + '<div class="{{msgClass}} id="msg" style={{displayMsg}}"><h4>{{msgType}}</h4><ul><li ng-repeat="err in currErrors">{{err}}</br></li></ul></div>'
+            + '<div class={{msgClass}} id="msg" style={{displayMsg}}><h4>{{msgType}}</h4><ul><li ng-repeat="err in currErrors">{{err}}</br></li></ul></div>'
             + '<div class="tabbable" id="configuration" style={{displayConf}}>'
             +   '<ul class="nav nav-tabs">'
             +     '<li class="active"><a href="#tab1" data-toggle="tab">Line Group</a></li>'
