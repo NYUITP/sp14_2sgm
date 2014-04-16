@@ -20,8 +20,8 @@
             +         '</tr>'
             +      '</table>'
             + '</div>'
-            + '<div id="graphs">'
-            +   '<ul><li ng-repeat="pie in getPieGroup(numPie)"><div id="{{pie.id}}" style="width:600px;height:384px;margin:8px auto">{{showGraph(pie.id)}}</div></li></ul>'
+            + '<div id="graphs" style={{checkError()}}>'
+            +   '<ul class="unstyled"><li ng-repeat="pie in getPieGroup(numPie)"><div id="{{pie.id}}" style="width:600px;height:384px;margin:8px auto">{{showGraph(pie.id)}}</div></li></ul>'
             + '</div>',
 controller: function($scope) {
 
@@ -148,19 +148,56 @@ function isNormalInteger(str) {
     return String(n) === str && n > 0;
 }
 
-$scope.showGraph=function(pieIndex) {
-  var readyToGraph = true;
+var readyToGraph = true;
+$scope.checkError=function() {
+  readyToGraph = true;
+  var outStyle = "display:block;"
   commitErrors = [0, 0, 0, 0, 0];
   //error handling 
+  if(!validUserInput){
+    commitErrors[0] = 1;
+    readyToGraph = false;
+  }
+  if(readyToGraph) {
+    if(needReset($scope.numPie)) {
+      commitErrors[1] = 1;
+      readyToGraph = false;
+    }
+    else {
+      if(!isNormalInteger($scope.numPie)) {
+        commitErrors[2] = 1;
+        readyToGraph = false;
+      }
+    }
+  }
+  if(readyToGraph) {
+    var pie;
+    for(var i = 0; i < pieGroup.length; i++) {
+      pie = pieGroup[i];
+      if(pie.data==undefined || pie.label==undefined) {
+        commitErrors[3] = 1;
+        readyToGraph = false;
+        break;
+      }
+    }
+  }
+
   if($scope.displayMsg=="display:block;")
     generateMessages(); 
+
+  if(!readyToGraph) 
+    outStyle = "display:none;"
+
+  return outStyle;
+}
+
+$scope.showGraph=function(pieIndex) {
   if(readyToGraph)
-    getOutputDisplay();
+    getOutputDisplay(pieIndex);
 }
 
 
 function getOnePieData(dt, label) {
-  //console.log(dt + " " + label);
   
   var
     finalData = [], row;
@@ -174,45 +211,42 @@ function getOnePieData(dt, label) {
 }
 
 
-function getOutputDisplay(){
-  var data, finalTitle, p, pie, container, graph;
-  for(p = 0; p < $scope.numPie; p++) {
-    pie = pieGroup[p];
-    data = getOnePieData(pie.data.colIndex, pie.label.colIndex);
+function getOutputDisplay(pieIndex){
+  var data, finalTitle, pie, container, graph;
+  pie = pieGroup[pieIndex];
+  data = getOnePieData(pie.data.colIndex, pie.label.colIndex);
 
     //Set title
-    if(needReset(pie.title)) finalTitle="Pie Graph " + pie.id;
-    else finalTitle=pie.title;
+  if(needReset(pie.title)) finalTitle="Pie Graph " + pie.id;
+  else finalTitle=pie.title;
 
-    container = document.getElementById(pie.id);
+  container = document.getElementById(pie.id);
 
-    graph = Flotr.draw(container, data, {
-      title: finalTitle,
-      HtmlText: false,
-      pie:{
-        show: true,
-        explode: 6
-      },
-      xaxis: {
-        showLabels: false
-      }, 
-      yaxis: {
-        showLabels: false
-      },
-      grid: {
-        verticalLines: false,
-        horizontalLines : false
-      },
-      mouse: {
-        track: true
-      },
-      legend: {
-        position: 'se',
-        backgroundColor: '#D2E8FF'
-      }
-    });
-
-  }
+  graph = Flotr.draw(container, data, {
+    title: finalTitle,
+    HtmlText: false,
+    pie:{
+      show: true,
+      explode: 6
+    },
+    xaxis: {
+      showLabels: false
+    }, 
+    yaxis: {
+      showLabels: false
+    },
+    grid: {
+      verticalLines: false,
+      horizontalLines : false
+    },
+    mouse: {
+      track: true
+    },
+    legend: {
+      position: 'se',
+      backgroundColor: '#D2E8FF'
+    }
+  });
 }
 
 
