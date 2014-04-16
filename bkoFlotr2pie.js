@@ -9,15 +9,17 @@
             + '<div class={{msgClass}} id="msg" style={{displayMsg}}><h4>{{msgType}}</h4><ul><li ng-repeat="err in currErrors">{{err}}</br></li></ul></div>'
             + '<div id="configuration" style={{displayConf}}>'
             +   '<b>Number of Pie: &nbsp;</b><input type="text" ng-model="numPie" placeholder="Enter number of pie"></br>'
-            +   '<b>Pie Setting&nbsp;</b>'
-            +      '<table>' 
+            +   '<div id="pieSetting" style={{checkNumPie(numPie)}}>'
+            +     '<b>Pie Setting&nbsp;</b>'
+            +       '<table>' 
             +         '<tr><th>Title</th><th>Data</th><th>Label</th></tr>'
             +         '<tr ng-repeat="pie in getPieGroup(numPie)">'
             +           '<td><input type="text" ng-model="pie.title" placeholder="Enter pie title"></td>'
             +           '<td><select ng-model="pie.data" ng-options="dataOption.colName for dataOption in dataOptions"><option value="-- choose data --"></option></select></td>'
             +           '<td><select ng-model="pie.label" ng-options="labelOption.colName for labelOption in labelOptions"><option value="-- choose label --"></option></select></td>'
             +         '</tr>'
-            +      '</table>'
+            +       '</table  >'
+            +   '</div>'
             + '</div>'
             + '<div id="graphs" style={{checkError()}}>'
             +   '<ul class="unstyled"><li ng-repeat="pie in getPieGroup(numPie)"><div id="{{pie.id}}" style="width:600px;height:384px;margin:8px auto">{{showGraph(pie.id)}}</div></li></ul>'
@@ -151,13 +153,19 @@ function isNormalInteger(str) {
     return String(n) === str && n > 0;
 }
 
+$scope.checkNumPie = function(numPie) {
+  if(!validUserInput || needReset(numPie) || !isNormalInteger(numPie))
+    return "display:none;"
+  else
+    return "display:block;"
+}
+
 var readyToGraph = true;
 $scope.checkError=function() {
   readyToGraph = true;
   var outStyle = "display:block;"
   commitErrors = [0, 0, 0, 0, 0];
   //error handling 
-<<<<<<< HEAD
   if(!validUserInput){
     commitErrors[0] = 1;
     readyToGraph = false;
@@ -186,7 +194,6 @@ $scope.checkError=function() {
     }
   }
 
-=======
  if($scope.numPie==""){
     commitErrors[1] = 1;
     readyToGraph = false;
@@ -199,7 +206,6 @@ $scope.checkError=function() {
     commitErrors[3] = 1;
     readyToGraph = false;
   }*/
->>>>>>> FETCH_HEAD
   if($scope.displayMsg=="display:block;")
     generateMessages(); 
 
@@ -211,12 +217,9 @@ $scope.checkError=function() {
 
 $scope.showGraph=function(pieIndex) {
   if(readyToGraph)
-<<<<<<< HEAD
     getOutputDisplay(pieIndex);
-=======
     getOutputDisplay();
 
->>>>>>> FETCH_HEAD
 }
 
 
