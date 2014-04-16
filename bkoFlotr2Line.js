@@ -1,17 +1,18 @@
 //author: Di Wu
 //Need to check empty input, then correct calculateAutoRange()
+//checkUserInput();
 (function () {
     'use strict';
     beaker.bkoDirective("flotr2Line", function () {
       return {
             template: 
-              '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} &nbsp;</button>'
+              '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Setting&nbsp;</button>'
             + '<button class="btn btn-primary" ng-click="toggleMsg()">&nbsp; {{hideOrShowMsg}} Error &nbsp;</button>'
             + '<div class="{{msgClass}} id="msg" style={{displayMsg}}"><h4>{{msgType}}</h4><ul><li ng-repeat="err in currErrors">{{err}}</br></li></ul></div>'
             + '<div class="tabbable" id="configuration" style={{displayConf}}>'
             +   '<ul class="nav nav-tabs">'
             +     '<li class="active"><a href="#tab1" data-toggle="tab">Line Group</a></li>'
-            +     '<li><a href="#tab2" data-toggle="tab">Axis</a></li>'
+            +     '<li><a href="#tab2" data-toggle="tab">Bound</a></li>'
             +   '</ul>'
             +   '<div class="tab-content">'
             +     '<div class="tab-pane active" id="tab1">'
@@ -70,7 +71,7 @@ $scope.displayConf = "display:block;";
 $scope.toggleConf = function() {
   if($scope.displayConf=="display:block;") {
     $scope.displayConf = "display:none;";
-    $scope.hideOrShowConf = "Show";
+    $scope.hideOrShowConf = "Show ";
   }
   else {
     $scope.displayConf = "display:block;";
@@ -160,7 +161,7 @@ $scope.showGraph=function(autoRange) {
     }
   }
   if($scope.displayMsg=="display:block;")
-    generateMessages() 
+    generateMessages(); 
   if(readyToGraph)
     getOutputDisplay();
 }

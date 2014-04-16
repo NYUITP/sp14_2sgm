@@ -1,165 +1,228 @@
-//Author: Priyanka Inani
-//two pie chart
-
+//really want unlimited number of graphs?
 (function () {
     'use strict';
     beaker.bkoDirective("flotr2Pie", function () {
- return {
-	template: '<div>'
-            + '<b>Title1</b> <input type="text" id="title" size="15"><br>'
-            + '<b>Value1</b>'
-            + '<select id=selectvalue>'
-            + '</select><br>'
-            + '<b>Label1</b>'
-            + '<select id=selectlabel>'
-            + '</select><br>'
-	    + '<b>Title2</b> <input type="text" id="title2" size="15"><br>'
-            + '<b>Value2</b>'
-            + '<select id=selectvalue2>'
-            + '</select><br>'
-            + '<b>Label2</b>'
-            + '<select id=selectlabel2>'
-            + '</select><br>'
-            + '<input type="button" ng-click="getOutputDisplay()" value="Run">'
-            + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div>'
-	    + '<div id="container2" style="width:600px;height:384px;margin:8px auto"></div>'
-            + '</div>',
-	link: function (scope, element, attrs) {
+      return {
+            template: 
+              '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Setting&nbsp;</button>'
+            + '<button class="btn btn-primary" ng-click="toggleMsg()">&nbsp; {{hideOrShowMsg}} Error &nbsp;</button>'
+            + '<div class="{{msgClass}} id="msg" style={{displayMsg}}"><h4>{{msgType}}</h4><ul><li ng-repeat="err in currErrors">{{err}}</br></li></ul></div>'
+            + '<div class id="configuration" style={{displayConf}}>'
+            +   '<b>Number of Pie: &nbsp;</b><input type="text" ng-model="numPie" placeholder="Enter number of pie"></br>'
+            +   '<b>Pie Setting&nbsp;</b>'
+            +      '<table>' 
+            +         '<tr><th>Title</th><th>Data</th><th>Label</th></tr>'
+            +         '<tr ng-repeat="pie in getPieGroup(numPie)">'
+            +           '<td><input type="text" ng-model="pie.title" placeholder="Enter pie title"></td>'
+            +           '<td><select ng-model="pie.data" ng-options="dataOption.colName for dataOption in dataOptions"><option value="">-- choose data --</option></select></td>'
+            +           '<td><select ng-model="pie.label" ng-options="labelOption.colName for labelOption in labelOptions"><option value="">-- choose label --</option></select><</td>'
+            +         '</tr>'
+            +      '</table>'
+            + '</div>'
+            + '<div id="graphs">'
+            +   '<ul><li ng-repeat="pie in getPieGroup(numPie)"><div id="pie.id" style="width:600px;height:384px;margin:8px auto">{{showGraph(pie.id)}}</div></li></ul>'
+            + '</div>'
+            ,
+controller: function($scope) {
 
-		var
-    		container = document.getElementById('container'),
-   		 graph,
-    		jsObj = scope.model.getCellModel(),
-    		colNames = jsObj.columnNames,
-    		numCol = colNames.length,
-    		records = jsObj.values,
-    		numRecords = records.length,
-    		isNumCol = checkNumCol(); //test which columns are numerical (numerical: true)
+var
+    container, // = document.getElementById('container')
+    graph,
+    jsObj = $scope.model.getCellModel(),
+    colNames = jsObj.columnNames,
+    numCol = colNames.length,
+    records = jsObj.values,
+    numRecords = records.length,
+    errors = ["Please enter valid input: at least two columns, at least one numeric column." ,"Please enter how many pies do you need.", "Please enter numeric value greater than 0 for the number of pies.", "Please select 'Data' and 'Label' for every pie."],
+    commitErrors = [0, 0, 0, 0],
+    pieGroup = [];
 
-		//colNames[0] = "Index";	
-
-		function checkNumCol() {
-  		var boolArr = [true], col, row;
-  		for(col = 1; col < numCol; col++) {
-    		for(row = 0; row < numRecords; row++) {
-      		if(!isNumber(records[row][col])) {
-        	boolArr.push(false);
-        	break;
-      		}
-    		}
-    		if(row==numRecords)
-      		boolArr.push(true);
-  		}
-  		
-  		return boolArr;
-		}
-
-		fillDropdown("selectvalue");
-		fillDropdownLabel("selectlabel");
-		fillDropdown("selectvalue2");
-		fillDropdownLabel("selectlabel2");
-
-		function fillDropdown(id) {
-  		var 
-    		element = document.getElementById(id),
-    		html = '',
-    		i;
-    		for(i = 0; i < numCol; i++) {
-      		if(isNumCol[i]){
-        		html = html + '<option value="' + i + '">' + colNames[i] + '</option>';
-      		}
-    		}
-    		element.innerHTML = html;
-		}
-
-		function fillDropdownLabel(id) {
-  		var 
-    		element = document.getElementById(id),
-    		html = '',
-    		i;
-    		for(i = 0; i < numCol; i++) {
-        		html = html + '<option value="' + i + '">' + colNames[i] + '</option>';
-    		}
-    		element.innerHTML = html;
-		}	
-		
-		scope.getOutputDisplay=function(){
-  var 
-    graphTitle = document.getElementById("title").value,
-    value = document.getElementById("selectvalue"),
-    label = document.getElementById("selectlabel"),
-    colXIndex = parseInt(value.options[value.selectedIndex].value),
-    colYIndex = parseInt(label.options[label.selectedIndex].value),
-    data = getData(colXIndex, colYIndex);
-
-  
-var 
-    graphTitle2 = document.getElementById("title2").value,
-    value2 = document.getElementById("selectvalue2"),
-    label2 = document.getElementById("selectlabel2"),
-    colXIndex2 = parseInt(value2.options[value2.selectedIndex].value),
-    colYIndex2 = parseInt(label2.options[label2.selectedIndex].value),
-    data2 = getData(colXIndex2, colYIndex2);
-  
-graph = Flotr.draw(container, data,{
-		title: graphTitle,
-    		HtmlText : false,
-    		grid : {
-      		verticalLines : false,
-      		horizontalLines : false
-    		},
-    		xaxis : { showLabels : false },
-	        yaxis : { showLabels : false },
-    		pie : {
-      		show : true, 
-      		explode : 6
-   		 },
-    		mouse : { track : true },
-    		legend : {
-      		position : 'se',
-      		backgroundColor : '#D2E8FF'
-    		}
-		});
-
-	graph = Flotr.draw(container2, data2,{
-		title: graphTitle2,
-    		HtmlText : false,
-    		grid : {
-      		verticalLines : false,
-      		horizontalLines : false
-    		},
-    		xaxis : { showLabels : false },
-	        yaxis : { showLabels : false },
-    		pie : {
-      		show : true, 
-      		explode : 6
-   		 },
-    		mouse : { track : true },
-    		legend : {
-      		position : 'se',
-      		backgroundColor : '#D2E8FF'
-    		}
-		});
-  
+$scope.hideOrShowConf = " Hide ";
+$scope.displayConf = "display:block;";
+$scope.toggleConf = function() {
+  if($scope.displayConf=="display:block;") {
+    $scope.displayConf = "display:none;";
+    $scope.hideOrShowConf = "Show";
+  }
+  else {
+    $scope.displayConf = "display:block;";
+    $scope.hideOrShowConf = " Hide ";
+  }
 }
 
-function getData(x, y) {
+$scope.hideOrShowMsg = "Show ";
+$scope.displayMsg = "display:none;";
+$scope.toggleMsg = function() {
+  if($scope.displayMsg=="display:block;") {
+    $scope.displayMsg = "display:none;";
+    $scope.hideOrShowMsg = "Show ";
+  }
+  else {
+    generateMessages();
+    $scope.displayMsg = "display:block;";
+    $scope.hideOrShowMsg = " Hide ";
+  }
+}
+
+function generateMessages() {
+  $scope.currErrors = [];
+  for(var i = 0; i < errors.length; i++) {
+    if(commitErrors[i]==1) $scope.currErrors.push(errors[i]);
+  }
+  if($scope.currErrors.length==0) {
+    $scope.msgClass="alert alert-success";
+    $scope.msgType="Success!";
+  }
+  else {
+    $scope.msgClass="alert alert-error";
+    $scope.msgType="Error!";
+  }
+}
+
+$scope.dataOptions = [];
+checkNumCol();
+function checkNumCol() {
+  var col, row;
+  for(col = 0; col < numCol; col++) {
+    for(row = 0; row < numRecords; row++) {
+      if(!isNumber(records[row][col])) {
+        break;
+      }
+    }
+    if(row==numRecords)
+      $scope.dataOptions.push({colIndex:col, colName:colNames[col]});
+  }
+}
+
+$scope.labelOptions = [];
+checkLabelCol();
+function checkLabelCol(){
+  for(col = 0; col < numCol; col++) {
+    $scope.labelOptions.push({colIndex:col, colName:colNames[col]});
+  }
+}
+
+var validUserInput = checkUserInput();
+function checkUserInput() {
+  if($scope.labelOptions.length<2 || $scope.dataOptions.length<1) {
+    return false;
+  }
+  return true;
+}
+
+$scope.getPieGroup=function(numPie) {
+  if(!validUserInput) return pieGroup;
+  if(needReset(numPie) || !isNormalInteger(numPie)) return pieGroup;
+  numPie = parseInt(numPie);
+  if(pieGroup.length==0) {
+    for(var i = 0; i < numPie; i++)
+      pieGroup.push({id:i, title:undefined, data:undefined, label:undefined});
+    return pieGroup;
+  }
+  if(pieGroup.length>numPie) {
+    pieGroup = pieGroup.slice(0, numPie);
+    return pieGroup;
+  }
+  if(pieGroup.length<numPie) {
+    var currID = pieGroup.length;
+    while(pieGroup.length<numPie) {
+      pieGroup.push({id:currID, title:undefined, data:undefined, label:undefined});
+      currID = currID+1;
+    }
+    return pieGroup;
+  }
+  return pieGroup;
+}
+
+function isNormalInteger(str) {
+    var n = ~~Number(str);
+    return String(n) === str && n > 0;
+}
+
+$scope.showGraph=function(pieIndex) {
+  var readyToGraph = true;
+  commitErrors = [0, 0, 0, 0, 0];
+
+  if($scope.displayMsg=="display:block;")
+    generateMessages(); 
+  if(readyToGraph)
+    getOutputDisplay();
+}
+
+
+function needReset(varStr) {
+  return (varStr==undefined||varStr==null||varStr=="");
+}
+
+function getData() {
+  var data = [];
+
+  for (var i = 0; i < $scope.yaxis.length; i++) {
+    var lb = $scope.yaxis[i].colLabel;
+    if(needReset(lb)) lb = $scope.yaxis[i].colName;
+    data.push( {data:getOneLineData($scope.xaxis.colIndex, $scope.yaxis[i].colIndex), label: lb, lines:{show:true}, points:{show:true}});
+  }
+  return data;
+}
+
+function getOneLineData(x, y) {
   var
     data = [],
     row;
 
   for(row = 0; row < numRecords; row++) {
-    data.push({data:[[0,parseInt(records[row][x])]], label:records[row][y]});
+    data.push([records[row][x], records[row][y]]);
   }
- 
-console.log(data);
   return data;
 }
+
 function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
+  return n!=undefined && !isNaN(parseFloat(n)) && isFinite(n);
 }
-	
-      }
-     };
+
+function getOutputDisplay(){
+  for(var p = 0; p < $scope.numPie; p++) {
+  var 
+    data = getData(), // First data series
+    finalTitle, finalXTitle, finalYTitle; 
+
+  var xaxis = $scope.xaxis;
+  //Set title
+  if(needReset($scope.title)) finalTitle="Line Graph";
+  else finalTitle=$scope.title;
+  if(needReset($scope.xtitle)) finalXTitle=$scope.xaxis.colName;
+  else finalXTitle=$scope.xtitle;
+  if(needReset($scope.ytitle)) finalYTitle="Y";
+  else finalYTitle=$scope.ytitle;
+
+  graph = Flotr.draw(container, data, {
+    title: finalTitle,
+    xaxis: {
+      title: finalXTitle,
+      min: currXMin,
+      max: currXMax,
+      noTicks: currXTick
+    }, 
+    yaxis: {
+      title: finalYTitle,
+      min: currYMin,
+      max: currYMax,
+      noTicks: currYTick
+    },
+    grid: {
+      
+    },
+    mouse: {
+      track: true
+    }
+  });
+}
+}
+
+
+
+
+        }
+      };
     });
-})();
+})(); 
