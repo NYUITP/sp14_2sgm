@@ -7,3 +7,5 @@ Individually load all the js files starting with bkoFlotr2, for instance bkoFlot
 
 All the files are loaded using chrome console at run time.
 Give table input and choose the required output type for instance pie, line or bubble chart.
+
+Different input selection required for different charts. Carefully choose input and overcome errors displayed on page for better output.
