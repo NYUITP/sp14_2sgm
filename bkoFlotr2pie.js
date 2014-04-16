@@ -1,4 +1,3 @@
-//really want unlimited number of graphs?
 //Values = int parse int, values=float, parse float
 (function () {
     'use strict';
@@ -63,6 +62,8 @@ $scope.toggleMsg = function() {
   }
 }
 
+
+
 function generateMessages() {
   $scope.currErrors = [];
   for(var i = 0; i < errors.length; i++) {
@@ -77,6 +78,8 @@ function generateMessages() {
     $scope.msgType="Error!";
   }
 }
+
+
 
 $scope.dataOptions = [];
 checkNumCol();
@@ -154,6 +157,7 @@ $scope.checkError=function() {
   var outStyle = "display:block;"
   commitErrors = [0, 0, 0, 0, 0];
   //error handling 
+<<<<<<< HEAD
   if(!validUserInput){
     commitErrors[0] = 1;
     readyToGraph = false;
@@ -182,6 +186,20 @@ $scope.checkError=function() {
     }
   }
 
+=======
+ if($scope.numPie==""){
+    commitErrors[1] = 1;
+    readyToGraph = false;
+  }
+  if(parseInt($scope.numPie)==0){
+    commitErrors[2] = 1;
+    readyToGraph = false;
+  }
+  /*if(($scope.pie.data || $scope.pie.label)==""){
+    commitErrors[3] = 1;
+    readyToGraph = false;
+  }*/
+>>>>>>> FETCH_HEAD
   if($scope.displayMsg=="display:block;")
     generateMessages(); 
 
@@ -193,7 +211,12 @@ $scope.checkError=function() {
 
 $scope.showGraph=function(pieIndex) {
   if(readyToGraph)
+<<<<<<< HEAD
     getOutputDisplay(pieIndex);
+=======
+    getOutputDisplay();
+
+>>>>>>> FETCH_HEAD
 }
 
 
@@ -205,7 +228,7 @@ function getOnePieData(dt, label) {
   for(row = 0; row < numRecords; row++) {
     finalData.push( { data: [[ 0, parseFloat(records[row][dt]) ]], label:records[row][label] } );
   }
-  console.log(finalData);
+  //console.log(finalData);
   return finalData;
   
 }
