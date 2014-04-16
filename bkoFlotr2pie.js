@@ -14,8 +14,8 @@
             +         '<tr><th>Title</th><th>Data</th><th>Label</th></tr>'
             +         '<tr ng-repeat="pie in getPieGroup(numPie)">'
             +           '<td><input type="text" ng-model="pie.title" placeholder="Enter pie title"></td>'
-            +           '<td><select ng-model="pie.data" ng-options="dataOption.colName for dataOption in dataOptions"><option value="">-- choose data --</option></select></td>'
-            +           '<td><select ng-model="pie.label" ng-options="labelOption.colName for labelOption in labelOptions"><option value="">-- choose label --</option></select><</td>'
+            +           '<td><select ng-model="pie.data" ng-options="dataOption.colName for dataOptions in dataOptions"><option value="">-- choose data --</option></select></td>'
+            +           '<td><select ng-model="pie.label" ng-options="labelOption.colName for labelOptions in labelOptions"><option value="">-- choose label --</option></select><</td>'
             +         '</tr>'
             +      '</table>'
             + '</div>'
@@ -154,24 +154,13 @@ function needReset(varStr) {
   return (varStr==undefined||varStr==null||varStr=="");
 }
 
-function getData() {
-  var data = [];
-
-  for (var i = 0; i < $scope.yaxis.length; i++) {
-    var lb = $scope.yaxis[i].colLabel;
-    if(needReset(lb)) lb = $scope.yaxis[i].colName;
-    data.push( {data:getOneLineData($scope.xaxis.colIndex, $scope.yaxis[i].colIndex), label: lb, lines:{show:true}, points:{show:true}});
-  }
-  return data;
-}
-
-function getOneLineData(x, y) {
+function getOneLineData(data, label) {
   var
     data = [],
     row;
 
   for(row = 0; row < numRecords; row++) {
-    data.push([records[row][x], records[row][y]]);
+    data.push({[0,parseFloat(records[row][data]]), label:records[row][label]});
   }
   return data;
 }
@@ -181,12 +170,10 @@ function isNumber(n) {
 }
 
 function getOutputDisplay(){
+  var data, title;
   for(var p = 0; p < $scope.numPie; p++) {
-  var 
-    data = getData(), // First data series
-    finalTitle, finalXTitle, finalYTitle; 
+    data = getOnePieData(pieGroup[p].data.colIndex, pieGroup[p].label.colIndex);
 
-  var xaxis = $scope.xaxis;
   //Set title
   if(needReset($scope.title)) finalTitle="Line Graph";
   else finalTitle=$scope.title;
