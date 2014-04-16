@@ -1,4 +1,5 @@
 //really want unlimited number of graphs?
+//Values = int parse int, values=float, parse float
 (function () {
     'use strict';
     beaker.bkoDirective("flotr2Pie", function () {
@@ -26,7 +27,7 @@
 controller: function($scope) {
 
 var
-    container, // = document.getElementById('container')
+    container,
     graph,
     jsObj = $scope.model.getCellModel(),
     colNames = jsObj.columnNames,
@@ -142,7 +143,7 @@ function isNormalInteger(str) {
 $scope.showGraph=function(pieIndex) {
   var readyToGraph = true;
   commitErrors = [0, 0, 0, 0, 0];
-
+  //error handling 
   if($scope.displayMsg=="display:block;")
     generateMessages(); 
   if(readyToGraph)
@@ -170,37 +171,39 @@ function isNumber(n) {
 }
 
 function getOutputDisplay(){
-  var data, title;
+  var data, finalTitle;
   for(var p = 0; p < $scope.numPie; p++) {
     data = getOnePieData(pieGroup[p].data.colIndex, pieGroup[p].label.colIndex);
 
   //Set title
-  if(needReset($scope.title)) finalTitle="Line Graph";
-  else finalTitle=$scope.title;
-  if(needReset($scope.xtitle)) finalXTitle=$scope.xaxis.colName;
-  else finalXTitle=$scope.xtitle;
-  if(needReset($scope.ytitle)) finalYTitle="Y";
-  else finalYTitle=$scope.ytitle;
+  if(needReset(pieGroup[p].title)) finalTitle="Pie Graph " + pieGroup[p].id;
+  else finalTitle=pieGroup[p].title;
+
+  container = document.getElementById(pieGroup[p].id);
 
   graph = Flotr.draw(container, data, {
     title: finalTitle,
+    HtmlText: false,
+    pie:{
+      show: true,
+      explode: 6
+    },
     xaxis: {
-      title: finalXTitle,
-      min: currXMin,
-      max: currXMax,
-      noTicks: currXTick
+      showLabels: false
     }, 
     yaxis: {
-      title: finalYTitle,
-      min: currYMin,
-      max: currYMax,
-      noTicks: currYTick
+      showLabels: false
     },
     grid: {
-      
+      verticalLines: false;
+      horizontalLines : false;
     },
     mouse: {
       track: true
+    },
+    legend: {
+      position: 'se',
+      backgroundColor: '#D2E8FF'
     }
   });
 }
