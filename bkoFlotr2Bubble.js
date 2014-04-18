@@ -2,7 +2,7 @@
 //Date: 04/18/2014
 (function () {
     'use strict';
-    beaker.bkoDirective("flotr2Bubble29", function () {
+    beaker.bkoDirective("flotr2Bubble", function () {
  return {
 	template:'<input type="button" id="button" value="Show/Hide Configuration" style="background-color:blue;color:white;height:30px; width:200px"><br><br>'
 	    + '<div id="main" style="border:1.5px solid">'
