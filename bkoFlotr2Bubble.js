@@ -1,10 +1,11 @@
 //Author: Pallavi Mane
-//Date: 04/16/2014
+//Date: 04/18/2014
 (function () {
     'use strict';
-    beaker.bkoDirective("flotr2Bubble", function () {
+    beaker.bkoDirective("flotr2Bubble29", function () {
  return {
-	template: '<div id="main">'
+	template:'<input type="button" id="button" value="Show/Hide Configuration" style="background-color:blue;color:white;height:30px; width:200px"><br><br>'
+	    + '<div id="main" style="border:1.5px solid">'
             + '<b>Title</b> <input type="text" id="title" size="15"><br>'
             + '<b>X Axis</b>'
             + '<select id=selectX>'
@@ -19,7 +20,6 @@
             + '<b>X Range</b> Min: <input type="text" class="textgroup" id="xmin" style="width:50px">     Max: <input type="text" class="textgroup"  id="xmax" style="width:50px"> Interval: <input type="text" class="textgroup" id="xinterval" style="width:50px"><br>'
             + '<b>Y Range</b>     Min: <input type="text" class="textgroup" id="ymin" style="width:50px">     Max: <input type="text" class="textgroup" id="ymax" style="width:50px"> Interval: <input type="text" class="textgroup" id="yinterval" style="width:50px"><br>'
             + 'Automatic Bounds&nbsp;&nbsp;<input type="checkbox" id="autoRange" checked="checked"><br></div>'
-	    + '<input type="button" id="button" value="Show/Hide Configuration" style="height:30px; width:200px">'
             + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div>',
 	link: function (scope, element, attrs) {
 		var flag = 0;
@@ -56,6 +56,7 @@
 		fillDropdown("selectX");
 		fillDropdown("selectY");
 		fillDropdown("selectZ");
+		textDisable();
 
 		function fillDropdown(id) {
 		  var 
@@ -64,9 +65,9 @@
 		    i;
 		    for(i = 0; i < numCol; i++) {
 		      if(isNumCol[i]){
-			html = html + '<option value="' + i + '">' + colNames[i] + '</option>';
+				html = html + '<option value="' + i + '">' + colNames[i] + '</option>';
+			}
 		      }
-		    }
 		   element.innerHTML = html;
 		 }
 	    
@@ -130,24 +131,32 @@
 
 		$('#selectX').change(function(){
 			document.getElementById('selectX').selected=true;
-		if(($("#selectY :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($('#autoRange').is(':checked'))) {
+		if(($("#selectY :selected").text() != "") && ($("#selectZ :selected").text() != "")){
+			if($('#autoRange').is(':checked')) {
 					textDisable();
-					getOutputDisplay();
 			}
+			getOutputDisplay();
+		     }	
+
 		});
+
          	$('#selectY').change(function(){
-			document.getElementById('selectX').selected=true;
-		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($('#autoRange').is(':checked'))) {
-					textDisable();	      			   
-					getOutputDisplay();
+			document.getElementById('selectY').selected=true;
+		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "")){
+			if($('#autoRange').is(':checked')) {
+					textDisable();
+			}
+			getOutputDisplay();
 		  }
 		});
 	
 		$('#selectZ').change(function(){
-			document.getElementById('selectX').selected=true;
-		if(($("#selectX :selected").text() != "") && ($("#selectY :selected").text() != "") && ($('#autoRange').is(':checked'))) {
-					textDisable();	      			
-					getOutputDisplay();
+			document.getElementById('selectZ').selected=true;
+		if(($("#selectX :selected").text() != "") && ($("#selectY :selected").text() != "")){
+			if($('#autoRange').is(':checked')) {
+					textDisable();
+			}
+			getOutputDisplay();
 		  }
 		});
 
@@ -159,50 +168,52 @@
 		});
 	
 		$('#autoRange').change(function(){
-		if($('#autoRange').is(':checked')){
+		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "")){
+			if($('#autoRange').is(':checked')){
 			$('.textgroup').val('');
 			textDisable();
 			getOutputDisplay();
-		}
-		else {
-			textEnable();
-			$('#xmin').on('input',function(){
-			    if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
-				getOutputDisplay();
-			     }
-			}); 
+			}
+			else {
+				textEnable();
+				$('#xmin').on('input',function(){
+				    if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
+					getOutputDisplay();
+				     }
+				}); 
 
-			$('#xmax').on('input',function(){
-			    if((($('#xmin').val()) != '') && (($('#ymin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
-				getOutputDisplay();
-			     }
-			}); 
+				$('#xmax').on('input',function(){
+				    if((($('#xmin').val()) != '') && (($('#ymin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
+					getOutputDisplay();
+				     }
+				}); 
 
-			$('#ymin').on('input',function(){
-			    if((($('#xmax').val()) != '') && (($('#xmin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
-				getOutputDisplay();
-			     }
-			}); 
+				$('#ymin').on('input',function(){
+				    if((($('#xmax').val()) != '') && (($('#xmin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
+					getOutputDisplay();
+				     }
+				}); 
 
-			$('#ymax').on('input',function(){
-			    if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#xmin').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
-				getOutputDisplay();
-			     }
-			}); 
+				$('#ymax').on('input',function(){
+				    if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#xmin').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
+					getOutputDisplay();
+				     }
+				}); 
 
-			$('#xinterval').on('input',function(){
-			    if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#xmin').val()) != '') && (($('#ymax').val()) != '') && (($('#yinterval').val()) != '')){
-				getOutputDisplay();
-			     }
-			}); 
+				$('#xinterval').on('input',function(){
+				    if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#xmin').val()) != '') && (($('#ymax').val()) != '') && (($('#yinterval').val()) != '')){
+					getOutputDisplay();
+				     }
+				}); 
 
-			$('#yinterval').on('input',function(){
-			    if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#xmin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '')){
-				getOutputDisplay();
-			     }
-			});
+				$('#yinterval').on('input',function(){
+				    if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#xmin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '')){
+					getOutputDisplay();
+				     }
+				});
+			 }
 	
-		      }
+		     }
 		});
 
 
@@ -258,6 +269,12 @@
 				 smallestY = Math.min.apply(null, yArr),
 		    		 largestY = Math.max.apply(null, yArr);
 
+				 $('#xmin').val(smallestX - largestX);
+				 $('#ymin').val(smallestY - largestY);
+				 $('#xmax').val(2*largestX);
+				 $('#ymax').val(2*largestY);
+				 $('#xinterval').val(numRecords);
+				 $('#yinterval').val(numRecords);
 
 	  			 graph = Flotr.draw(container, [data], {
 				    title: graphTitle,
