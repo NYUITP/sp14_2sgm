@@ -8,7 +8,7 @@
             + '<button class="btn btn-primary" ng-click="toggleMsg()">&nbsp; {{hideOrShowMsg}} Error &nbsp;</button></br>'
             + '<div class={{msgClass}} id="msg" style={{displayMsg}}><h4>{{msgType}}</h4><ul><li ng-repeat="err in currErrors">{{err}}</br></li></ul></div>'
             + '<div id="configuration" style={{displayConf}}>'
-            +   '</br><b>Number of Pie: &nbsp;</b><input type="text" class="input-medium" ng-model="numPie" placeholder="Enter number of pie"></br>'
+            +   '</br><b>Number of Pie: &nbsp;</b><input type="text" name="pienum" class="input-medium" ng-model="numPie" placeholder="Enter number of pie"></br>'
             +   '<b>Pie Setting&nbsp;</b>'
             +     '<div id="pieSetting" style={{checkNumPie()}}>'
             +       '<table>' 
@@ -33,8 +33,8 @@ var
     numCol = colNames.length,
     records = jsObj.values,
     numRecords = records.length,
-    errors = ["Please enter valid input: at least two columns, at least one numeric column." ,"Please enter how many pies do you need.", "Please enter numeric value greater than 0 for the number of pies.", "Please select 'Data' and 'Label' for every pie."],
-    commitErrors = [0, 0, 0, 0];
+    errors = ["Please enter valid input: at least two columns.", "At least one column should be numeric." ,"Please enter how many pies do you need.", "Please enter numeric value greater than 0 for the number of pies.", "Please select 'Data' and 'Label' for every pie."],
+    commitErrors = [0, 0, 0, 0, 0];
 
 $scope.pieGroup = [];
 
@@ -110,7 +110,7 @@ function isNumber(n) {
 
 var validUserInput = checkUserInput();
 function checkUserInput() {
-  if($scope.labelOptions.length<2 || $scope.dataOptions.length<1) {
+  if($scope.labelOptions.length<=2 || $scope.dataOptions.length<1) {
     return false;
   }
   return true;
@@ -169,14 +169,20 @@ $scope.checkError=function() {
     commitErrors[0] = 1;
     readyToGraph = false;
   }
+  if(readyToGraph){
+     if($scope.dataOptions.length <=1){
+	commitErrors[1] = 1;
+        readyToGraph = false;
+	}
+  }
   if(readyToGraph) {
     if(needReset($scope.numPie)) {
-      commitErrors[1] = 1;
+      commitErrors[2] = 1;
       readyToGraph = false;
     }
     else {
       if(!isNormalInteger($scope.numPie)) {
-        commitErrors[2] = 1;
+        commitErrors[3] = 1;
         readyToGraph = false;
       }
     }
@@ -186,7 +192,7 @@ $scope.checkError=function() {
     for(var i = 0; i < $scope.pieGroup.length; i++) {
       pie = $scope.pieGroup[i];
       if(pie.data==undefined || pie.label==undefined) {
-        commitErrors[3] = 1;
+        commitErrors[4] = 1;
         readyToGraph = false;
         break;
       }
