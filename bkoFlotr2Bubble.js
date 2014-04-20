@@ -1,11 +1,12 @@
 //Author: Pallavi Mane
-//Date: 04/18/2014
+//Date: 04/20/2014
 (function () {
     'use strict';
     beaker.bkoDirective("flotr2Bubble", function () {
  return {
-	template:'<input type="button" id="button" value="Show/Hide Configuration" style="background-color:blue;color:white;height:30px; width:200px"><br><br>'
-	    + '<div id="main" style="border:1.5px solid">'
+	template:'<input type="button" id="button" value="Show/Hide Configuration" class="btn btn-primary"><br><br>'
+	    + '<span id="inputerror" class="label label-important"></span>'
+	    + '<div id="main" style="border:1.5px solid"><br>'
             + '<b>Title</b> <input type="text" id="title" size="15"><br>'
             + '<b>X Axis</b>'
             + '<select id=selectX>'
@@ -17,8 +18,8 @@
             + '<select id=selectZ>'
             + '</select><br>'
 	    + '<b><i><u>Set X-Y Bounds</u></i></b><br>'
-            + '<b>X Range</b> Min: <input type="text" class="textgroup" id="xmin" style="width:50px">     Max: <input type="text" class="textgroup"  id="xmax" style="width:50px"> Interval: <input type="text" class="textgroup" id="xinterval" style="width:50px"><br>'
-            + '<b>Y Range</b>     Min: <input type="text" class="textgroup" id="ymin" style="width:50px">     Max: <input type="text" class="textgroup" id="ymax" style="width:50px"> Interval: <input type="text" class="textgroup" id="yinterval" style="width:50px"><br>'
+            + '<b>X Range</b> Min: <input type="text" id="xmin" style="width:50px"><span id="errorxmin" class="label label-important"></span>    Max: <input type="text" id="xmax" style="width:50px"><span id="errorxmax" class="label label-important"></span> Interval: <input type="text" id="xinterval" style="width:50px"><span id="errorxinterval" class="label label-important"></span><br>'
+            + '<b>Y Range</b>     Min: <input type="text" id="ymin" style="width:50px"><span id="errorymin" class="label label-important"></span>     Max: <input type="text" id="ymax" style="width:50px"><span id="errorymax" class="label label-important"></span> Interval: <input type="text" id="yinterval" style="width:50px"><span id="erroryinterval" class="label label-important"></span><br>'
             + 'Automatic Bounds&nbsp;&nbsp;<input type="checkbox" id="autoRange" checked="checked"><br></div>'
             + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div>',
 	link: function (scope, element, attrs) {
@@ -38,6 +39,8 @@
 	    	isNumCol = checkNumCol();
 		flag = 0;
 
+		var totalNumCols = 0;
+
 		function checkNumCol() {
 		  var boolArr = [true], col, row;
 		  for(col = 1; col < numCol; col++) {
@@ -47,11 +50,13 @@
 			break;
 		      }
 		    }
-		    if(row==numRecords)
+		    if(row==numRecords){
 		      boolArr.push(true);
+		      totalNumCols += 1;
+		    }
 		  }
 		  return boolArr;
-		}		
+		}
 
 		fillDropdown("selectX");
 		fillDropdown("selectY");
@@ -71,27 +76,6 @@
 		   element.innerHTML = html;
 		 }
 	    
-	  function checkRangeInput(range, min, max, interval) {
-	  if(!isNumber(min) || !isNumber(max) || !isNumber(interval) ){ 
-	    var r = confirm("Please enter numeric min, max and interval.");
-	    if(r==true)
-		flag = 0;
-	    else
-		flag = 1;
-	   }
-
-	  min = parseFloat(min);
-	  max = parseFloat(max);
-	  interval = parseFloat(interval);
-	  if(min > max) 
-	    abortJS(range + " Error: max is smaller than min.");
-	  
-	  if(interval <= 0) 
-	    abortJS(range + " Error: interval cannot be smaller or equals to zero.");
-	  
-	  var ticks = Math.ceil(Math.abs(max - min) / interval);
-	  return [min, max, ticks];
-	}
 
 
 	function abortJS(err) {
@@ -115,12 +99,12 @@
 	}
 
 
-	function getColumnTotal(z)
+	function getColumnTotal(column3)
 	{
 	    var total;
 	    var value = 0;
   	    for(var row = 0; row < numRecords; row++) {
-		value = value + parseInt(records[row][z]);
+		value = value + parseInt(records[row][column3]);
    	    }
 	    return value;
 	}
@@ -128,6 +112,7 @@
 	function isNumber(n) {
 	  return !isNaN(parseFloat(n)) && isFinite(n);
 	}
+
 
 		$('#selectX').change(function(){
 			document.getElementById('selectX').selected=true;
@@ -161,63 +146,116 @@
 		});
 
 		$('#title').change(function(){
-		    if(($("#selectX :selected").text() != "") && ($("#selectY :selected").text() != "") && ($("#selectX :selected").text() != "") && ($('#autoRange').is(':checked'))) {
-					textDisable();	      			
-					getOutputDisplay();
-		  }
+		if(($("#selectX :selected").text() != "") && ($("#selectY :selected").text() != "") && ($("#selectX :selected").text() !=  ""))
+			getOutputDisplay();
 		});
 	
 		$('#autoRange').change(function(){
 		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "")){
 			if($('#autoRange').is(':checked')){
-			$('.textgroup').val('');
-			textDisable();
-			getOutputDisplay();
+				textDisable();
+				getOutputDisplay();
 			}
-			else {
+			else{
 				textEnable();
-				$('#xmin').on('input',function(){
-				    if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
-					getOutputDisplay();
-				     }
-				}); 
-
-				$('#xmax').on('input',function(){
-				    if((($('#xmin').val()) != '') && (($('#ymin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
-					getOutputDisplay();
-				     }
-				}); 
-
-				$('#ymin').on('input',function(){
-				    if((($('#xmax').val()) != '') && (($('#xmin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
-					getOutputDisplay();
-				     }
-				}); 
-
-				$('#ymax').on('input',function(){
-				    if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#xmin').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
-					getOutputDisplay();
-				     }
-				}); 
-
-				$('#xinterval').on('input',function(){
-				    if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#xmin').val()) != '') && (($('#ymax').val()) != '') && (($('#yinterval').val()) != '')){
-					getOutputDisplay();
-				     }
-				}); 
-
-				$('#yinterval').on('input',function(){
-				    if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#xmin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '')){
-					getOutputDisplay();
-				     }
-				});
-			 }
-	
-		     }
+			}
+		    }
 		});
+	
+		$('#xmin').on('input',function(){
+		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "") && !($('#autoRange').is(':checked'))){
+				if(($('#xmin').val()) == '' || isNaN($('#xmin').val())){
+					$('#errorxmin').show();					
+					$('#errorxmin').html("Only Numbers allowed");
+					
+				}
+				else if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
+					$('#errorxmin').hide();
+					getOutputDisplay();
+				}
+			}
+		}); 
 
+		$('#xmax').on('input',function(){
+		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "") && !($('#autoRange').is(':checked'))){
+				if(($('#xmax').val()) == '' || isNaN($('#xmax').val())){
+					$('#errorxmax').show();					
+					$('#errorxmax').html("Only Numbers allowed");
+					
+				}
+				else if((($('#xmin').val()) != '') && (($('#ymin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
+					$('#errorxmax').hide();
+					getOutputDisplay();
+			        }
+			}				
+		}); 
 
-			
+		$('#ymin').on('input',function(){
+		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "") && !($('#autoRange').is(':checked'))){
+				if(($('#ymin').val()) == '' || isNaN($('#ymin').val())){
+					$('#errorymin').show();					
+					$('#errorymin').html("Only Numbers allowed");
+					
+				}
+				else if((($('#xmax').val()) != '') && (($('#xmin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
+					$('#errorymin').hide();
+					getOutputDisplay();
+				     }
+			}
+		}); 
+
+		$('#ymax').on('input',function(){
+		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "") && !($('#autoRange').is(':checked'))){
+				if(($('#ymax').val()) == '' || isNaN($('#ymax').val())){
+					$('#errorymax').show();					
+					$('#errorymax').html("Only Numbers allowed");
+					
+				}
+				else if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#xmin').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
+					$('#errorymax').hide();
+					getOutputDisplay();
+				     }
+			}
+		}); 
+
+		$('#xinterval').on('input',function(){
+		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "") && !($('#autoRange').is(':checked'))){
+				if(($('#xinterval').val()) == '' || isNaN($('#xinterval').val())){
+					$('#errorxinterval').show();					
+					$('#errorxinterval').html("Only Numbers allowed");
+					
+				}
+				else if(($('#xinterval').val()) < 0 || ($('#xinterval').val()) == 0){
+					$('#errorxinterval').show();					
+					$('#errorxinterval').html("Interval cannot be negative or zero");
+					
+				}
+				else if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#xmin').val()) != '') && (($('#ymax').val()) != '') && (($('#yinterval').val()) != '')){
+					$('#errorxinterval').hide();	
+					getOutputDisplay();
+				}
+			}		
+		}); 
+
+		$('#yinterval').on('input',function(){
+		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "") && !($('#autoRange').is(':checked'))){
+				if(($('#yinterval').val()) == '' || isNaN($('#yinterval').val())){
+					$('#erroryinterval').show();					
+					$('#erroryinterval').html("Only Numbers allowed");
+					
+				}
+				else if(($('#yinterval').val()) < 0 || ($('#yinterval').val()) == 0){
+					$('#erroryinterval').show();					
+					$('#erroryinterval').html("Interval cannot be negative or zero");
+					
+				}
+				else if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#xmin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '')){
+					$('#erroryinterval').hide();	
+					getOutputDisplay();
+				}
+			}				
+		});
+	
 
 
 	function textDisable() {
@@ -250,7 +288,6 @@
 	    colYIndex = parseInt(yaxis.options[yaxis.selectedIndex].value),
 	    colZIndex = parseInt(zaxis.options[zaxis.selectedIndex].value),
 	    data = dataToChart(colXIndex, colYIndex, colZIndex),
-	    autoRange = document.getElementById("autoRange").checked,
 	    xvals, 
 	    yvals; 
 	    var largestX, largestY,smallestX,smallestY;
@@ -287,8 +324,8 @@
 				 });
 		}
 		else {
-			xvals = checkRangeInput("X Range", document.getElementById("xmin").value, document.getElementById("xmax").value, document.getElementById("xinterval").value); 
-     			yvals = checkRangeInput("Y Range", document.getElementById("ymin").value, document.getElementById("ymax").value, document.getElementById("yinterval").value); 
+			xvals = [document.getElementById("xmin").value, document.getElementById("xmax").value, document.getElementById("xinterval").value]; 
+     			yvals = [document.getElementById("ymin").value, document.getElementById("ymax").value, document.getElementById("yinterval").value]; 
 			graph = Flotr.draw(container, [data], {
 			    title: graphTitle,
 			    bubbles : { show : true, baseRadius : 3 },
