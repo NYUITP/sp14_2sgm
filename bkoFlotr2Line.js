@@ -6,13 +6,13 @@
     beaker.bkoDirective("flotr2Line", function () {
       return {
             template: 
-              '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Setting&nbsp;</button>'
+              '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Configuration&nbsp;</button>'
             + '<button class="btn btn-primary" ng-click="toggleMsg()">&nbsp; {{hideOrShowMsg}} Error &nbsp;</button>'
             + '<div class={{msgClass}} id="msg" style={{displayMsg}}><h4>{{msgType}}</h4><ul><li ng-repeat="err in currErrors">{{err}}</br></li></ul></div>'
             + '<div class="tabbable" id="configuration" style={{displayConf}}>'
             +   '<ul class="nav nav-tabs">'
             +     '<li class="active"><a href="#tab1" data-toggle="tab">Line Group</a></li>'
-            +     '<li><a href="#tab2" data-toggle="tab">Bound</a></li>'
+            +     '<li><a href="#tab2" data-toggle="tab">Bounds</a></li>'
             +   '</ul>'
             +   '<div class="tab-content">'
             +     '<div class="tab-pane active" id="tab1">'
@@ -27,9 +27,9 @@
             +         '</table>'
             +     '</div>'
             +     '<div class="tab-pane" id="tab2">'
-            +       '<p><b>Set X and Y ranges automatically</b> <input class="input-medium" type="checkbox" ng-model="autoRange" ng-change="toggleAutoRange()"></p>'
-            +       '<b>X Range</b>     Min: <input class="input-medium" type="text" ng-model="xmin" size="4" ng-disabled="autoRange">     Max: <input class="input-medium" type="text" ng-model="xmax" size="4" ng-disabled="autoRange"> Interval: <input class="input-medium" type="text" ng-model="xinterval" size="4" ng-disabled="autoRange"><br>'
-            +       '<b>Y Range</b>     Min: <input class="input-medium" type="text" ng-model="ymin" size="4" ng-disabled="autoRange">     Max: <input class="input-medium" type="text" ng-model="ymax" size="4" ng-disabled="autoRange"> Interval: <input class="input-medium" type="text" ng-model="yinterval" size="4" ng-disabled="autoRange"><br>'
+            +       '<p><b>Automatic bounds.</b> <input class="input-medium" type="checkbox" ng-model="autoRange" ng-change="toggleAutoRange()"></p>'
+            +       '<b>X Bound</b>     Min: <input class="input-medium" type="text" ng-model="xmin" size="4" ng-disabled="autoRange">     Max: <input class="input-medium" type="text" ng-model="xmax" size="4" ng-disabled="autoRange"> Interval: <input class="input-medium" type="text" ng-model="xinterval" size="4" ng-disabled="autoRange"><br>'
+            +       '<b>Y Bound</b>     Min: <input class="input-medium" type="text" ng-model="ymin" size="4" ng-disabled="autoRange">     Max: <input class="input-medium" type="text" ng-model="ymax" size="4" ng-disabled="autoRange"> Interval: <input class="input-medium" type="text" ng-model="yinterval" size="4" ng-disabled="autoRange"><br>'
             +     '</div>'
             +   '</div>'
             + '</div>'
