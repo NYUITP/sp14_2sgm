@@ -283,7 +283,6 @@ function getOutputDisplay(){
     }
   };
   graph = Flotr.draw(container, output.processedData, output.graphSetting);
-  console.log(output);
 }
 /********End of Graph Functions*********/
 

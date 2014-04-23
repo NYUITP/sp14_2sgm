@@ -103,88 +103,7 @@
                 "body": "import pandas as pd\ndf = pd.DataFrame([['USA', 5, 15], ['India', 10, 30], ['China', 15, 20], ['Japan',20, 5], ['Australia',30, 25]], columns=['Country', 'Population %', 'Unemployment %'])\ndf"
             },
             "output": {
-                "selectedType": "Table",
-                "result": {
-                    "type": "TableDisplay",
-                    "tableDisplayModel": {
-                        "columnNames": [
-                            "",
-                            "Country",
-                            "Population %",
-                            "Unemployment %"
-                        ],
-                        "values": [
-                            [
-                                "0",
-                                "       USA",
-                                "  5",
-                                " 15"
-                            ],
-                            [
-                                "1",
-                                "     India",
-                                " 10",
-                                " 30"
-                            ],
-                            [
-                                "2",
-                                "     China",
-                                " 15",
-                                " 20"
-                            ],
-                            [
-                                "3",
-                                "     Japan",
-                                " 20",
-                                "  5"
-                            ],
-                            [
-                                "4",
-                                " Australia",
-                                " 30",
-                                " 25"
-                            ]
-                        ]
-                    },
-                    "columnNames": [
-                        "",
-                        "Country",
-                        "Population %",
-                        "Unemployment %"
-                    ],
-                    "values": [
-                        [
-                            "0",
-                            "       USA",
-                            "  5",
-                            " 15"
-                        ],
-                        [
-                            "1",
-                            "     India",
-                            " 10",
-                            " 30"
-                        ],
-                        [
-                            "2",
-                            "     China",
-                            " 15",
-                            " 20"
-                        ],
-                        [
-                            "3",
-                            "     Japan",
-                            " 20",
-                            "  5"
-                        ],
-                        [
-                            "4",
-                            " Australia",
-                            " 30",
-                            " 25"
-                        ]
-                    ]
-                },
+                "selectedType": "Hidden",
                 "outputArrived": true,
                 "elapsedTime": 641
             }
@@ -197,90 +116,35 @@
                 "body": "import pandas as pd\ndf = pd.DataFrame([[12,28000, 20], [13,25000, 21], [16,65200,11], [6,34500,15], [23,56000,14]], columns=['ProductNumber','Sales', 'Market Share %'])\ndf"
             },
             "output": {
-                "selectedType": "Table",
-                "result": {
-                    "type": "TableDisplay",
-                    "tableDisplayModel": {
-                        "columnNames": [
-                            "",
-                            "ProductNumber",
-                            "Sales",
-                            "Market Share %"
-                        ],
-                        "values": [
-                            [
-                                "0",
-                                " 12",
-                                " 28000",
-                                " 20"
-                            ],
-                            [
-                                "1",
-                                " 13",
-                                " 25000",
-                                " 21"
-                            ],
-                            [
-                                "2",
-                                " 16",
-                                " 65200",
-                                " 11"
-                            ],
-                            [
-                                "3",
-                                "  6",
-                                " 34500",
-                                " 15"
-                            ],
-                            [
-                                "4",
-                                " 23",
-                                " 56000",
-                                " 14"
-                            ]
-                        ]
-                    },
-                    "columnNames": [
-                        "",
-                        "ProductNumber",
-                        "Sales",
-                        "Market Share %"
-                    ],
-                    "values": [
-                        [
-                            "0",
-                            " 12",
-                            " 28000",
-                            " 20"
-                        ],
-                        [
-                            "1",
-                            " 13",
-                            " 25000",
-                            " 21"
-                        ],
-                        [
-                            "2",
-                            " 16",
-                            " 65200",
-                            " 11"
-                        ],
-                        [
-                            "3",
-                            "  6",
-                            " 34500",
-                            " 15"
-                        ],
-                        [
-                            "4",
-                            " 23",
-                            " 56000",
-                            " 14"
-                        ]
-                    ]
-                },
+                "selectedType": "Hidden",
                 "outputArrived": true,
                 "elapsedTime": 163
+            }
+        },
+        {
+            "id": "codebyVDlv",
+            "type": "code",
+            "evaluator": "IPython",
+            "input": {
+                "body": "import pandas as pd\ndf = pd.DataFrame([['USA'], ['India'], ['China'], ['Japan'], ['Australia']], columns=['Country'])\ndf\n"
+            },
+            "output": {
+                "selectedType": "Hidden",
+                "outputArrived": true,
+                "elapsedTime": 82
+            }
+        },
+        {
+            "id": "codelsVol6",
+            "type": "code",
+            "evaluator": "IPython",
+            "input": {
+                "body": "import pandas as pd\ndf = pd.DataFrame([['USA', 'North America'], ['India', 'Asia'], ['China', 'Asia'], ['Japan', 'Asia'], ['Australia', 'Australia']], columns=['Country', 'Continent'])\ndf\n"
+            },
+            "output": {
+                "selectedType": "Hidden",
+                "outputArrived": true,
+                "elapsedTime": 71
             }
         }
     ]
