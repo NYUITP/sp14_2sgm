@@ -37,9 +37,9 @@
             + '</div>'
             + '<div id="container" style="width:600px;height:384px;margin:8px auto">{{showGraph(autoRange)}}</div>',
 controller: function($scope) {
-
+/********Var Declaration*********/
 var
-    output,
+    output={},
     container = document.getElementById('container'),
     graph,
     jsObj = $scope.model.getCellModel(),
@@ -49,7 +49,9 @@ var
     numRecords = records.length,
     currXMin=-10, currXMax=10, currYMin=-10, currYMax=10, currXTick=5, currYTick=5, //test which columns are numerical (numerical: true)
     errors = ["Please select the X axis.", "Please select at least one Y axis.", "Please enter numeric values.", "Max is smaller than Min.", "Interval cannot be smaller or equals to zero."];
+/********End OF Declaration*********/
 
+/********Error Checking*********/
 $scope.initReadyToGraph = function(){
   $scope.readyToGraph = true;
 }
@@ -73,7 +75,6 @@ $scope.checkYAxis = function(ys) {
   }
   else return "";
 }
-
 $scope.checkMinMax = function(axisName, input) {
   if(!isNumber(input)){
     $scope.readyToGraph = false;
@@ -108,7 +109,9 @@ function checkMinMaxError (min, max) {
   else
     return "";
 }
+/********End OF Error Checking*********/
 
+/********Auto Range Functions*********/
 $scope.autoRange = true;
 setDefaultRange();
 function setDefaultRange() {
@@ -145,7 +148,9 @@ $scope.calculateAutoRange = function(xaxis, yaxis) {
     setDefaultRange();
   }
 }
+/********End OF Auto Range Functions*********/
 
+/********Show/Hide Configuration*********/
 $scope.hideOrShowConf = " Hide ";
 $scope.displayConf = "display:block;";
 $scope.toggleConf = function() {
@@ -158,7 +163,9 @@ $scope.toggleConf = function() {
     $scope.hideOrShowConf = " Hide ";
   }
 }
+/********End OF Show/Hide Configuration*********/
 
+/********Check Numeric Columns*********/
 $scope.colOptions = [];
 checkNumCol();
 function checkNumCol() {
@@ -173,23 +180,24 @@ function checkNumCol() {
       $scope.colOptions.push({colIndex:col, colName:colNames[col]});
   }
 }
+/********End OF Check Numeric Columns*********/
 
+/********Find Selected Y axisesColumns*********/
 $scope.yAxisOptions = [];
 initializeYAxisOptions();
 function initializeYAxisOptions(){
   for(var i = 0; i < $scope.colOptions.length; i++)
     $scope.yAxisOptions.push({colIndex:$scope.colOptions[i].colIndex, colName:$scope.colOptions[i].colName, colSelected:false, colLabel:undefined});
 }
+/********End OF Find Selected Y axisesColumns*********/
 
+/********Helper Functions*********/
+function isNumber(n) {
+  return n!=undefined && !isNaN(parseFloat(n)) && isFinite(n);
+}
 
-$scope.showGraph=function(autoRange) {
-
-  if($scope.readyToGraph) {
-    currXMin=$scope.xmin, currXMax=$scope.xmax, currYMin=$scope.ymin, currYMax=$scope.ymax,
-    currXTick = Math.ceil(Math.abs($scope.xmax - $scope.xmin) / $scope.xinterval);
-    currYTick = Math.ceil(Math.abs($scope.ymax - $scope.ymin) / $scope.yinterval);
-    getOutputDisplay();
-  }
+function needReset(varStr) {
+  return (varStr==undefined||varStr==null||varStr=="");
 }
 
 function getColMinMax(col) {
@@ -199,10 +207,6 @@ function getColMinMax(col) {
     min = Math.min(min, records[row][col]);
   }
   return [min, max];
-}
-
-function needReset(varStr) {
-  return (varStr==undefined||varStr==null||varStr=="");
 }
 
 function getData() {
@@ -226,9 +230,19 @@ function getOneLineData(x, y) {
   }
   return data;
 }
+/********End OF Helper Functions*********/
 
-function isNumber(n) {
-  return n!=undefined && !isNaN(parseFloat(n)) && isFinite(n);
+/********Graph Functions*********/
+$scope.showGraph=function(autoRange) {
+
+  if($scope.readyToGraph) {
+    if(!autoRange) {
+      currXMin=$scope.xmin, currXMax=$scope.xmax, currYMin=$scope.ymin, currYMax=$scope.ymax,
+      currXTick = Math.ceil(Math.abs($scope.xmax - $scope.xmin) / $scope.xinterval);
+      currYTick = Math.ceil(Math.abs($scope.ymax - $scope.ymin) / $scope.yinterval);
+    }
+    getOutputDisplay();
+  }
 }
 
 function getOutputDisplay(){
@@ -244,8 +258,10 @@ function getOutputDisplay(){
   else finalXTitle=$scope.xtitle;
   if(needReset($scope.ytitle)) finalYTitle="Y";
   else finalYTitle=$scope.ytitle;
-
-  graph = Flotr.draw(container, data, {
+  output.inObj = jsObj;
+  output.processedData = data;
+  output.graphSetting = 
+  {
     title: finalTitle,
     xaxis: {
       title: finalXTitle,
@@ -265,8 +281,11 @@ function getOutputDisplay(){
     mouse: {
       track: true
     }
-  });
+  };
+  graph = Flotr.draw(container, output.processedData, output.graphSetting);
+  console.log(output);
 }
+/********End of Graph Functions*********/
 
 
 
