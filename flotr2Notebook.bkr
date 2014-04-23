@@ -14,7 +14,7 @@
         {
             "name": "IPython",
             "plugin": "IPython",
-            "shellID": "0E4BD51164174E2185E4ABA24324C606",
+            "shellID": "2CDAD5AE354D414A808E5D7E4B96798F",
             "imports": "",
             "supplementalClassPath": ""
         },
@@ -28,12 +28,12 @@
         {
             "name": "R",
             "plugin": "R",
-            "shellID": "798e34d8-2a57-4c37-af69-079efea63825"
+            "shellID": "0a7e7dbc-3a4d-4f80-9fe2-983e029b5326"
         },
         {
             "name": "Groovy",
             "plugin": "Groovy",
-            "shellID": "f86e441f-a116-4795-9470-9a78b76e2358"
+            "shellID": "bdb79cab-2237-4d5c-a4a4-ce2b85ccd05a"
         },
         {
             "name": "IRuby",
@@ -56,41 +56,17 @@
             "type": "code",
             "evaluator": "Html",
             "input": {
-                "body": "<div class=\"row-fluid\">\n\n  <div class=\"span9\">\n\n    <h1>Overview</h1>\n\n\t\t<p>Use the open source Canvas graphing library Flotr2 to display data in line diagram.</p>\n\n    <h2>Language support</h2>\n\n    <p><strong>Code:</strong> Python (Pandas.DataFrame), R ()</p>\n\n    <h2>Plugins</h2>\n\n\t<p>All of the languages available in Beaker are added via plugins, so if we've missed your favorite language, you can create a plugin, and it will be treated as a first-class citizen.</p>\n    \n  </div>  \n  \n  \n  <div class=\"span3\">\n    <h1>Additional tutorials</h1>\n    <h2>Beaker</h2>\n    <p><a href=\"http://dl.dropboxusercontent.com/s/hkl3gbypachu9qz/faq.html\" target=\"_blank\">Help/FAQ</a> </p>\n    <p><a href=\"#/open?uri=file:config%2Ftutorials%2Fform.bkr\">Basic forms in Beaker</a> </p>\n\n    <h2>Python</h2>\n    <a href=\"#/open?uri=ipynb:%2Fhttp:%2F%2Fatwallab.cshl.edu%2Fteaching%2FQBbootcamp3.ipynb\">Scientific Computing with Python</a> - From Mickey Atwal\n    \n    <h2>R</h2>\n    TODO\n\n    <h2>Groovy</h2>\n    TODO\n  </div>  \n\n  \n</div>"
+                "body": "<div class=\"row-fluid\">\n\n  <div class=\"span9\">\n\n    <h1>Overview</h1>\n\n\t\t<p>Use the open source Canvas graphing library Flotr2 to display data in line diagram.</p>\n\n    <h2>Language support</h2>\n\n    <p><strong>Code:</strong> Python (DataFrame in Pandas), R (Data Frame)</p>\n\n    <h2>Plugins</h2>\n\n\t<p>All of the flotr2 table display types can be accessed by loading corresponding JavaScript plugins.</p>\n    <p>Line Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2Line.js\">bkoFlotr2Line.js</a></p>\n    <p>Bubble Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2Bubble.js\">bkoFlotr2Bubble.js</a></p>\n    <p>Pie Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2pie.js\">bkoFlotr2Pie.js</a></p>\n\n    <h1>How to Set Up</h1>\n    <p>1. Load Java Script file(s) in JavaScript Console using command:</br>bkHelper.loadJS( &lt;URL of the file&gt; ); </p></br>\n<p>2. Register flotr2 type(s) as the output display type(s) for tables using command:</br> \n\tLine: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Line'], &lt;Index of new display type&gt;);</br>\n\tBubble: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Bubble'], &lt;Index of new display type&gt;);</br>\n\tPie: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Pie'], &lt;Index of new display type&gt;);\n</p>\n  </div>  \n  \n\n  \n</div>"
             },
             "output": {
                 "selectedType": "BeakerDisplay",
                 "result": {
                     "type": "BeakerDisplay",
                     "innertype": "Html",
-                    "object": "<div class=\"row-fluid\">\n\n  <div class=\"span9\">\n\n    <h1>Overview</h1>\n\n\t\t<p>Use the open source Canvas graphing library Flotr2 to display data in line diagram.</p>\n\n    <h2>Language support</h2>\n\n    <p><strong>Text:</strong> Markdown, HTML, Latex, plain text</p>\n\n    <p><strong>Code:</strong> Python (with IPython additions), Julia, JavaScript, R, Groovy</p>\n\n    <h2>Plugins</h2>\n\n\t<p>All of the languages available in Beaker are added via plugins, so if we've missed your favorite language, you can create a plugin, and it will be treated as a first-class citizen.</p>\n    \n  </div>  \n  \n  \n  <div class=\"span3\">\n    <h1>Additional tutorials</h1>\n    <h2>Beaker</h2>\n    <p><a href=\"http://dl.dropboxusercontent.com/s/hkl3gbypachu9qz/faq.html\" target=\"_blank\">Help/FAQ</a> </p>\n    <p><a href=\"#/open?uri=file:config%2Ftutorials%2Fform.bkr\">Basic forms in Beaker</a> </p>\n\n    <h2>Python</h2>\n    <a href=\"#/open?uri=ipynb:%2Fhttp:%2F%2Fatwallab.cshl.edu%2Fteaching%2FQBbootcamp3.ipynb\">Scientific Computing with Python</a> - From Mickey Atwal\n    \n    <h2>R</h2>\n    TODO\n\n    <h2>Groovy</h2>\n    TODO\n  </div>  \n\n  \n</div>"
+                    "object": "<div class=\"row-fluid\">\n\n  <div class=\"span9\">\n\n    <h1>Overview</h1>\n\n\t\t<p>Use the open source Canvas graphing library Flotr2 to display data in line diagram.</p>\n\n    <h2>Language support</h2>\n\n    <p><strong>Code:</strong> Python (DataFrame in Pandas), R (Data Frame)</p>\n\n    <h2>Plugins</h2>\n\n\t<p>All of the flotr2 table display types can be accessed by loading corresponding JavaScript plugins.</p>\n    <p>Line Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2Line.js\">bkoFlotr2Line.js</a></p>\n    <p>Bubble Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2Bubble.js\">bkoFlotr2Bubble.js</a></p>\n    <p>Pie Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2pie.js\">bkoFlotr2Pie.js</a></p>\n\n    <h1>How to Set Up</h1>\n    <p>1. Load Java Script file(s) in JavaScript Console using command:</br>bkHelper.loadJS( &lt;URL of the file&gt; ); </p></br>\n<p>2. Register flotr2 type(s) as the output display type(s) for tables using command:</br> \n\tLine: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Line'], &lt;Index of new display type&gt;);</br>\n\tBubble: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Bubble'], &lt;Index of new display type&gt;);</br>\n\tPie: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Pie'], &lt;Index of new display type&gt;);\n</p>\n  </div>  \n  \n\n  \n</div>"
                 },
                 "elapsedTime": 0
             }
-        },
-        {
-            "id": "sectionK9MNdY",
-            "type": "section",
-            "title": "Purpose",
-            "level": 2,
-            "collapsed": false
-        },
-        {
-            "id": "texteQJApG",
-            "type": "text",
-            "body": "<span style=\"color: rgb(37, 51, 64); font-family: 'Segoe UI', Tahoma, Arial, Helvetica, sans-serif; font-size: 13px; line-height: 19.017696380615234px;\">Use the open source Canvas graphing library Flotr2 to display data in line diagram.</span>"
-        },
-        {
-            "id": "section8QdOSw",
-            "type": "section",
-            "title": "How to Set up",
-            "level": 2,
-            "collapsed": false
-        },
-        {
-            "id": "textfHuTj3",
-            "type": "text",
-            "body": "1. Load bkoFlotr2Line.js (Link to dowload) in JavaScript Console using command:&nbsp;<div>bkHelper.loadJS( &lt;URL of the file&gt;&nbsp;);</div><div>EX:&nbsp;<span style=\"font-size: 14px;\">\"http://pathToFile/bkoFlotr2Line.js</span><span style=\"font-size: 14px;\">\"</span><span style=\"font-size: 14px;\">&nbsp;</span></div><div><div>2. Register Flotr2 as the output display type for tables using command:&nbsp;</div><div>beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Line'], &lt;Index of new display type&gt;);<br><p class=\"p1\">EX: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Line'], 0);</p></div></div>"
         },
         {
             "id": "section5eDJ1v",
@@ -135,93 +111,69 @@
             "type": "code",
             "evaluator": "IPython",
             "input": {
-                "body": "import pandas as pd\ndf = pd.DataFrame([['USA', 5, 15], ['India', 10, 30], ['China', 15, 20], ['Japan',20, 5], ['Australia',30, 25]], columns=['Country', 'Population %', 'Unemployment %'])\ndf"
+                "body": "import pandas as pd\ndf = pd.DataFrame([['USA'], ['India'], ['China'], ['Japan'], ['Australia']], columns=['Country'])\ndf\n\n"
             },
             "output": {
-                "selectedType": "flotr2Line",
+                "selectedType": "Table",
                 "result": {
                     "type": "TableDisplay",
                     "tableDisplayModel": {
                         "columnNames": [
                             "",
-                            "Country",
-                            "Population %",
-                            "Unemployment %"
+                            "Country"
                         ],
                         "values": [
                             [
                                 "0",
-                                "       USA",
-                                "  5",
-                                " 15"
+                                "       USA"
                             ],
                             [
                                 "1",
-                                "     India",
-                                " 10",
-                                " 30"
+                                "     India"
                             ],
                             [
                                 "2",
-                                "     China",
-                                " 15",
-                                " 20"
+                                "     China"
                             ],
                             [
                                 "3",
-                                "     Japan",
-                                " 20",
-                                "  5"
+                                "     Japan"
                             ],
                             [
                                 "4",
-                                " Australia",
-                                " 30",
-                                " 25"
+                                " Australia"
                             ]
                         ]
                     },
                     "columnNames": [
                         "",
-                        "Country",
-                        "Population %",
-                        "Unemployment %"
+                        "Country"
                     ],
                     "values": [
                         [
                             "0",
-                            "       USA",
-                            "  5",
-                            " 15"
+                            "       USA"
                         ],
                         [
                             "1",
-                            "     India",
-                            " 10",
-                            " 30"
+                            "     India"
                         ],
                         [
                             "2",
-                            "     China",
-                            " 15",
-                            " 20"
+                            "     China"
                         ],
                         [
                             "3",
-                            "     Japan",
-                            " 20",
-                            "  5"
+                            "     Japan"
                         ],
                         [
                             "4",
-                            " Australia",
-                            " 30",
-                            " 25"
+                            " Australia"
                         ]
                     ]
                 },
                 "outputArrived": true,
-                "elapsedTime": 993
+                "elapsedTime": 676
             }
         }
     ]
