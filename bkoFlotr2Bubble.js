@@ -4,7 +4,7 @@
     'use strict';
     beaker.bkoDirective("flotr2Bubble", function () {
  return {
-	template:'<span id="inputerror" class="label label-important"></span>'
+	template:'<span id="inputerror" class="label label-important"></span><br><br>'
 	    + '<div id="allcontent">'
 	    + '<input type="button" id="button" value="Show/Hide Configuration" class="btn btn-primary"><br><br>'
 	    + '<div id="main" style="border:1.5px solid"><br>'
@@ -68,7 +68,7 @@
 			if(totalNumCols < 3){
 				$('#inputerror').show();
 				$('#allcontent').hide();
-				$('#inputerror').html("Bubble Chart Requires min 3 numerical columns!!");
+				$('#inputerror').html("Bubble Chart Requires Minimum 3 numerical columns!");
 
 			}
 			else{
@@ -82,6 +82,7 @@
 		function isNumber(n) {
 		  return !isNaN(parseFloat(n)) && isFinite(n);
 		}
+
 
 	function chartDraw(){
 
@@ -135,6 +136,10 @@
 		$('#selectX').change(function(){
 			document.getElementById('selectX').selected=true;
 		if(($("#selectY :selected").text() != "") && ($("#selectZ :selected").text() != "")){
+			if($('#inputerror').is(':visible')){
+				$('#autoRange').prop("checked",true);
+				$('#inputerror').hide();
+			}
 			if($('#autoRange').is(':checked')) {
 					textDisable();
 			}
@@ -146,6 +151,10 @@
          	$('#selectY').change(function(){
 			document.getElementById('selectY').selected=true;
 		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "")){
+			if($('#inputerror').is(":visible")){
+				$('#autoRange').prop("checked",true);
+				$('#inputerror').hide();
+			}
 			if($('#autoRange').is(':checked')) {
 					textDisable();
 			}
@@ -156,6 +165,10 @@
 		$('#selectZ').change(function(){
 			document.getElementById('selectZ').selected=true;
 		if(($("#selectX :selected").text() != "") && ($("#selectY :selected").text() != "")){
+			if($('#inputerror').is(':visible')){
+				$('#autoRange').prop("checked",true);
+				$('#inputerror').hide();
+			}
 			if($('#autoRange').is(':checked')) {
 					textDisable();
 			}
@@ -169,26 +182,38 @@
 		});
 	
 		$('#autoRange').change(function(){
-		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "")){
-			if($('#autoRange').is(':checked')){
+		if($('#autoRange').is(':checked')){
+			if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "")){
+
 				textDisable();
 				getOutputDisplay();
 			}
-			else{
-				textEnable();
-			}
 		    }
+		else{
+			if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "")){
+				$('#inputerror').hide();
+				textEnable();
+				getOutputDisplay();
+			}
+			else{
+				$('#inputerror').html("Please select X-Y bounds and Bubble Size to proceed");
+				$('#inputerror').show();
+			}
+		}
+
 		});
 	
 		$('#xmin').on('input',function(){
 		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "") && !($('#autoRange').is(':checked'))){
 				if(($('#xmin').val()) == '' || isNaN($('#xmin').val())){
-					$('#errorxmin').show();					
+					$('#errorxmin').show();	
+			
 					$('#errorxmin').html("Only Numbers allowed");
 					
 				}
 				else if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
 					$('#errorxmin').hide();
+		
 					getOutputDisplay();
 				}
 			}
@@ -197,7 +222,7 @@
 		$('#xmax').on('input',function(){
 		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "") && !($('#autoRange').is(':checked'))){
 				if(($('#xmax').val()) == '' || isNaN($('#xmax').val())){
-					$('#errorxmax').show();					
+					$('#errorxmax').show();	
 					$('#errorxmax').html("Only Numbers allowed");
 					
 				}
@@ -211,7 +236,7 @@
 		$('#ymin').on('input',function(){
 		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "") && !($('#autoRange').is(':checked'))){
 				if(($('#ymin').val()) == '' || isNaN($('#ymin').val())){
-					$('#errorymin').show();					
+					$('#errorymin').show();		
 					$('#errorymin').html("Only Numbers allowed");
 					
 				}
@@ -225,7 +250,7 @@
 		$('#ymax').on('input',function(){
 		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "") && !($('#autoRange').is(':checked'))){
 				if(($('#ymax').val()) == '' || isNaN($('#ymax').val())){
-					$('#errorymax').show();					
+					$('#errorymax').show();	
 					$('#errorymax').html("Only Numbers allowed");
 					
 				}
@@ -239,17 +264,17 @@
 		$('#xinterval').on('input',function(){
 		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "") && !($('#autoRange').is(':checked'))){
 				if(($('#xinterval').val()) == '' || isNaN($('#xinterval').val())){
-					$('#errorxinterval').show();					
+					$('#errorxinterval').show();	
 					$('#errorxinterval').html("Only Numbers allowed");
 					
 				}
 				else if(($('#xinterval').val()) < 0 || ($('#xinterval').val()) == 0){
-					$('#errorxinterval').show();					
+					$('#errorxinterval').show();	
 					$('#errorxinterval').html("Interval cannot be negative or zero");
 					
 				}
 				else if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#xmin').val()) != '') && (($('#ymax').val()) != '') && (($('#yinterval').val()) != '')){
-					$('#errorxinterval').hide();	
+					$('#errorxinterval').hide();
 					getOutputDisplay();
 				}
 			}		
@@ -258,17 +283,17 @@
 		$('#yinterval').on('input',function(){
 		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "") && !($('#autoRange').is(':checked'))){
 				if(($('#yinterval').val()) == '' || isNaN($('#yinterval').val())){
-					$('#erroryinterval').show();					
+					$('#erroryinterval').show();	
 					$('#erroryinterval').html("Only Numbers allowed");
 					
 				}
 				else if(($('#yinterval').val()) < 0 || ($('#yinterval').val()) == 0){
-					$('#erroryinterval').show();					
+					$('#erroryinterval').show();
 					$('#erroryinterval').html("Interval cannot be negative or zero");
 					
 				}
 				else if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#xmin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '')){
-					$('#erroryinterval').hide();	
+					$('#erroryinterval').hide();
 					getOutputDisplay();
 				}
 			}				
