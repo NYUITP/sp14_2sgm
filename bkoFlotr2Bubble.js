@@ -1,11 +1,12 @@
 //Author: Pallavi Mane
-//Date: 04/20/2014
+//Date: 04/23/2014
 (function () {
     'use strict';
     beaker.bkoDirective("flotr2Bubble", function () {
  return {
-	template:'<input type="button" id="button" value="Show/Hide Configuration" class="btn btn-primary"><br><br>'
-	    + '<span id="inputerror" class="label label-important"></span>'
+	template:'<span id="inputerror" class="label label-important"></span>'
+	    + '<div id="allcontent">'
+	    + '<input type="button" id="button" value="Show/Hide Configuration" class="btn btn-primary"><br><br>'
 	    + '<div id="main" style="border:1.5px solid"><br>'
             + '<b>Title</b> <input type="text" id="title" size="15"><br>'
             + '<b>X Axis</b>'
@@ -21,47 +22,74 @@
             + '<b>X Range</b> Min: <input type="text" id="xmin" style="width:50px"><span id="errorxmin" class="label label-important"></span>    Max: <input type="text" id="xmax" style="width:50px"><span id="errorxmax" class="label label-important"></span> Interval: <input type="text" id="xinterval" style="width:50px"><span id="errorxinterval" class="label label-important"></span><br>'
             + '<b>Y Range</b>     Min: <input type="text" id="ymin" style="width:50px"><span id="errorymin" class="label label-important"></span>     Max: <input type="text" id="ymax" style="width:50px"><span id="errorymax" class="label label-important"></span> Interval: <input type="text" id="yinterval" style="width:50px"><span id="erroryinterval" class="label label-important"></span><br>'
             + 'Automatic Bounds&nbsp;&nbsp;<input type="checkbox" id="autoRange" checked="checked"><br></div>'
-            + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div>',
-	link: function (scope, element, attrs) {
+            + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div></div>',
+	link: function (scope,element,attrs) {
 		var flag = 0;
 		$("#button").click(function(){
    			$("#main").toggle(1000);
 	   	});
+			var
+		    	container = document.getElementById('container'),
+		    	graph,
+		    	jsObj = scope.model.getCellModel(),
+		    	colNames = jsObj.columnNames,
+		    	numCol = colNames.length,
+		    	records = jsObj.values,
+		    	numRecords = records.length,
+		    	isNumCol = checkNumCol();
+			flag = 0;
+		
+			function checkNumCol() {
+			  var boolArr = [true], col, row;
+			  for(col = 1; col < numCol; col++) {
+			    for(row = 0; row < numRecords; row++) {
+			      if(!isNumber(records[row][col])) {
+				boolArr.push(false);
+				break;
+			      }
+			    }
+			    if(row==numRecords){
+			      boolArr.push(true);
+			    }
+			  }
+			  return boolArr;
+			}
+	
 
-		var
-	    	container = document.getElementById('container'),
-	    	graph,
-	    	jsObj = scope.model.getCellModel(),
-	    	colNames = jsObj.columnNames,
-	    	numCol = colNames.length,
-	    	records = jsObj.values,
-	    	numRecords = records.length,
-	    	isNumCol = checkNumCol();
-		flag = 0;
 
 		var totalNumCols = 0;
+			for(var k =1;k<isNumCol.length;k++)
+			{
+				if(isNumCol[k] == true){
+					totalNumCols = totalNumCols + 1;
+				}
+			}
 
-		function checkNumCol() {
-		  var boolArr = [true], col, row;
-		  for(col = 1; col < numCol; col++) {
-		    for(row = 0; row < numRecords; row++) {
-		      if(!isNumber(records[row][col])) {
-			boolArr.push(false);
-			break;
-		      }
-		    }
-		    if(row==numRecords){
-		      boolArr.push(true);
-		      totalNumCols += 1;
-		    }
-		  }
-		  return boolArr;
+			if(totalNumCols < 3){
+				$('#inputerror').show();
+				$('#allcontent').hide();
+				$('#inputerror').html("Bubble Chart Requires min 3 numerical columns!!");
+
+			}
+			else{
+	    			$('#inputerror').hide();
+				$('#allcontent').show();
+				chartDraw();
+			}
+
+
+
+		function isNumber(n) {
+		  return !isNaN(parseFloat(n)) && isFinite(n);
 		}
+
+	function chartDraw(){
 
 		fillDropdown("selectX");
 		fillDropdown("selectY");
 		fillDropdown("selectZ");
 		textDisable();
+
 
 		function fillDropdown(id) {
 		  var 
@@ -78,41 +106,31 @@
 	    
 
 
-	function abortJS(err) {
-	  alert(err);
-	  throw new Error(err);
-	}
+		function dataToChart(x, y, z) {
+		  var
+		    data = [],
+		    point,
+		    row;
 
-	function dataToChart(x, y, z) {
-	  var
-	    data = [],
-	    point,
-	    row;
+		  var totalColValue = getColumnTotal(z);
 
-          var totalColValue = getColumnTotal(z);
-
-	  for(row = 0; row < numRecords; row++) {
-		point = [records[row][x], records[row][y], parseInt(((records[row][z])/totalColValue)*100)];
-		data.push(point);
-	  }
-	  return data;
-	}
+		  for(row = 0; row < numRecords; row++) {
+			point = [records[row][x], records[row][y], parseInt(((records[row][z])/totalColValue)*100)];
+			data.push(point);
+		  }
+		  return data;
+		}
 
 
-	function getColumnTotal(column3)
-	{
-	    var total;
-	    var value = 0;
-  	    for(var row = 0; row < numRecords; row++) {
-		value = value + parseInt(records[row][column3]);
-   	    }
-	    return value;
-	}
-
-	function isNumber(n) {
-	  return !isNaN(parseFloat(n)) && isFinite(n);
-	}
-
+		function getColumnTotal(column3)
+		{
+		    var total;
+		    var value = 0;
+	  	    for(var row = 0; row < numRecords; row++) {
+			value = value + parseInt(records[row][column3]);
+	   	    }
+		    return value;
+		}
 
 		$('#selectX').change(function(){
 			document.getElementById('selectX').selected=true;
@@ -258,89 +276,90 @@
 	
 
 
-	function textDisable() {
-	      $("#xmin").attr("disabled","disabled");
-	      $("#xmax").attr("disabled","disabled");
-	      $("#ymin").attr("disabled","disabled");
-	      $("#ymax").attr("disabled","disabled");
-	      $("#xinterval").attr("disabled","disabled");
-	      $("#yinterval").attr("disabled","disabled");
-	}
+		function textDisable() {
+		      $("#xmin").attr("disabled","disabled");
+		      $("#xmax").attr("disabled","disabled");
+		      $("#ymin").attr("disabled","disabled");
+		      $("#ymax").attr("disabled","disabled");
+		      $("#xinterval").attr("disabled","disabled");
+		      $("#yinterval").attr("disabled","disabled");
+		}
 	
-	function textEnable() {
-	      $("#xmin").removeAttr("disabled");
-	      $("#xmax").removeAttr("disabled");
-	      $("#ymin").removeAttr("disabled");
-	      $("#ymax").removeAttr("disabled");
-	      $("#xinterval").removeAttr("disabled");
-	      $("#yinterval").removeAttr("disabled");
-	}
+		function textEnable() {
+		      $("#xmin").removeAttr("disabled");
+		      $("#xmax").removeAttr("disabled");
+		      $("#ymin").removeAttr("disabled");
+		      $("#ymax").removeAttr("disabled");
+		      $("#xinterval").removeAttr("disabled");
+		      $("#yinterval").removeAttr("disabled");
+		}
 
 
- 	function getOutputDisplay(){
-	  var container = document.getElementById('container');
-	  var 
-	    graphTitle = document.getElementById("title").value,
-	    xaxis = document.getElementById("selectX"),
-	    yaxis = document.getElementById("selectY"),
-	    zaxis = document.getElementById("selectZ"),
-	    colXIndex = parseInt(xaxis.options[xaxis.selectedIndex].value),
-	    colYIndex = parseInt(yaxis.options[yaxis.selectedIndex].value),
-	    colZIndex = parseInt(zaxis.options[zaxis.selectedIndex].value),
-	    data = dataToChart(colXIndex, colYIndex, colZIndex),
-	    xvals, 
-	    yvals; 
-	    var largestX, largestY,smallestX,smallestY;
+	 	function getOutputDisplay(){
+		  var container = document.getElementById('container');
+		  var 
+		    graphTitle = document.getElementById("title").value,
+		    xaxis = document.getElementById("selectX"),
+		    yaxis = document.getElementById("selectY"),
+		    zaxis = document.getElementById("selectZ"),
+		    colXIndex = parseInt(xaxis.options[xaxis.selectedIndex].value),
+		    colYIndex = parseInt(yaxis.options[yaxis.selectedIndex].value),
+		    colZIndex = parseInt(zaxis.options[zaxis.selectedIndex].value),
+		    data = dataToChart(colXIndex, colYIndex, colZIndex),
+		    xvals, 
+		    yvals; 
+		    var largestX, largestY,smallestX,smallestY;
 
-	     var checkAutoOption = $('#autoRange').is(':checked');
-		 if(checkAutoOption){
-				var xArr = [], yArr = [];
-				for(var row = 0; row < numRecords; row++) {
-				     xArr.push(records[row][colXIndex]);
-				}
-				for(var row = 0; row < numRecords; row++) {
-				     yArr.push(records[row][colYIndex]);
-				}
-				 smallestX = Math.min.apply(null, xArr),
-		    		 largestX = Math.max.apply(null, xArr);
-				 smallestY = Math.min.apply(null, yArr),
-		    		 largestY = Math.max.apply(null, yArr);
+		     var checkAutoOption = $('#autoRange').is(':checked');
+			 if(checkAutoOption){
+					var xArr = [], yArr = [];
+					for(var row = 0; row < numRecords; row++) {
+					     xArr.push(records[row][colXIndex]);
+					}
+					for(var row = 0; row < numRecords; row++) {
+					     yArr.push(records[row][colYIndex]);
+					}
+					 smallestX = Math.min.apply(null, xArr),
+			    		 largestX = Math.max.apply(null, xArr);
+					 smallestY = Math.min.apply(null, yArr),
+			    		 largestY = Math.max.apply(null, yArr);
 
-				 $('#xmin').val(smallestX - largestX);
-				 $('#ymin').val(smallestY - largestY);
-				 $('#xmax').val(2*largestX);
-				 $('#ymax').val(2*largestY);
-				 $('#xinterval').val(numRecords);
-				 $('#yinterval').val(numRecords);
+					 $('#xmin').val(smallestX - largestX);
+					 $('#ymin').val(smallestY - largestY);
+					 $('#xmax').val(2*largestX);
+					 $('#ymax').val(2*largestY);
+					 $('#xinterval').val(numRecords);
+					 $('#yinterval').val(numRecords);
 
-	  			 graph = Flotr.draw(container, [data], {
+		  			 graph = Flotr.draw(container, [data], {
+					    title: graphTitle,
+					    bubbles : { show : true, baseRadius : 3 },
+					    xaxis   : {title: colNames[colXIndex], min: smallestX - largestX, max: (2*largestX), noTicks: numRecords},
+					    yaxis   : {title: colNames[colYIndex], min: smallestY - largestY, max: (2*largestY), noTicks: numRecords},
+					    mouse: {
+			      			     track: true
+			    			   }
+					 });
+			}
+			else {
+				xvals = [document.getElementById("xmin").value, document.getElementById("xmax").value, document.getElementById("xinterval").value]; 
+	     			yvals = [document.getElementById("ymin").value, document.getElementById("ymax").value, document.getElementById("yinterval").value]; 
+				graph = Flotr.draw(container, [data], {
 				    title: graphTitle,
 				    bubbles : { show : true, baseRadius : 3 },
-				    xaxis   : {title: colNames[colXIndex], min: smallestX - largestX, max: (2*largestX), noTicks: numRecords},
-				    yaxis   : {title: colNames[colYIndex], min: smallestY - largestY, max: (2*largestY), noTicks: numRecords},
+				    xaxis   : {title: colNames[colXIndex], min: xvals[0], max: xvals[1], noTicks: xvals[2]},
+				    yaxis   : {title: colNames[colYIndex], min: yvals[0], max: yvals[1], noTicks: yvals[2]},
 				    mouse: {
-		      			     track: true
-		    			   }
-				 });
-		}
-		else {
-			xvals = [document.getElementById("xmin").value, document.getElementById("xmax").value, document.getElementById("xinterval").value]; 
-     			yvals = [document.getElementById("ymin").value, document.getElementById("ymax").value, document.getElementById("yinterval").value]; 
-			graph = Flotr.draw(container, [data], {
-			    title: graphTitle,
-			    bubbles : { show : true, baseRadius : 3 },
-			    xaxis   : {title: colNames[colXIndex], min: xvals[0], max: xvals[1], noTicks: xvals[2]},
-			    yaxis   : {title: colNames[colYIndex], min: yvals[0], max: yvals[1], noTicks: yvals[2]},
-			    mouse: {
-					track: true
-				    }
-			});	
+						track: true
+					    }
+				});	
 
-		}
+			}
 		
-	    }
+		    }
 
          }
+	}
 
      };
     });
