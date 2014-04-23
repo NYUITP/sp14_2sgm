@@ -23,15 +23,15 @@
             +       '<p><b>Automatic bounds</b> <input class="input-medium" type="checkbox" ng-model="autoRange" ng-change="toggleAutoRange()"></p>'
             +         '<b>X Bound</b></br>'
             +           '<table>'
-            +           '<tr><td>Min&nbsp;</td>       <td><input class="input-medium" type="text" ng-model="xmin" ng-disabled="autoRange"></td>       <td><span class="label label-important">{{checkMinMax(1, xmin)}}</span></td></tr>'
-            +           '<tr><td>Max&nbsp;</td>       <td><input class="input-medium" type="text" ng-model="xmax" ng-disabled="autoRange"></td>       <td><span class="label label-important">{{checkMinMax(1, xmax)}}</span></td></tr>'
-            +           '<tr><td>Interval&nbsp;</td>  <td><input class="input-medium" type="text" ng-model="xinterval" ng-disabled="autoRange"></td>  <td><span class="label label-important">{{checkInterval(xinterval)}}</span></td></tr>'
+            +           '<tr><td>Min&nbsp;</td>       <td><span class="{{checkMinMax(1, xmin)[1]}}"><input class="input-medium" type="text" ng-model="xmin" ng-disabled="autoRange"></span></td>       <td><span class="label label-important">{{checkMinMax(1, xmin)[0]}}</span></td></tr>'
+            +           '<tr><td>Max&nbsp;</td>       <td><span class="{{checkMinMax(1, xmax)[1]}}"><input class="input-medium" type="text" ng-model="xmax" ng-disabled="autoRange"></span></td>       <td><span class="label label-important">{{checkMinMax(1, xmax)[0]}}</span></td></tr>'
+            +           '<tr><td>Interval&nbsp;</td>  <td><span class="{{checkInterval(xinterval)[1]}}"><input class="input-medium" type="text" ng-model="xinterval" ng-disabled="autoRange"></span></td>  <td><span class="label label-important">{{checkInterval(xinterval)[0]}}</span></td></tr>'
             +           '</table>'
             +         '<b>Y Bound</b></br>'
             +           '<table>'
-            +           '<tr><td>Min&nbsp;</td>       <td><input class="input-medium" type="text" ng-model="ymin" ng-disabled="autoRange"></td>       <td><span class="label label-important">{{checkMinMax(2, ymin)}}</span></td></tr>'
-            +           '<tr><td>Max&nbsp;</td>       <td><input class="input-medium" type="text" ng-model="ymax" ng-disabled="autoRange"></td>       <td><span class="label label-important">{{checkMinMax(2, ymax)}}</span></td></tr>'
-            +            '<tr><td>Interval&nbsp;</td>  <td><input class="input-medium" type="text" ng-model="yinterval" ng-disabled="autoRange"></td>  <td><span class="label label-important">{{checkInterval(yinterval)}}</span></td></tr>'
+            +           '<tr><td>Min&nbsp;</td>       <td><span class="{{checkMinMax(1, ymin)[1]}}"><input class="input-medium" type="text" ng-model="ymin" ng-disabled="autoRange"></span></td>       <td><span class="label label-important">{{checkMinMax(2, ymin)[0]}}</span></td></tr>'
+            +           '<tr><td>Max&nbsp;</td>       <td><span class="{{checkMinMax(1, ymax)[1]}}"><input class="input-medium" type="text" ng-model="ymax" ng-disabled="autoRange"></span></td>       <td><span class="label label-important">{{checkMinMax(2, ymax)[0]}}</span></td></tr>'
+            +            '<tr><td>Interval&nbsp;</td>  <td><span class="{{checkInterval(yinterval)[1]}}"><input class="input-medium" type="text" ng-model="yinterval" ng-disabled="autoRange"></span></td>  <td><span class="label label-important">{{checkInterval(yinterval)[0]}}</span></td></tr>'
             +           '</table>'
             +   '</div>'
             + '</div>'
@@ -78,7 +78,7 @@ $scope.checkYAxis = function(ys) {
 $scope.checkMinMax = function(axisName, input) {
   if(!isNumber(input)){
     $scope.readyToGraph = false;
-    return errors[2];
+    return [errors[2],"control-group error"];
   }
   else if(axisName==1) {
     return checkMinMaxError($scope.xmin, $scope.xmax);
@@ -87,27 +87,27 @@ $scope.checkMinMax = function(axisName, input) {
     return checkMinMaxError($scope.ymin, $scope.ymax);
   }
   else
-    return "";
+    return ["",""];
 }
 $scope.checkInterval = function(interval) {
   if(!isNumber(interval)){
     $scope.readyToGraph = false;
-    return errors[2];
+    return [errors[2],"control-group error"];
   }
   else if(parseFloat(interval)<=0) {
     $scope.readyToGraph = false;
-    return errors[4];
+    return [errors[4],"control-group error"];
   }
   else
-    return "";
+    return ["",""];
 }
 function checkMinMaxError (min, max) {
   if(isNumber(min) && isNumber(max) && parseFloat(max) < parseFloat(min) ) {
     $scope.readyToGraph = false;
-    return errors[3];
+    return [errors[3],"control-group error"];
   }
   else
-    return "";
+    return ["",""];
 }
 /********End OF Error Checking*********/
 
