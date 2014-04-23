@@ -21,8 +21,18 @@
             +         '</table>'
             +       '{{calculateAutoRange(xaxis, yaxis)}}'
             +       '<p><b>Automatic bounds</b> <input class="input-medium" type="checkbox" ng-model="autoRange" ng-change="toggleAutoRange()"></p>'
-            +         '<b>X Bound</b>     Min: <input class="input-medium" type="text" ng-model="xmin" ng-disabled="autoRange"><span class="label label-important">{{checkNumeric(xmin)}}</span>     Max: <input class="input-medium" type="text" ng-model="xmax" ng-disabled="autoRange"><span class="label label-important">{{checkNumeric(xmax)}}</span>     Interval: <input class="input-medium" type="text" ng-model="xinterval" ng-disabled="autoRange"><span class="label label-important">{{checkInterval(xinterval)}}</span><span class="label label-important">{{checkMinMax(xmin, xmax)}}</span><br>'
-            +         '<b>Y Bound</b>     Min: <input class="input-medium" type="text" ng-model="ymin" ng-disabled="autoRange"><span class="label label-important">{{checkNumeric(ymin)}}</span>     Max: <input class="input-medium" type="text" ng-model="ymax" ng-disabled="autoRange"><span class="label label-important">{{checkNumeric(ymax)}}</span>     Interval: <input class="input-medium" type="text" ng-model="yinterval" ng-disabled="autoRange"><span class="label label-important">{{checkInterval(yinterval)}}</span><span class="label label-important">{{checkMinMax(ymin, ymax)}}</span><br>'
+            +         '<b>X Bound</b></br>'
+            +           '<table>'
+            +           '<tr><td>Min&nbsp;</td>       <td><input class="input-medium" type="text" ng-model="xmin" ng-disabled="autoRange"></td>       <td><span class="label label-important">{{checkMinMax(1, xmin)}}</span></td></tr>'
+            +           '<tr><td>Max&nbsp;</td>       <td><input class="input-medium" type="text" ng-model="xmax" ng-disabled="autoRange"></td>       <td><span class="label label-important">{{checkMinMax(1, xmax)}}</span></td></tr>'
+            +           '<tr><td>Interval&nbsp;</td>  <td><input class="input-medium" type="text" ng-model="xinterval" ng-disabled="autoRange"></td>  <td><span class="label label-important">{{checkInterval(xinterval)}}</span></td></tr>'
+            +           '</table>'
+            +         '<b>Y Bound</b></br>'
+            +           '<table>'
+            +           '<tr><td>Min&nbsp;</td>       <td><input class="input-medium" type="text" ng-model="ymin" ng-disabled="autoRange"></td>       <td><span class="label label-important">{{checkMinMax(2, ymin)}}</span></td></tr>'
+            +           '<tr><td>Max&nbsp;</td>       <td><input class="input-medium" type="text" ng-model="ymax" ng-disabled="autoRange"></td>       <td><span class="label label-important">{{checkMinMax(2, ymax)}}</span></td></tr>'
+            +            '<tr><td>Interval&nbsp;</td>  <td><input class="input-medium" type="text" ng-model="yinterval" ng-disabled="autoRange"></td>  <td><span class="label label-important">{{checkInterval(yinterval)}}</span></td></tr>'
+            +           '</table>'
             +   '</div>'
             + '</div>'
             + '<div id="container" style="width:600px;height:384px;margin:8px auto">{{showGraph(autoRange)}}</div>',
@@ -64,12 +74,19 @@ $scope.checkYAxis = function(ys) {
   else return "";
 }
 
-$scope.checkNumeric = function(input) {
+$scope.checkMinMax = function(axisName, input) {
   if(!isNumber(input)){
     $scope.readyToGraph = false;
     return errors[2];
   }
-  return "";
+  else if(axisName==1) {
+    return checkMinMaxError($scope.xmin, $scope.xmax);
+  }
+  else if(axisName==2) {
+    return checkMinMaxError($scope.ymin, $scope.ymax);
+  }
+  else
+    return "";
 }
 $scope.checkInterval = function(interval) {
   if(!isNumber(interval)){
@@ -83,7 +100,7 @@ $scope.checkInterval = function(interval) {
   else
     return "";
 }
-$scope.checkMinMax = function(min, max) {
+function checkMinMaxError (min, max) {
   if(isNumber(min) && isNumber(max) && parseFloat(max) < parseFloat(min) ) {
     $scope.readyToGraph = false;
     return errors[3];
