@@ -1,0 +1,128 @@
+{
+    "beaker": "2",
+    "evaluators": [
+        {
+            "name": "Html",
+            "plugin": "./plugin/evaluator/html.js",
+            "shellID": null
+        },
+        {
+            "name": "Latex",
+            "plugin": "./plugin/evaluator/latex.js",
+            "shellID": null
+        },
+        {
+            "name": "IPython",
+            "plugin": "IPython",
+            "shellID": "BC1CE442D4694CA49E2CABA142D8FFB8",
+            "imports": "",
+            "supplementalClassPath": ""
+        },
+        {
+            "name": "JavaScript",
+            "plugin": "JavaScript",
+            "shellID": null,
+            "jsSetting2": "",
+            "jsSetting1": ""
+        },
+        {
+            "name": "R",
+            "plugin": "R",
+            "shellID": "efafa6dd-89ef-4c2c-8b31-eb8453b1f6f2"
+        },
+        {
+            "name": "Groovy",
+            "plugin": "Groovy",
+            "shellID": "1ed6ecdd-c0a0-4da3-a02f-532c7e2a1d49"
+        },
+        {
+            "name": "IRuby",
+            "plugin": "IRuby",
+            "shellID": "BD67DDF962194BD8A10A9D164DE9F36B",
+            "imports": "",
+            "supplementalClassPath": ""
+        }
+    ],
+    "cells": [
+        {
+            "id": "section001",
+            "type": "section",
+            "level": 1,
+            "title": "Flotr2 Line Diagram",
+            "collapsed": false
+        },
+        {
+            "id": "sectionK9MNdY",
+            "type": "section",
+            "title": "Purpose",
+            "level": 2,
+            "collapsed": false
+        },
+        {
+            "id": "texteQJApG",
+            "type": "text",
+            "body": "<span style=\"color: rgb(37, 51, 64); font-family: 'Segoe UI', Tahoma, Arial, Helvetica, sans-serif; font-size: 13px; line-height: 19.017696380615234px;\">Use the open source Canvas graphing library Flotr2 to display data in line diagram.</span>"
+        },
+        {
+            "id": "section8QdOSw",
+            "type": "section",
+            "title": "How to Set up",
+            "level": 2,
+            "collapsed": false
+        },
+        {
+            "id": "textfHuTj3",
+            "type": "text",
+            "body": "1. Load bkoFlotr2Line.js (Link to dowload) in JavaScript Console using command:&nbsp;<div>bkHelper.loadJS( &lt;URL of the file&gt;&nbsp;);</div><div>EX:&nbsp;<span style=\"font-size: 14px;\">\"http://pathToFile/bkoFlotr2Line.js</span><span style=\"font-size: 14px;\">\"</span><span style=\"font-size: 14px;\">&nbsp;</span></div><div><div>2. Register Flotr2 as the output display type for tables using command:&nbsp;</div><div>beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Line'], &lt;Index of new display type&gt;);<br><p class=\"p1\">EX: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Line'], 0);</p></div></div>"
+        },
+        {
+            "id": "section5eDJ1v",
+            "type": "section",
+            "title": "User Interface",
+            "level": 2,
+            "collapsed": false
+        },
+        {
+            "id": "textlXRxYM",
+            "type": "text",
+            "body": "<div>Functionalities:</div><div>1. Click Hide/Show Configuration button to hide/show configuration.</div><div><br></div><div>Input requirement:</div>1. Must select x axis and at least one y axis&nbsp;<div>2. If bounds not set automatically, must enter numerical values to set up bounds and intervals for both x and y axis.</div><div><br></div>"
+        },
+        {
+            "id": "sectionH6W1ik",
+            "type": "section",
+            "title": "Input Codes",
+            "level": 2,
+            "collapsed": false
+        },
+        {
+            "id": "sectioncBV2y9",
+            "type": "section",
+            "title": "iPython<br>",
+            "level": 3,
+            "collapsed": false
+        },
+        {
+            "id": "textlbFmvX",
+            "type": "text",
+            "body": "<h1 style=\"font-family: Arial, sans-serif; background-color: rgb(190, 212, 235); font-weight: normal; color: rgb(33, 34, 36); margin-top: 0px; padding: 5px 0px 5px 10px; text-shadow: white 0px 1px 0px; border-top-width: 20px; border-top-style: solid; border-top-color: white; font-size: 29px; line-height: normal;\">pandas.DataFrame<a class=\"headerlink\" href=\"http://pandas.pydata.org/pandas-docs/version/0.13.1/generated/pandas.DataFrame.html#pandas-dataframe\" title=\"Permalink to this headline\" style=\"color: rgb(198, 15, 15); visibility: hidden; font-size: 0.8em; padding: 0px 4px;\"></a></h1><h1 style=\"font-family: Arial, sans-serif; background-color: rgb(190, 212, 235); font-weight: normal; color: rgb(33, 34, 36); margin-top: 0px; padding: 5px 0px 5px 10px; text-shadow: white 0px 1px 0px; border-top-width: 20px; border-top-style: solid; border-top-color: white; font-size: 29px; line-height: normal;\"><dl class=\"class\" style=\"margin-bottom: 15px; color: rgb(62, 67, 73); font-size: 14px; background-color: rgb(255, 255, 255);\"><dt id=\"pandas.DataFrame\"><em class=\"property\">class&nbsp;</em><tt class=\"descclassname\" style=\"background-color: transparent; color: rgb(34, 34, 34); font-size: 1.1em;\">pandas.</tt><tt class=\"descname\" style=\"background-color: transparent; color: rgb(34, 34, 34); font-size: 1.2em;\">DataFrame</tt><big>(</big><em>data=None</em>,&nbsp;<em>index=None</em>,&nbsp;<em>columns=None</em>,&nbsp;<em>dtype=None</em>,&nbsp;<em>copy=False</em><big>)</big><a class=\"headerlink\" href=\"http://pandas.pydata.org/pandas-docs/version/0.13.1/generated/pandas.DataFrame.html#pandas.DataFrame\" title=\"Permalink to this definition\" style=\"color: rgb(198, 15, 15); visibility: hidden; font-size: 0.8em; padding: 0px 4px;\"></a></dt><dd style=\"margin-top: 3px; margin-bottom: 10px; margin-left: 30px; line-height: 1.5em;\"><p style=\"line-height: 1.5em;\">Two-dimensional size-mutable, potentially heterogeneous tabular data structure with labeled axes (rows and columns). Arithmetic operations align on both row and column labels. Can be thought of as a dict-like container for Series objects. The primary pandas data structure</p><table class=\"docutils field-list\" frame=\"void\" rules=\"none\" style=\"margin-bottom: 10px; border: 0px; border-collapse: separate; border-spacing: 10px; margin-left: 1px;\"><colgroup><col class=\"field-name\"><col class=\"field-body\"></colgroup><tbody valign=\"top\"><tr class=\"field-odd field\"><th class=\"field-name\" style=\"padding: 1px 8px 1px 5px; white-space: nowrap; background-color: rgb(238, 238, 238); border: 0px !important;\">Parameters :</th><td class=\"field-body\" style=\"padding: 1px 8px 1px 5px; border: 0px !important;\"><p class=\"first\" style=\"margin-bottom: 0px; line-height: 1.5em; font-style: italic;\"><strong style=\"font-style: normal;\">data</strong>&nbsp;: numpy ndarray (structured or homogeneous), dict, or DataFrame</p><blockquote style=\"border-left-style: none; margin: 0em 0em 0.3em; padding-left: 30px;\"><p style=\"line-height: 1.5em;\">Dict can contain Series, arrays, constants, or list-like objects</p></blockquote><p style=\"margin-bottom: 0px; line-height: 1.5em; font-style: italic;\"><strong style=\"font-style: normal;\">index</strong>&nbsp;: Index or array-like</p><blockquote style=\"border-left-style: none; margin: 0em 0em 0.3em; padding-left: 30px;\"><p style=\"line-height: 1.5em;\">Index to use for resulting frame. Will default to np.arange(n) if no indexing information part of input data and no index provided</p></blockquote><p style=\"margin-bottom: 0px; line-height: 1.5em; font-style: italic;\"><strong style=\"font-style: normal;\">columns</strong>&nbsp;: Index or array-like</p><blockquote style=\"border-left-style: none; margin: 0em 0em 0.3em; padding-left: 30px;\"><p style=\"line-height: 1.5em;\">Column labels to use for resulting frame. Will default to np.arange(n) if no column labels are provided</p></blockquote><p style=\"margin-bottom: 0px; line-height: 1.5em; font-style: italic;\"><strong style=\"font-style: normal;\">dtype</strong>&nbsp;: dtype, default None</p><blockquote style=\"border-left-style: none; margin: 0em 0em 0.3em; padding-left: 30px;\"><p style=\"line-height: 1.5em;\">Data type to force, otherwise infer</p></blockquote><p style=\"margin-bottom: 0px; line-height: 1.5em; font-style: italic;\"><strong style=\"font-style: normal;\">copy</strong>&nbsp;: boolean, default False</p><blockquote class=\"last\" style=\"border-left-style: none; margin: 0em 0em 0.3em; padding-left: 30px;\"><p style=\"line-height: 1.5em;\">Copy data from inputs. Only affects DataFrame / 2d ndarray input</p></blockquote></td></tr></tbody></table></dd></dl></h1>"
+        },
+        {
+            "id": "sectionf6bX6o",
+            "type": "section",
+            "title": "Code Examples -- iPython",
+            "level": 4,
+            "collapsed": false
+        },
+        {
+            "id": "codecT0KJd",
+            "type": "code",
+            "evaluator": "IPython",
+            "input": {
+                "body": "import pandas as pd\ndf = pd.DataFrame([['USA', 5, 15], ['India', 10, 30], ['China', 15, 20], ['Japan',20, 5], ['Australia',30, 25]], columns=['Country', 'Population %', 'Unemployment %'])\ndf"
+            },
+            "output": {
+                "selectedType": "Hidden"
+            }
+        }
+    ]
+}
