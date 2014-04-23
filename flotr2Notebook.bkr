@@ -49,7 +49,7 @@
             "type": "section",
             "level": 1,
             "title": "Flotr2 Tutorial",
-            "collapsed": false
+            "collapsed": true
         },
         {
             "id": "codefE5W8q",
@@ -84,6 +84,13 @@
             "collapsed": false
         },
         {
+            "id": "sectionInjZlN",
+            "type": "section",
+            "title": "Info on pandas.DataFrame",
+            "level": 3,
+            "collapsed": true
+        },
+        {
             "id": "textlbFmvX",
             "type": "text",
             "body": "<h1 style=\"font-family: Arial, sans-serif; background-color: rgb(190, 212, 235); font-weight: normal; color: rgb(33, 34, 36); margin-top: 0px; padding: 5px 0px 5px 10px; text-shadow: white 0px 1px 0px; border-top-width: 20px; border-top-style: solid; border-top-color: white; font-size: 29px; line-height: normal;\">pandas.DataFrame<a class=\"headerlink\" href=\"http://pandas.pydata.org/pandas-docs/version/0.13.1/generated/pandas.DataFrame.html#pandas-dataframe\" title=\"Permalink to this headline\" style=\"color: rgb(198, 15, 15); visibility: hidden; font-size: 0.8em; padding: 0px 4px;\"></a></h1><h1 style=\"font-family: Arial, sans-serif; background-color: rgb(190, 212, 235); font-weight: normal; color: rgb(33, 34, 36); margin-top: 0px; padding: 5px 0px 5px 10px; text-shadow: white 0px 1px 0px; border-top-width: 20px; border-top-style: solid; border-top-color: white; font-size: 29px; line-height: normal;\"><dl class=\"class\" style=\"margin-bottom: 15px; color: rgb(62, 67, 73); font-size: 14px; background-color: rgb(255, 255, 255);\"><dt id=\"pandas.DataFrame\"><em class=\"property\">class&nbsp;</em><tt class=\"descclassname\" style=\"background-color: transparent; color: rgb(34, 34, 34); font-size: 1.1em;\">pandas.</tt><tt class=\"descname\" style=\"background-color: transparent; color: rgb(34, 34, 34); font-size: 1.2em;\">DataFrame</tt><big>(</big><em>data=None</em>,&nbsp;<em>index=None</em>,&nbsp;<em>columns=None</em>,&nbsp;<em>dtype=None</em>,&nbsp;<em>copy=False</em><big>)</big><a class=\"headerlink\" href=\"http://pandas.pydata.org/pandas-docs/version/0.13.1/generated/pandas.DataFrame.html#pandas.DataFrame\" title=\"Permalink to this definition\" style=\"color: rgb(198, 15, 15); visibility: hidden; font-size: 0.8em; padding: 0px 4px;\"></a></dt><dd style=\"margin-top: 3px; margin-bottom: 10px; margin-left: 30px; line-height: 1.5em;\"><p style=\"line-height: 1.5em;\">Two-dimensional size-mutable, potentially heterogeneous tabular data structure with labeled axes (rows and columns). Arithmetic operations align on both row and column labels. Can be thought of as a dict-like container for Series objects. The primary pandas data structure</p><table class=\"docutils field-list\" frame=\"void\" rules=\"none\" style=\"margin-bottom: 10px; border: 0px; border-collapse: separate; border-spacing: 10px; margin-left: 1px;\"><colgroup><col class=\"field-name\"><col class=\"field-body\"></colgroup><tbody valign=\"top\"><tr class=\"field-odd field\"><th class=\"field-name\" style=\"padding: 1px 8px 1px 5px; white-space: nowrap; background-color: rgb(238, 238, 238); border: 0px !important;\">Parameters :</th><td class=\"field-body\" style=\"padding: 1px 8px 1px 5px; border: 0px !important;\"><p class=\"first\" style=\"margin-bottom: 0px; line-height: 1.5em; font-style: italic;\"><strong style=\"font-style: normal;\">data</strong>&nbsp;: numpy ndarray (structured or homogeneous), dict, or DataFrame</p><blockquote style=\"border-left-style: none; margin: 0em 0em 0.3em; padding-left: 30px;\"><p style=\"line-height: 1.5em;\">Dict can contain Series, arrays, constants, or list-like objects</p></blockquote><p style=\"margin-bottom: 0px; line-height: 1.5em; font-style: italic;\"><strong style=\"font-style: normal;\">index</strong>&nbsp;: Index or array-like</p><blockquote style=\"border-left-style: none; margin: 0em 0em 0.3em; padding-left: 30px;\"><p style=\"line-height: 1.5em;\">Index to use for resulting frame. Will default to np.arange(n) if no indexing information part of input data and no index provided</p></blockquote><p style=\"margin-bottom: 0px; line-height: 1.5em; font-style: italic;\"><strong style=\"font-style: normal;\">columns</strong>&nbsp;: Index or array-like</p><blockquote style=\"border-left-style: none; margin: 0em 0em 0.3em; padding-left: 30px;\"><p style=\"line-height: 1.5em;\">Column labels to use for resulting frame. Will default to np.arange(n) if no column labels are provided</p></blockquote><p style=\"margin-bottom: 0px; line-height: 1.5em; font-style: italic;\"><strong style=\"font-style: normal;\">dtype</strong>&nbsp;: dtype, default None</p><blockquote style=\"border-left-style: none; margin: 0em 0em 0.3em; padding-left: 30px;\"><p style=\"line-height: 1.5em;\">Data type to force, otherwise infer</p></blockquote><p style=\"margin-bottom: 0px; line-height: 1.5em; font-style: italic;\"><strong style=\"font-style: normal;\">copy</strong>&nbsp;: boolean, default False</p><blockquote class=\"last\" style=\"border-left-style: none; margin: 0em 0em 0.3em; padding-left: 30px;\"><p style=\"line-height: 1.5em;\">Copy data from inputs. Only affects DataFrame / 2d ndarray input</p></blockquote></td></tr></tbody></table></dd></dl></h1>"
@@ -92,7 +99,7 @@
             "id": "sectionf6bX6o",
             "type": "section",
             "title": "Code Examples -- iPython",
-            "level": 4,
+            "level": 3,
             "collapsed": false
         },
         {
@@ -105,7 +112,7 @@
             "output": {
                 "selectedType": "Hidden",
                 "outputArrived": true,
-                "elapsedTime": 641
+                "elapsedTime": 114
             }
         },
         {
@@ -118,7 +125,7 @@
             "output": {
                 "selectedType": "Hidden",
                 "outputArrived": true,
-                "elapsedTime": 163
+                "elapsedTime": 131
             }
         },
         {
@@ -145,6 +152,56 @@
                 "selectedType": "Hidden",
                 "outputArrived": true,
                 "elapsedTime": 71
+            }
+        },
+        {
+            "id": "sectionEf0c1x",
+            "type": "section",
+            "title": "R",
+            "level": 2,
+            "collapsed": false
+        },
+        {
+            "id": "sectionlL0sMD",
+            "type": "section",
+            "title": "Info on R DataFrame",
+            "level": 4,
+            "collapsed": true
+        },
+        {
+            "id": "textGTWR6A",
+            "type": "text",
+            "body": "<h1 style=\"padding: 0px 0px 5px; margin-top: 0px; margin-right: 15px; margin-bottom: 20px; font-weight: normal; font-size: 2em; line-height: normal; font-family: Georgia, 'Times New Roman', Times, serif; color: rgb(17, 17, 17); letter-spacing: -1px; background-image: url(http://www.r-tutor.com/sites/www.r-tutor.com/themes/elitecircle/images/bk_dotted.gif); background-position: 0% 100%; background-repeat: repeat no-repeat;\">Data Frame</h1><div id=\"node-10\" class=\"node\" style=\"padding: 0px; margin: 0px;\"><div class=\"submitted\" style=\"padding: 0px; margin: 0px;\"></div><div class=\"content clear-block\" style=\"padding: 0px; margin: 0px;\"><p class=\"noindent\" style=\"padding: 0px; margin-top: 10px; margin-right: 15px; color: rgb(68, 68, 68); font-family: Verdana, 'Trebuchet MS', Tahoma, sans-serif; font-size: 12px; line-height: 19.200000762939453px;\">A&nbsp;<span class=\"ecbx-1000\" style=\"padding: 0px; margin: 0px; font-weight: bold;\">data frame&nbsp;</span>is used for storing data tables. It is a list of vectors of equal length. For example, the following variable&nbsp;<span class=\"ecss-1000\" style=\"padding: 0px; margin: 0px; font-family: sans-serif; font-size: 12px;\">df&nbsp;</span>is a data frame containing three vectors&nbsp;<span class=\"ecss-1000\" style=\"padding: 0px; margin: 0px; font-family: sans-serif; font-size: 12px;\">n</span>,&nbsp;<span class=\"ecss-1000\" style=\"padding: 0px; margin: 0px; font-family: sans-serif; font-size: 12px;\">s</span>,&nbsp;<span class=\"ecss-1000\" style=\"padding: 0px; margin: 0px; font-family: sans-serif; font-size: 12px;\">b</span>.</p><div class=\"lstlisting\" style=\"padding: 0.5em; margin: 0.5em 0px; font-family: 'Lucida Console', 'courier new', monospace; white-space: nowrap; background-color: rgb(252, 252, 249); border-left-width: 2px; border-left-style: solid; border-left-color: rgb(239, 239, 239); color: rgb(68, 68, 68); font-size: 12px; line-height: 19.200000762939453px;\"><span class=\"label\" style=\"padding: 0px; margin: 0px 0.5em 0px 0px;\"><a id=\"x12-31001r1\" style=\"padding: 0px; margin: 0px; color: rgb(203, 71, 33); background-color: inherit;\"></a></span>&gt;&nbsp;n&nbsp;=&nbsp;c(2,&nbsp;3,&nbsp;5)&nbsp;<br style=\"padding: 0px; margin: 0px;\"><span class=\"label\" style=\"padding: 0px; margin: 0px 0.5em 0px 0px;\"><a id=\"x12-31002r2\" style=\"padding: 0px; margin: 0px; color: rgb(203, 71, 33); background-color: inherit;\"></a></span>&gt;&nbsp;s&nbsp;=&nbsp;c(\"aa\",&nbsp;\"bb\",&nbsp;\"cc\")&nbsp;<br style=\"padding: 0px; margin: 0px;\"><span class=\"label\" style=\"padding: 0px; margin: 0px 0.5em 0px 0px;\"><a id=\"x12-31003r3\" style=\"padding: 0px; margin: 0px; color: rgb(203, 71, 33); background-color: inherit;\"></a></span>&gt;&nbsp;b&nbsp;=&nbsp;c(TRUE,&nbsp;FALSE,&nbsp;TRUE)&nbsp;<br style=\"padding: 0px; margin: 0px;\"><span class=\"label\" style=\"padding: 0px; margin: 0px 0.5em 0px 0px;\"><a id=\"x12-31004r4\" style=\"padding: 0px; margin: 0px; color: rgb(203, 71, 33); background-color: inherit;\"></a></span>&gt;&nbsp;df&nbsp;=&nbsp;data.frame(n,&nbsp;s,&nbsp;b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;df&nbsp;is&nbsp;a&nbsp;data&nbsp;frame</div><p class=\"noindent\" style=\"padding: 0px; margin-top: 10px; margin-right: 15px; color: rgb(68, 68, 68); font-family: Verdana, 'Trebuchet MS', Tahoma, sans-serif; font-size: 12px; line-height: 19.200000762939453px;\"></p></div></div>"
+        },
+        {
+            "id": "section7vzKW2",
+            "type": "section",
+            "title": "Code Example -- R",
+            "level": 4,
+            "collapsed": true
+        },
+        {
+            "id": "codelo2LnR",
+            "type": "code",
+            "evaluator": "R",
+            "input": {
+                "body": "food = c(2, 3, 5) \ndrink = c(10, 29, -10) \nfinished = c(TRUE, FALSE, TRUE) \ndf = data.frame(food, drink, finished)"
+            },
+            "output": {
+                "selectedType": "Hidden",
+                "elapsedTime": 134
+            }
+        },
+        {
+            "id": "codeHIMWo7",
+            "type": "code",
+            "evaluator": "R",
+            "input": {
+                "body": "food = c(2, 3, 5) \ndrink = c(10, 29, -10) \nsnack = c(1, 20, 50)\nbaba = c(2, 3, 4)\ndf = data.frame(food, drink, snack)"
+            },
+            "output": {
+                "selectedType": "Hidden",
+                "elapsedTime": 90
             }
         }
     ]
