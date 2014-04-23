@@ -56,7 +56,8 @@
             "type": "code",
             "evaluator": "Html",
             "input": {
-                "body": "<div class=\"row-fluid\">\n\n  <div class=\"span9\">\n\n    <h1>Overview</h1>\n\n\t\t<p>Use the open source Canvas graphing library Flotr2 to display data in line diagram.</p>\n\n    <h2>Language support</h2>\n\n    <p><strong>Code:</strong> Python (DataFrame in Pandas), R (Data Frame)</p>\n\n    <h2>Plugins</h2>\n\n\t<p>All of the flotr2 table display types can be accessed by loading corresponding JavaScript plugins.</p>\n    <p>Line Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2Line.js\">bkoFlotr2Line.js</a></p>\n    <p>Bubble Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2Bubble.js\">bkoFlotr2Bubble.js</a></p>\n    <p>Pie Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2pie.js\">bkoFlotr2Pie.js</a></p>\n\n    <h1>How to Set Up</h1>\n    <p>1. Load Java Script file(s) in JavaScript Console using command:</br>bkHelper.loadJS( &lt;URL of the file&gt; ); </p></br>\n<p>2. Register flotr2 type(s) as the output display type(s) for tables using command:</br> \n\tLine: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Line'], &lt;Index of new display type&gt;);</br>\n\tBubble: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Bubble'], &lt;Index of new display type&gt;);</br>\n\tPie: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Pie'], &lt;Index of new display type&gt;);\n</p>\n  </div>  \n  \n\n  \n</div>"
+                "body": "<div class=\"row-fluid\">\n\n  <div class=\"span9\">\n\n    <h1>Overview</h1>\n\n\t\t<p>Use the open source Canvas graphing library Flotr2 to display data in line diagram.</p>\n\n    <h2>Language support</h2>\n\n    <p><strong>Code:</strong> Python (DataFrame in Pandas), R (Data Frame)</p>\n\n    <h2>Plugins</h2>\n\n\t<p>All of the flotr2 table display types can be accessed by loading corresponding JavaScript plugins.</p>\n    <p>Line Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2Line.js\">bkoFlotr2Line.js</a></p>\n    <p>Bubble Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2Bubble.js\">bkoFlotr2Bubble.js</a></p>\n    <p>Pie Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2pie.js\">bkoFlotr2Pie.js</a></p>\n\n    <h1>How to Set Up</h1>\n    <p>1. Load Java Script file(s) in JavaScript Console using command:</br>bkHelper.loadJS( &lt;URL of the file&gt; ); </p></br>\n<p>2. Register flotr2 type(s) as the output display type(s) for tables using command:</br> \n\tLine: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Line'], &lt;Index of new display type&gt;);</br>\n\tBubble: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Bubble'], &lt;Index of new display type&gt;);</br>\n\tPie: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Pie'], &lt;Index of new display type&gt;);\n\n</p>\n  </div>  \n  \n\n  \n</div>",
+                "hidden": true
             },
             "output": {
                 "selectedType": "BeakerDisplay",
@@ -69,29 +70,17 @@
             }
         },
         {
-            "id": "section5eDJ1v",
-            "type": "section",
-            "title": "User Interface",
-            "level": 2,
-            "collapsed": false
-        },
-        {
-            "id": "textlXRxYM",
-            "type": "text",
-            "body": "<div>Functionalities:</div><div>1. Click Hide/Show Configuration button to hide/show configuration.</div><div><br></div><div>Input requirement:</div>1. Must select x axis and at least one y axis&nbsp;<div>2. If bounds not set automatically, must enter numerical values to set up bounds and intervals for both x and y axis.</div><div><br></div>"
-        },
-        {
             "id": "sectionH6W1ik",
             "type": "section",
             "title": "Input Codes",
-            "level": 2,
+            "level": 1,
             "collapsed": false
         },
         {
             "id": "sectioncBV2y9",
             "type": "section",
-            "title": "iPython<br>",
-            "level": 3,
+            "title": "iPython",
+            "level": 2,
             "collapsed": false
         },
         {
@@ -111,7 +100,7 @@
             "type": "code",
             "evaluator": "IPython",
             "input": {
-                "body": "import pandas as pd\ndf = pd.DataFrame([['USA'], ['India'], ['China'], ['Japan'], ['Australia']], columns=['Country'])\ndf\n\n"
+                "body": "import pandas as pd\ndf = pd.DataFrame([['USA', 5, 15], ['India', 10, 30], ['China', 15, 20], ['Japan',20, 5], ['Australia',30, 25]], columns=['Country', 'Population %', 'Unemployment %'])\ndf"
             },
             "output": {
                 "selectedType": "Table",
@@ -120,60 +109,178 @@
                     "tableDisplayModel": {
                         "columnNames": [
                             "",
-                            "Country"
+                            "Country",
+                            "Population %",
+                            "Unemployment %"
                         ],
                         "values": [
                             [
                                 "0",
-                                "       USA"
+                                "       USA",
+                                "  5",
+                                " 15"
                             ],
                             [
                                 "1",
-                                "     India"
+                                "     India",
+                                " 10",
+                                " 30"
                             ],
                             [
                                 "2",
-                                "     China"
+                                "     China",
+                                " 15",
+                                " 20"
                             ],
                             [
                                 "3",
-                                "     Japan"
+                                "     Japan",
+                                " 20",
+                                "  5"
                             ],
                             [
                                 "4",
-                                " Australia"
+                                " Australia",
+                                " 30",
+                                " 25"
                             ]
                         ]
                     },
                     "columnNames": [
                         "",
-                        "Country"
+                        "Country",
+                        "Population %",
+                        "Unemployment %"
                     ],
                     "values": [
                         [
                             "0",
-                            "       USA"
+                            "       USA",
+                            "  5",
+                            " 15"
                         ],
                         [
                             "1",
-                            "     India"
+                            "     India",
+                            " 10",
+                            " 30"
                         ],
                         [
                             "2",
-                            "     China"
+                            "     China",
+                            " 15",
+                            " 20"
                         ],
                         [
                             "3",
-                            "     Japan"
+                            "     Japan",
+                            " 20",
+                            "  5"
                         ],
                         [
                             "4",
-                            " Australia"
+                            " Australia",
+                            " 30",
+                            " 25"
                         ]
                     ]
                 },
                 "outputArrived": true,
-                "elapsedTime": 676
+                "elapsedTime": 641
+            }
+        },
+        {
+            "id": "code64VDns",
+            "type": "code",
+            "evaluator": "IPython",
+            "input": {
+                "body": "import pandas as pd\ndf = pd.DataFrame([[12,28000, 20], [13,25000, 21], [16,65200,11], [6,34500,15], [23,56000,14]], columns=['ProductNumber','Sales', 'Market Share %'])\ndf"
+            },
+            "output": {
+                "selectedType": "Table",
+                "result": {
+                    "type": "TableDisplay",
+                    "tableDisplayModel": {
+                        "columnNames": [
+                            "",
+                            "ProductNumber",
+                            "Sales",
+                            "Market Share %"
+                        ],
+                        "values": [
+                            [
+                                "0",
+                                " 12",
+                                " 28000",
+                                " 20"
+                            ],
+                            [
+                                "1",
+                                " 13",
+                                " 25000",
+                                " 21"
+                            ],
+                            [
+                                "2",
+                                " 16",
+                                " 65200",
+                                " 11"
+                            ],
+                            [
+                                "3",
+                                "  6",
+                                " 34500",
+                                " 15"
+                            ],
+                            [
+                                "4",
+                                " 23",
+                                " 56000",
+                                " 14"
+                            ]
+                        ]
+                    },
+                    "columnNames": [
+                        "",
+                        "ProductNumber",
+                        "Sales",
+                        "Market Share %"
+                    ],
+                    "values": [
+                        [
+                            "0",
+                            " 12",
+                            " 28000",
+                            " 20"
+                        ],
+                        [
+                            "1",
+                            " 13",
+                            " 25000",
+                            " 21"
+                        ],
+                        [
+                            "2",
+                            " 16",
+                            " 65200",
+                            " 11"
+                        ],
+                        [
+                            "3",
+                            "  6",
+                            " 34500",
+                            " 15"
+                        ],
+                        [
+                            "4",
+                            " 23",
+                            " 56000",
+                            " 14"
+                        ]
+                    ]
+                },
+                "outputArrived": true,
+                "elapsedTime": 163
             }
         }
     ]
