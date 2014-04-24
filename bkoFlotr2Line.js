@@ -8,8 +8,8 @@
             template: 
               '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Configuration&nbsp;</button>'
             + '<div class={{msgClass}} id="msg" style={{displayMsg}}><h4>{{msgType}}</h4><ul><li ng-repeat="err in currErrors">{{err}}</br></li></ul></div>'
+            + '<span class="label label-important">{{initReadyToGraph()}}</span>'
             + '<div id="configuration" style={{displayConf}}>' 
-            +       '{{initReadyToGraph()}}' 
             +       '<table>'
             +       '<tr><td><b>Title&nbsp;</b></td> <td><input class="input-medium" type="text" ng-model="title"  size="30" placeholder="Add graph title here"></td></tr>'
             +       '<tr><td><b>X Title&nbsp;</b></td> <td><input class="input-medium" type="text" ng-model="xtitle"  size="30" placeholder="Add x-axis title here"></td><td><b>&nbsp;Y Title&nbsp;</b></td> <td><input class="input-medium" type="text" ng-model="ytitle"  size="30" placeholder="Add y-axis title here"></td></tr>'
@@ -48,12 +48,19 @@ var
     records = jsObj.values,
     numRecords = records.length,
     currXMin=-10, currXMax=10, currYMin=-10, currYMax=10, currXTick=5, currYTick=5, //test which columns are numerical (numerical: true)
-    errors = ["Please select the X axis.", "Please select at least one Y axis.", "Please enter numeric values.", "Max is smaller than Min.", "Interval cannot be smaller or equals to zero."];
+    errors = ["Please select the X axis.", "Please select at least one Y axis.", "Please enter numeric values.", "Max is smaller than Min.", "Interval cannot be smaller or equals to zero.", "Please have at least two numeric columns."];
 /********End OF Declaration*********/
 
 /********Error Checking*********/
 $scope.initReadyToGraph = function(){
-  $scope.readyToGraph = true;
+  var opt;
+  if($scope.colOptions.length==1) {
+    $scope.hideOrShowConf = " Hide ";
+    $scope.displayConf = "display:none;";
+    return errors[5];
+  }
+  else
+    $scope.readyToGraph = true;
 }
 $scope.checkXaxis = function(x) {
   if(x===undefined) {

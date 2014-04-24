@@ -14,7 +14,7 @@
         {
             "name": "IPython",
             "plugin": "IPython",
-            "shellID": "2CDAD5AE354D414A808E5D7E4B96798F",
+            "shellID": "8A226E33A1064E6796F2FA811AC75289",
             "imports": "",
             "supplementalClassPath": ""
         },
@@ -28,12 +28,12 @@
         {
             "name": "R",
             "plugin": "R",
-            "shellID": "0a7e7dbc-3a4d-4f80-9fe2-983e029b5326"
+            "shellID": "c133054b-1e60-44a1-bb4a-32ff442e018d"
         },
         {
             "name": "Groovy",
             "plugin": "Groovy",
-            "shellID": "bdb79cab-2237-4d5c-a4a4-ce2b85ccd05a"
+            "shellID": "ccaace1d-a203-4689-9ac6-8f8db3e3d743"
         },
         {
             "name": "IRuby",
@@ -81,7 +81,7 @@
             "type": "section",
             "title": "iPython",
             "level": 2,
-            "collapsed": false
+            "collapsed": true
         },
         {
             "id": "sectionInjZlN",
@@ -100,7 +100,7 @@
             "type": "section",
             "title": "Code Examples -- iPython",
             "level": 3,
-            "collapsed": false
+            "collapsed": true
         },
         {
             "id": "codecT0KJd",
@@ -138,7 +138,7 @@
             "output": {
                 "selectedType": "Hidden",
                 "outputArrived": true,
-                "elapsedTime": 82
+                "elapsedTime": 414
             }
         },
         {
@@ -159,13 +159,13 @@
             "type": "section",
             "title": "R",
             "level": 2,
-            "collapsed": false
+            "collapsed": true
         },
         {
             "id": "sectionlL0sMD",
             "type": "section",
             "title": "Info on R DataFrame",
-            "level": 4,
+            "level": 3,
             "collapsed": true
         },
         {
@@ -177,7 +177,7 @@
             "id": "section7vzKW2",
             "type": "section",
             "title": "Code Example -- R",
-            "level": 4,
+            "level": 3,
             "collapsed": true
         },
         {
@@ -189,7 +189,7 @@
             },
             "output": {
                 "selectedType": "Hidden",
-                "elapsedTime": 134
+                "elapsedTime": 195
             }
         },
         {
