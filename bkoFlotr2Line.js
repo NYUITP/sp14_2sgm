@@ -48,7 +48,7 @@ var
     records = jsObj.values,
     numRecords = records.length,
     currXMin=-10, currXMax=10, currYMin=-10, currYMax=10, currXTick=5, currYTick=5, //test which columns are numerical (numerical: true)
-    errors = ["Please select the X axis.", "Please select at least one Y axis.", "Please enter numeric values.", "Max is smaller than Min.", "Interval cannot be smaller or equals to zero.", "Please have at least two numeric columns."];
+    errors = ["Please select the X axis.", "Please select at least one Y axis.", "Please enter numeric values.", "Max is smaller than Min.", "Interval cannot be smaller or equals to zero.", "Please have at least two numeric columns.", "Please have unique column names."];
 /********End OF Declaration*********/
 
 /********Error Checking*********/
@@ -57,10 +57,26 @@ $scope.initReadyToGraph = function(){
   if($scope.colOptions.length==1) {
     $scope.hideOrShowConf = " Hide ";
     $scope.displayConf = "display:none;";
+    $scope.readyToGraph = false;
     return errors[5];
+  }
+  else if (!uniqueColumnNames()) {
+    $scope.hideOrShowConf = " Hide ";
+    $scope.displayConf = "display:none;";
+    $scope.readyToGraph = false;
+    return errors[6];
   }
   else
     $scope.readyToGraph = true;
+}
+function uniqueColumnNames() {
+  for(var i = 0; i < colNames.length; i++) {
+    for(var j = i+1; j < colNames.length; j++) {
+      if(colNames[i]==colNames[j])
+        return false;
+    }
+  }
+  return true;
 }
 $scope.checkXaxis = function(x) {
   if(x===undefined) {
