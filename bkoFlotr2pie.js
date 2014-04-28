@@ -1,3 +1,5 @@
+//Priyanka Inani 
+//code cleaning to be done
 //Values = int parse int, values=float, parse float
 (function () {
     'use strict';
@@ -5,38 +7,114 @@
       return {
             template: 
               '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Setting&nbsp;</button>'
-            + '<button class="btn btn-primary" ng-click="toggleMsg()">&nbsp; {{hideOrShowMsg}} Error &nbsp;</button></br>'
+           // + '<button class="btn btn-primary" ng-click="toggleMsg()">&nbsp; {{hideOrShowMsg}} Error &nbsp;</button></br>'
             + '<div class={{msgClass}} id="msg" style={{displayMsg}}><h4>{{msgType}}</h4><ul><li ng-repeat="err in currErrors">{{err}}</br></li></ul></div>'
+//+ '<span class="label label-important">{{initReadyToGraph()}}</span>'
             + '<div id="configuration" style={{displayConf}}>'
-            +   '</br><b>Number of Pie: &nbsp;</b><input type="text" name="pienum" class="input-medium" ng-model="numPie" placeholder="Enter number of pie"></br>'
+            +   '</br><b>Number of Pie: &nbsp;</b><input type="text" name="pienum" class="input-medium" ng-model="numPie" placeholder="Enter number of pie"><span class="label label-important">{{countPie(numPie)}}</span></br>'
             +   '<b>Pie Setting&nbsp;</b>'
             +     '<div id="pieSetting" style={{checkNumPie()}}>'
             +       '<table>' 
             +         '<tr><th>Title</th><th>Data</th><th>Label</th></tr>'
             +         '<tr ng-repeat="pie in getPieGroup(numPie)">'
             +           '<td><input type="text" class="input-medium" ng-model="pie.title" placeholder="Enter pie title"></td>'
-            +           '<td><select ng-model="pie.data" ng-options="dataOption.colName for dataOption in dataOptions"><option value="-- choose data --"></option></select></td>'
-            +           '<td><select ng-model="pie.label" ng-options="labelOption.colName for labelOption in labelOptions"><option value="-- choose label --"></option></select></td>'
+            +           '<td><select ng-model="pie.data" ng-options="dataOption.colName for dataOption in dataOptions"><option value="-- choose data --"></option></select><span class="label label-important">{{checkData(pie.data)}}</span></td>'
+            +           '<td><select ng-model="pie.label" ng-options="labelOption.colName for labelOption in labelOptions"><option value="-- choose label --"></option></select><span class="label label-important">{{checkLabel(pie.label)}}</span></td>'
             +         '</tr>'
             +       '</table>'
             +     '</div>'
             + '</div>'
-            + '<div id="graphs" style={{checkError()}}>'
+            + '<div id="graphs" style={{initReadyToGraph()}}>'
             +   '<ul class="unstyled"><li ng-repeat="pie in pieGroup"><div id="{{pie.id}}" style="width:600px;height:384px;margin:8px auto">{{showGraph(pie)}}</div></li></ul>'
             + '</div>',
 controller: function($scope) {
 
-
+/*Variable Declaration*/
 var
     jsObj = $scope.model.getCellModel(),
     colNames = jsObj.columnNames,
     numCol = colNames.length,
     records = jsObj.values,
     numRecords = records.length,
-    errors = ["Please enter valid input: at least two columns.", "At least one column should be numeric." ,"Please enter how many pies do you need.", "Please enter numeric value greater than 0 for the number of pies.", "Please select 'Data' and 'Label' for every pie."],
-    commitErrors = [0, 0, 0, 0, 0];
-
+    errors = ["Please enter valid input: at least two columns.", "At least one column should be numeric." ,"Please enter how many pies do you need.", "Please enter numeric value greater than 0 for the number of pies.", "Please select the 'Data' for pie chart","Please select  'Label' for pie chart","Please have unique columns name"];
 $scope.pieGroup = [];
+    //commitErrors = [0, 0, 0, 0, 0];
+
+/*Variable declaration end*/
+
+/*new error handling*/
+$scope.initReadyToGraph = function(){
+  var opt;
+  var outStyle = "display:block;"
+  if($scope.labelOptions.length<=2 || $scope.dataOptions.length<1) {
+    $scope.hideOrShowConf = " Hide ";
+    $scope.displayConf = "display:none;";
+    $scope.readyToGraph = false;
+    return errors[0];
+  }
+  else if (!uniqueColumnNames()) {
+    $scope.hideOrShowConf = " Hide ";
+    $scope.displayConf = "display:none;";
+    $scope.readyToGraph = false;
+    return errors[6];
+  }
+ else if ($scope.dataOptions.length<=1){
+	$scope.hideOrShowConf = " Hide ";
+    $scope.displayConf = "display:none;";
+    $scope.readyToGraph = false;
+    return errors[1];
+ }
+  else
+    $scope.readyToGraph = true;
+
+if(!$scope.readyToGraph) 
+    outStyle = "display:none;"
+
+  return outStyle;
+}
+
+function uniqueColumnNames() {
+  for(var i = 0; i < colNames.length; i++) {
+    for(var j = i+1; j < colNames.length; j++) {
+      if(colNames[i]==colNames[j])
+        return false;
+    }
+  }
+  return true;
+}
+$scope.countPie = function(x) {
+  if(x== undefined) {
+    $scope.readyToGraph = false;
+    return errors[2];
+  }
+  else if (!isNormalInteger(x)){
+ $scope.readyToGraph = false;
+    return errors[3];
+ }
+  return "";
+}
+
+$scope.checkData = function(y) {
+  if(y== undefined) {
+    $scope.readyToGraph = false;
+    return errors[4];
+  }
+  return "";
+}
+
+$scope.checkLabel = function(z) {
+  if(z== undefined) {
+    $scope.readyToGraph = false;
+    return errors[5];
+  }
+  return "";
+}
+
+
+/*end of new error handling*/
+
+
+/*Show hide configuration*/
 
 $scope.hideOrShowConf = " Hide ";
 $scope.displayConf = "display:block;";
@@ -50,8 +128,10 @@ $scope.toggleConf = function() {
     $scope.hideOrShowConf = " Hide ";
   }
 }
+/*End of show hide configuration*/
 
-$scope.hideOrShowMsg = "Show ";
+
+/*$scope.hideOrShowMsg = "Show ";
 $scope.displayMsg = "display:none;";
 $scope.toggleMsg = function() {
   if($scope.displayMsg=="display:block;") {
@@ -63,9 +143,9 @@ $scope.toggleMsg = function() {
     $scope.displayMsg = "display:block;";
     $scope.hideOrShowMsg = " Hide ";
   }
-}
+}*/
 
-function generateMessages() {
+/*function generateMessages() {
   $scope.currErrors = [];
   for(var i = 0; i < errors.length; i++) {
     if(commitErrors[i]==1) $scope.currErrors.push(errors[i]);
@@ -78,8 +158,9 @@ function generateMessages() {
     $scope.msgClass="alert alert-error";
     $scope.msgType="Error!";
   }
-}
+}*/
 
+/*Check data columns*/
 $scope.dataOptions = [];
 checkNumCol();
 function checkNumCol() {
@@ -94,7 +175,9 @@ function checkNumCol() {
       $scope.dataOptions.push({colIndex:col, colName:colNames[col]});
   }
 }
+/*end of check data columns*/
 
+/*check label columns*/
 $scope.labelOptions = [];
 checkLabelCol();
 function checkLabelCol(){
@@ -103,7 +186,9 @@ function checkLabelCol(){
     $scope.labelOptions.push({colIndex:col, colName:colNames[col]});
   }
 }
+/*end of check label columns*/
 
+/*helper functions*/
 function isNumber(n) {
   return n!=undefined && !isNaN(parseFloat(n)) && isFinite(n);
 }
@@ -159,6 +244,10 @@ $scope.checkNumPie = function() {
     return "display:block;"
 }
 
+/*end of helper functions*/
+
+
+/*old error handling
 var readyToGraph;
 $scope.checkError=function() {
   readyToGraph = true;
@@ -206,9 +295,11 @@ $scope.checkError=function() {
 
   return outStyle;
 }
+*/
 
+/*Pie Chart function*/
 $scope.showGraph=function(pie) {
-  if(readyToGraph) {
+  if($scope.readyToGraph) {
     getOutputDisplay(pie);
   }
 }
@@ -263,6 +354,7 @@ function getOutputDisplay(pie){
   });
 }
 
+/*end of pie chart function*/
 
 
 
