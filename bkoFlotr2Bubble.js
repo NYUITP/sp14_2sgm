@@ -1,10 +1,10 @@
 //Author: Pallavi Mane
-//Date: 04/23/2014
+//Date: 04/28/2014
 (function () {
     'use strict';
     beaker.bkoDirective("flotr2Bubble", function () {
  return {
-	template:'<span id="inputerror" class="label label-important"></span><br><br>'
+	template:'<span id="inputerror" class="label label-important"></span><br>'
 	    + '<div id="allcontent">'
 	    + '<input type="button" id="button" value="Show/Hide Configuration" class="btn btn-primary"><br><br>'
 	    + '<div id="main" style="border:1.5px solid"><br>'
@@ -19,15 +19,18 @@
             + '<select id=selectZ>'
             + '</select><br>'
 	    + '<b><i><u>Set X-Y Bounds</u></i></b><br>'
-            + '<b>X Range</b> Min: <input type="text" id="xmin" style="width:50px"><span id="errorxmin" class="label label-important"></span>    Max: <input type="text" id="xmax" style="width:50px"><span id="errorxmax" class="label label-important"></span> Interval: <input type="text" id="xinterval" style="width:50px"><span id="errorxinterval" class="label label-important"></span><br>'
-            + '<b>Y Range</b>     Min: <input type="text" id="ymin" style="width:50px"><span id="errorymin" class="label label-important"></span>     Max: <input type="text" id="ymax" style="width:50px"><span id="errorymax" class="label label-important"></span> Interval: <input type="text" id="yinterval" style="width:50px"><span id="erroryinterval" class="label label-important"></span><br>'
+            + '<b>X Bound</b> Min: <input type="text" id="xmin" style="width:50px"><span id="errorxmin" class="label label-important"></span>    Max: <input type="text" id="xmax" style="width:50px"><span id="errorxmax" class="label label-important"></span> Interval: <input type="text" id="xinterval" style="width:50px"><span id="errorxinterval" class="label label-important"></span><br>'
+            + '<b>Y Bound</b>     Min: <input type="text" id="ymin" style="width:50px"><span id="errorymin" class="label label-important"></span>     Max: <input type="text" id="ymax" style="width:50px"><span id="errorymax" class="label label-important"></span> Interval: <input type="text" id="yinterval" style="width:50px"><span id="erroryinterval" class="label label-important"></span><br>'
             + 'Automatic Bounds&nbsp;&nbsp;<input type="checkbox" id="autoRange" checked="checked"><br></div>'
             + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div></div>',
-	link: function (scope,element,attrs) {
-		var flag = 0;
-		$("#button").click(function(){
-   			$("#main").toggle(1000);
-	   	});
+	link: function (scope) {
+
+			$("#button").click(function(){
+	   			$("#main").toggle(1000);
+		   	});
+
+/********************** Initialization and Data Validation ************************************/
+
 			var
 		    	container = document.getElementById('container'),
 		    	graph,
@@ -37,8 +40,10 @@
 		    	records = jsObj.values,
 		    	numRecords = records.length,
 		    	isNumCol = checkNumCol();
-			flag = 0;
-		
+			var flag = 0;
+
+
+			/* Data Validation: check for columns with all numeric values */
 			function checkNumCol() {
 			  var boolArr = [true], col, row;
 			  for(col = 1; col < numCol; col++) {
@@ -56,15 +61,19 @@
 			}
 	
 
-
 		var totalNumCols = 0;
-			for(var k =1;k<isNumCol.length;k++)
+			for(var k =0;k<isNumCol.length;k++)
 			{
+				/*check for index column in input */
+				if((colNames[0] == "") && k==0){
+					k =1;
+				}
 				if(isNumCol[k] == true){
 					totalNumCols = totalNumCols + 1;
 				}
 			}
 
+			/* Data Validation: check for minimum 3 complete numeric columns in input*/
 			if(totalNumCols < 3){
 				$('#inputerror').show();
 				$('#allcontent').hide();
@@ -74,7 +83,7 @@
 			else{
 	    			$('#inputerror').hide();
 				$('#allcontent').show();
-				chartDraw();
+				drawChart();
 			}
 
 
@@ -83,8 +92,12 @@
 		  return !isNaN(parseFloat(n)) && isFinite(n);
 		}
 
+/******************** End Of Initialization and Data Validation *********************************/
 
-	function chartDraw(){
+
+/********************** Dynamic Display of Bubble Chart **************************************/
+
+	function drawChart(){
 
 		fillDropdown("selectX");
 		fillDropdown("selectY");
@@ -97,8 +110,9 @@
 		    element = document.getElementById(id),
 		    html = '',
 		    i;
-		    for(i = 0; i < numCol; i++) {
-		      if(isNumCol[i]){
+
+        	    for(i = 0; i < numCol; i++) {
+		        if(isNumCol[i]){
 				html = html + '<option value="' + i + '">' + colNames[i] + '</option>';
 			}
 		      }
@@ -122,7 +136,7 @@
 		  return data;
 		}
 
-
+		/* get total of all values in column3 used for bubble size */
 		function getColumnTotal(column3)
 		{
 		    var total;
@@ -133,6 +147,7 @@
 		    return value;
 		}
 
+	/*********** Begin of Event Handling functions for HTML elements *****************/
 		$('#selectX').change(function(){
 			document.getElementById('selectX').selected=true;
 		if(($("#selectY :selected").text() != "") && ($("#selectZ :selected").text() != "")){
@@ -184,7 +199,7 @@
 		$('#autoRange').change(function(){
 		if($('#autoRange').is(':checked')){
 			if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "")){
-
+				errortextHide();
 				textDisable();
 				getOutputDisplay();
 			}
@@ -199,7 +214,7 @@
 				$('#inputerror').html("Please select X-Y bounds and Bubble Size to proceed");
 				$('#inputerror').show();
 			}
-		}
+		 }
 
 		});
 	
@@ -207,13 +222,11 @@
 		if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "") && !($('#autoRange').is(':checked'))){
 				if(($('#xmin').val()) == '' || isNaN($('#xmin').val())){
 					$('#errorxmin').show();	
-			
 					$('#errorxmin').html("Only Numbers allowed");
 					
 				}
 				else if((($('#xmax').val()) != '') && (($('#ymin').val()) != '') && (($('#ymax').val()) != '') && (($('#xinterval').val()) != '') && (($('#yinterval').val()) != '')){
 					$('#errorxmin').hide();
-		
 					getOutputDisplay();
 				}
 			}
@@ -298,7 +311,17 @@
 				}
 			}				
 		});
+
+	/*********** End of Event Handling functions for HTML elements *****************/
 	
+		function errortextHide() {
+		      $("#errorxmin").hide();
+		      $("#errorxmax").hide();
+		      $("#errorymin").hide();
+		      $("#errorymax").hide();
+		      $("#errorxinterval").hide();
+		      $("#erroryinterval").hide();
+		}
 
 
 		function textDisable() {
@@ -319,7 +342,7 @@
 		      $("#yinterval").removeAttr("disabled");
 		}
 
-
+	        /* display chart based on selected configuration */
 	 	function getOutputDisplay(){
 		  var container = document.getElementById('container');
 		  var 
@@ -384,6 +407,7 @@
 		    }
 
          }
+/********************** End Of Dynamic Display of Bubble Chart **************************************/
 	}
 
      };
