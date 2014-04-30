@@ -325,7 +325,7 @@ function getOutputDisplay(){
     }
   };
 
-  var container = element.find('#container')[0];
+  var container = document.getElementById('container');
   var graph = Flotr.draw(container, $scope.output.processedData, $scope.output.graphSetting);
   
 }
