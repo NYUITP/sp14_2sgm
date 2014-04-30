@@ -19,7 +19,6 @@ describe("Beaker Line: iPython input (no customized setting)", function() {
     // and you need to get a new scope that is going to be associated with the OutputDisplay
     var scope = $rootScope.$new();
 
-    var outputModel = iPythonInput;
     var iPythonInput =
     { 
       type: "TableDisplay", 
@@ -31,6 +30,8 @@ describe("Beaker Line: iPython input (no customized setting)", function() {
       columnNames: ["", "Country", "Population %"], 
       values: [ ["0", "   USA", "  5"] , ["1", " India", " 10"] ]
     };
+
+    var outputModel = iPythonInput;
     
     scope.outputDisplayModel = {
       getCellModel: function() {
@@ -54,6 +55,7 @@ describe("Beaker Line: iPython input (no customized setting)", function() {
     });
     
     it("check output object", function() {
+      //Axis selection
       myScope.xaxis = {colIndex:0, colName:""};
       myScope.yAxisOptions[1].colSelected = true;
       myScope.$digest();
@@ -65,6 +67,33 @@ describe("Beaker Line: iPython input (no customized setting)", function() {
       expect(myScope.output.graphSetting.yaxis.min).toBe(5);
       expect(myScope.output.graphSetting.yaxis.max).toBe(10);
       expect(myScope.output.graphSetting.yaxis.noTicks).toBe(5);
+
+      //Title setting check
+      myScope.title = "Line Graph!!";
+      myScope.xtitle = "Index!!";
+      myScope.ytitle = "Population!!";
+      myScope.$digest();
+      expect(myScope.output.graphSetting.title).toEqual("Line Graph!!");
+      expect(myScope.output.graphSetting.xaxis.title).toEqual("Index!!");
+      expect(myScope.output.graphSetting.yaxis.title).toEqual("Population!!");
+
+      //Bound checking
+      myScope.autoRange = false;
+      myScope.xmin = -5;
+      myScope.xmax = 5;
+      myScope.xinterval = 2;
+      myScope.ymin = -5;
+      myScope.ymax = 5;
+      myScope.yinterval = 2;
+      myScope.$digest();
+
+      expect(myScope.output.graphSetting.xaxis.min).toBe(-5);
+      expect(myScope.output.graphSetting.xaxis.max).toBe(5);
+      expect(myScope.output.graphSetting.xaxis.noTicks).toBe(5);
+      expect(myScope.output.graphSetting.yaxis.min).toBe(-5);
+      expect(myScope.output.graphSetting.yaxis.max).toBe(5);
+      expect(myScope.output.graphSetting.yaxis.noTicks).toBe(5);
+
     });
 
 });

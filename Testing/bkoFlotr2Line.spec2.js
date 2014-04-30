@@ -19,14 +19,15 @@ describe("Beaker Line: R input (no customized setting)", function() {
     // and you need to get a new scope that is going to be associated with the OutputDisplay
     var scope = $rootScope.$new();
 
-    var outputModel = RInput;
     var RInput = 
     { 
       type: "TableDisplay", 
       columnNames: ["food", "drink"], 
       values: [ ["2.0", "10.0"] , ["3.0", "-10.0"] ]
     };
-    
+
+    var outputModel = RInput;
+
     scope.outputDisplayModel = {
       getCellModel: function() {
         return outputModel;
@@ -45,10 +46,11 @@ describe("Beaker Line: R input (no customized setting)", function() {
     it("should get cell model", function() {
       expect(myScope.model.getCellModel().type).toBe("TableDisplay");
       expect(myScope.model.getCellModel().columnNames).toEqual(["food", "drink"]);
-      expect(myScope.model.getCellModel().values).toEqual([2, 10] , [3, -10]);
+      expect(myScope.model.getCellModel().values).toEqual([[2, 10] , [3, -10]]);
     });
     
     it("check output object", function() {
+      //Axis selection
       myScope.xaxis = {colIndex:0, colName:"food"};
       myScope.yAxisOptions[1].colSelected = true;
       myScope.$digest();
@@ -59,6 +61,32 @@ describe("Beaker Line: R input (no customized setting)", function() {
       expect(myScope.output.graphSetting.xaxis.noTicks).toBe(5);
       expect(myScope.output.graphSetting.yaxis.min).toBe(-10);
       expect(myScope.output.graphSetting.yaxis.max).toBe(10);
+      expect(myScope.output.graphSetting.yaxis.noTicks).toBe(5);
+
+      //Title setting check
+      myScope.title = "Line Graph!!";
+      myScope.xtitle = "Index!!";
+      myScope.ytitle = "Population!!";
+      myScope.$digest();
+      expect(myScope.output.graphSetting.title).toEqual("Line Graph!!");
+      expect(myScope.output.graphSetting.xaxis.title).toEqual("Index!!");
+      expect(myScope.output.graphSetting.yaxis.title).toEqual("Population!!");
+
+      //Bound checking
+      myScope.autoRange = false;
+      myScope.xmin = -5;
+      myScope.xmax = 5;
+      myScope.xinterval = 2;
+      myScope.ymin = -5;
+      myScope.ymax = 5;
+      myScope.yinterval = 2;
+      myScope.$digest();
+
+      expect(myScope.output.graphSetting.xaxis.min).toBe(-5);
+      expect(myScope.output.graphSetting.xaxis.max).toBe(5);
+      expect(myScope.output.graphSetting.xaxis.noTicks).toBe(5);
+      expect(myScope.output.graphSetting.yaxis.min).toBe(-5);
+      expect(myScope.output.graphSetting.yaxis.max).toBe(5);
       expect(myScope.output.graphSetting.yaxis.noTicks).toBe(5);
     });
 
