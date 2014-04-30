@@ -6,13 +6,13 @@
     beaker.bkoDirective("flotr2Line", function () {
       return {
             template: 
-              '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Configuration&nbsp;</button>'
-            + '<div class={{msgClass}} id="msg" style={{displayMsg}}><h4>{{msgType}}</h4><ul><li ng-repeat="err in currErrors">{{err}}</br></li></ul></div>'
+              '<div class="MyLineClass">'
+            + '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Configuration&nbsp;</button>'
             + '<span class="label label-important">{{initReadyToGraph()}}</span>'
             + '<div id="configuration" style={{displayConf}}>' 
             +       '<table>'
-            +       '<tr><td><b>Title&nbsp;</b></td> <td><input class="input-medium" type="text" ng-model="title"  size="30" placeholder="Add graph title here"></td></tr>'
-            +       '<tr><td><b>X Title&nbsp;</b></td> <td><input class="input-medium" type="text" ng-model="xtitle"  size="30" placeholder="Add x-axis title here"></td><td><b>&nbsp;Y Title&nbsp;</b></td> <td><input class="input-medium" type="text" ng-model="ytitle"  size="30" placeholder="Add y-axis title here"></td></tr>'
+            +       '<tr><td><b>Title&nbsp;</b></td> <td><input class="input-medium" type="text" ng-model="title" placeholder="Add graph title here"></td></tr>'
+            +       '<tr><td><b>X Title&nbsp;</b></td> <td><input class="input-medium" type="text" ng-model="xtitle" placeholder="Add x-axis title here"></td><td><b>&nbsp;Y Title&nbsp;</b></td> <td><input class="input-medium" type="text" ng-model="ytitle"  size="30" placeholder="Add y-axis title here"></td></tr>'
             +       '<tr><td><b>X Axis&nbsp;</b></td><td><select ng-model="xaxis" ng-options="colOption.colName for colOption in colOptions"><option value="<-- choose x-axis -->"></option></select><span class="label label-important">{{checkXaxis(xaxis)}}</span></td></tr>' 
             +       '</table>'
             +       '<b>Y Axis&nbsp;</b><span class="label label-important">{{checkYAxis(yAxisOptions)}}</span>'
@@ -35,11 +35,11 @@
             +           '</table>'
             +   '</div>'
             + '</div>'
-            + '<div id="container" style="width:600px;height:384px;margin:8px auto">{{showGraph(autoRange)}}</div>',
+            + '<div id="container" style="width:600px;height:384px;margin:8px auto">{{showGraph(autoRange)}}</div>'
+            + '</div>',
 controller: function($scope) {
 /********Var Declaration*********/
 var
-    output={},
     container = document.getElementById('container'),
     graph,
     jsObj = $scope.model.getCellModel(),
@@ -50,7 +50,7 @@ var
     currXMin=-10, currXMax=10, currYMin=-10, currYMax=10, currXTick=5, currYTick=5, //test which columns are numerical (numerical: true)
     errors = ["Please select the X axis.", "Please select at least one Y axis.", "Please enter numeric values.", "Max is smaller than Min.", "Interval cannot be smaller or equals to zero.", "Please have at least two numeric columns.", "Please have unique column names."];
 /********End OF Declaration*********/
-
+$scope.output={};
 /********Error Checking*********/
 $scope.initReadyToGraph = function(){
   var opt;
@@ -79,6 +79,7 @@ function uniqueColumnNames() {
   return true;
 }
 $scope.checkXaxis = function(x) {
+  console.log(x);
   if(x===undefined) {
     $scope.readyToGraph = false;
     return errors[0];
@@ -92,6 +93,7 @@ $scope.checkYAxis = function(ys) {
     if($scope.yAxisOptions[i].colSelected)
       $scope.yaxis.push($scope.yAxisOptions[i]);
   }
+  console.log($scope.yaxis);
   if($scope.yaxis.length==0) {
     $scope.readyToGraph = false;
     return errors[1];
@@ -257,6 +259,7 @@ function getOneLineData(x, y) {
 
 /********Graph Functions*********/
 $scope.showGraph=function(autoRange) {
+  console.log("Show Graph run!");
 
   if($scope.readyToGraph) {
     if(!autoRange) {
@@ -264,6 +267,7 @@ $scope.showGraph=function(autoRange) {
       currXTick = Math.ceil(Math.abs($scope.xmax - $scope.xmin) / $scope.xinterval);
       currYTick = Math.ceil(Math.abs($scope.ymax - $scope.ymin) / $scope.yinterval);
     }
+    console.log("Calling getOutputDisplay!");
     getOutputDisplay();
   }
 }
@@ -281,9 +285,9 @@ function getOutputDisplay(){
   else finalXTitle=$scope.xtitle;
   if(needReset($scope.ytitle)) finalYTitle="Y";
   else finalYTitle=$scope.ytitle;
-  output.inObj = jsObj;
-  output.processedData = data;
-  output.graphSetting = 
+  $scope.output.inObj = jsObj;
+  $scope.output.processedData = data;
+  $scope.output.graphSetting = 
   {
     title: finalTitle,
     xaxis: {
@@ -305,7 +309,7 @@ function getOutputDisplay(){
       track: true
     }
   };
-  graph = Flotr.draw(container, output.processedData, output.graphSetting);
+  graph = Flotr.draw(container, $scope.output.processedData, $scope.output.graphSetting);
 }
 /********End of Graph Functions*********/
 
