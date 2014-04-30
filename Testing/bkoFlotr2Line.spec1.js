@@ -1,19 +1,4 @@
-/*
- *  Copyright 2014 TWO SIGMA OPEN SOURCE, LLC
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
- //author: Di Wu
+
 describe("Beaker Line: iPython input (no customized setting)", function() {
 
   var fooService;
@@ -34,7 +19,8 @@ describe("Beaker Line: iPython input (no customized setting)", function() {
     // and you need to get a new scope that is going to be associated with the OutputDisplay
     var scope = $rootScope.$new();
 
-    var outputModel = 
+    var outputModel = iPythonInput;
+    var iPythonInput =
     { 
       type: "TableDisplay", 
       tableDisplayModel: 
@@ -45,14 +31,7 @@ describe("Beaker Line: iPython input (no customized setting)", function() {
       columnNames: ["", "Country", "Population %"], 
       values: [ ["0", "   USA", "  5"] , ["1", " India", " 10"] ]
     };
-    /*
-    var outputModel = 
-    { 
-      type: "TableDisplay", 
-      columnNames: ["food", "drink"], 
-      values: [ ["2.0", "10.0"] , ["3.0", "-10.0"] ]
-    };
-    */
+    
     scope.outputDisplayModel = {
       getCellModel: function() {
         return outputModel;
@@ -87,8 +66,5 @@ describe("Beaker Line: iPython input (no customized setting)", function() {
       expect(myScope.output.graphSetting.yaxis.max).toBe(10);
       expect(myScope.output.graphSetting.yaxis.noTicks).toBe(5);
     });
-
-
-
 
 });

@@ -1,41 +1,48 @@
 //author: Di Wu
-//Need to check empty input, then correct calculateAutoRange()
-//checkUserInput();
 (function () {
     'use strict';
     beaker.bkoDirective("flotr2Line", function () {
       return {
             template: 
               '<div class="MyLineClass">'
-            + '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Configuration&nbsp;</button>'
-            + '<span class="label label-important">{{initReadyToGraph()}}</span>'
-            + '<div id="configuration" style={{displayConf}}>' 
-            +       '<table>'
-            +       '<tr><td><b>Title&nbsp;</b></td> <td><input class="input-medium" type="text" ng-model="title" placeholder="Add graph title here"></td></tr>'
-            +       '<tr><td><b>X Title&nbsp;</b></td> <td><input class="input-medium" type="text" ng-model="xtitle" placeholder="Add x-axis title here"></td><td><b>&nbsp;Y Title&nbsp;</b></td> <td><input class="input-medium" type="text" ng-model="ytitle"  size="30" placeholder="Add y-axis title here"></td></tr>'
-            +       '<tr><td><b>X Axis&nbsp;</b></td><td><select ng-model="xaxis" ng-options="colOption.colName for colOption in colOptions"><option value="<-- choose x-axis -->"></option></select><span class="label label-important">{{checkXaxis(xaxis)}}</span></td></tr>' 
-            +       '</table>'
-            +       '<b>Y Axis&nbsp;</b><span class="label label-important">{{checkYAxis(yAxisOptions)}}</span>'
-            +         '<table>' 
-            +           '<tr ng-repeat="yOption in yAxisOptions"><td><input class="input-medium" type="checkbox" ng-model="yOption.colSelected"></td><td>{{yOption.colName}}</td><td><input class="input-medium" type="text" ng-model="yOption.colLabel" placeholder="Enter Line Label"></td></tr>'
+            + '<div class="row-fluid">'
+            +   '<div class="span6" id="container" style="height:384px;">{{showGraph(autoRange)}}</div>'
+            +   '<div class="span6">' 
+            +     '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Configuration&nbsp;</button>'
+            +     '<span class="label label-important">{{initReadyToGraph()}}</span>'
+            +     '<div id="configuration" style={{displayConf}}>'
+            +         '<table>'
+            +         '<tr><td><b>X Axis&nbsp;</b></td><td><select ng-model="xaxis" ng-options="colOption.colName for colOption in colOptions"></select><span class="label label-important">{{checkXaxis(xaxis)}}</span></td></tr>' 
             +         '</table>'
-            +       '{{calculateAutoRange(xaxis, yaxis)}}'
-            +       '<p><b>Automatic bounds</b> <input class="input-medium" type="checkbox" ng-model="autoRange" ng-change="toggleAutoRange()"></p>'
-            +         '<b>X Bound</b></br>'
-            +           '<table>'
-            +           '<tr><td>Min&nbsp;</td>       <td><span class="{{checkMinMax(1, xmin)[1]}}"><input class="input-medium" type="text" ng-model="xmin" ng-disabled="autoRange"></span></td>       <td><span class="label label-important">{{checkMinMax(1, xmin)[0]}}</span></td></tr>'
-            +           '<tr><td>Max&nbsp;</td>       <td><span class="{{checkMinMax(1, xmax)[1]}}"><input class="input-medium" type="text" ng-model="xmax" ng-disabled="autoRange"></span></td>       <td><span class="label label-important">{{checkMinMax(1, xmax)[0]}}</span></td></tr>'
-            +           '<tr><td>Interval&nbsp;</td>  <td><span class="{{checkInterval(xinterval)[1]}}"><input class="input-medium" type="text" ng-model="xinterval" ng-disabled="autoRange"></span></td>  <td><span class="label label-important">{{checkInterval(xinterval)[0]}}</span></td></tr>'
+            +         '<b>Y Axis&nbsp;</b><span class="label label-important">{{checkYAxis(yAxisOptions)}}</span>'
+            +           '<table>' 
+            +             '<tr ng-repeat="yOption in yAxisOptions"><td><input class="input-medium" type="checkbox" ng-model="yOption.colSelected"></td><td>{{yOption.colName}}</td><td><input class="input-medium" type="text" ng-model="yOption.colLabel" placeholder="Enter Line Label"></td></tr>'
             +           '</table>'
-            +         '<b>Y Bound</b></br>'
-            +           '<table>'
-            +           '<tr><td>Min&nbsp;</td>       <td><span class="{{checkMinMax(1, ymin)[1]}}"><input class="input-medium" type="text" ng-model="ymin" ng-disabled="autoRange"></span></td>       <td><span class="label label-important">{{checkMinMax(2, ymin)[0]}}</span></td></tr>'
-            +           '<tr><td>Max&nbsp;</td>       <td><span class="{{checkMinMax(1, ymax)[1]}}"><input class="input-medium" type="text" ng-model="ymax" ng-disabled="autoRange"></span></td>       <td><span class="label label-important">{{checkMinMax(2, ymax)[0]}}</span></td></tr>'
-            +            '<tr><td>Interval&nbsp;</td>  <td><span class="{{checkInterval(yinterval)[1]}}"><input class="input-medium" type="text" ng-model="yinterval" ng-disabled="autoRange"></span></td>  <td><span class="label label-important">{{checkInterval(yinterval)[0]}}</span></td></tr>'
-            +           '</table>'
+            +         '<table>'
+            +           '<tr><td><b>Title&nbsp;</b></td> <td><input class="input-medium" type="text" ng-model="title" placeholder="Add graph title here"></td></tr>'
+            +           '<tr><td><b>X Title&nbsp;</b></td> <td><input class="input-medium" type="text" ng-model="xtitle" placeholder="Add x-axis title here"></td></tr>'
+            +           '<tr><td><b>Y Title&nbsp;</b></td> <td><input class="input-medium" type="text" ng-model="ytitle" placeholder="Add y-axis title here"></td></tr>'
+            +         '</table>'
+            +         '{{calculateAutoRange(xaxis, yaxis)}}'
+            +         '<p><b>Automatic bounds</b> <input class="input-medium" type="checkbox" ng-model="autoRange" ng-change="toggleAutoRange()"></p>'
+            +         '<div id="boundConfig" style={{displayBoundConf}}>'
+            +           '<b>X Bound</b></br>'
+            +             '<table>'
+            +               '<tr><td>Min&nbsp;</td>       <td><span class="{{checkMinMax(1, xmin)[1]}}"><input class="input-medium" type="text" ng-model="xmin" ng-disabled="autoRange"></span></td>       <td><span class="label label-important">{{checkMinMax(1, xmin)[0]}}</span></td></tr>'
+            +               '<tr><td>Max&nbsp;</td>       <td><span class="{{checkMinMax(1, xmax)[1]}}"><input class="input-medium" type="text" ng-model="xmax" ng-disabled="autoRange"></span></td>       <td><span class="label label-important">{{checkMinMax(1, xmax)[0]}}</span></td></tr>'
+            +               '<tr><td>Interval&nbsp;</td>  <td><span class="{{checkInterval(xinterval)[1]}}"><input class="input-medium" type="text" ng-model="xinterval" ng-disabled="autoRange"></span></td>  <td><span class="label label-important">{{checkInterval(xinterval)[0]}}</span></td></tr>'
+            +             '</table>'
+            +           '<b>Y Bound</b></br>'
+            +             '<table>'
+            +               '<tr><td>Min&nbsp;</td>       <td><span class="{{checkMinMax(1, ymin)[1]}}"><input class="input-medium" type="text" ng-model="ymin" ng-disabled="autoRange"></span></td>       <td><span class="label label-important">{{checkMinMax(2, ymin)[0]}}</span></td></tr>'
+            +               '<tr><td>Max&nbsp;</td>       <td><span class="{{checkMinMax(1, ymax)[1]}}"><input class="input-medium" type="text" ng-model="ymax" ng-disabled="autoRange"></span></td>       <td><span class="label label-important">{{checkMinMax(2, ymax)[0]}}</span></td></tr>'
+            +               '<tr><td>Interval&nbsp;</td>  <td><span class="{{checkInterval(yinterval)[1]}}"><input class="input-medium" type="text" ng-model="yinterval" ng-disabled="autoRange"></span></td>  <td><span class="label label-important">{{checkInterval(yinterval)[0]}}</span></td></tr>'
+            +             '</table>'
+            +         '</div>'
+            +     '</div>'
             +   '</div>'
             + '</div>'
-            + '<div id="container" style="width:600px;height:384px;margin:8px auto">{{showGraph(autoRange)}}</div>'
+            //+ '<div class="row-fluid"><div class="span6">Fluid 6</div><div class="span6">Fluid 6</div></div>'
             + '</div>',
 controller: function($scope) {
 /********Var Declaration*********/
@@ -48,11 +55,39 @@ var
     currXMin=-10, currXMax=10, currYMin=-10, currYMax=10, currXTick=5, currYTick=5, //test which columns are numerical (numerical: true)
     errors = ["Please select the X axis.", "Please select at least one Y axis.", "Please enter numeric values.", "Max is smaller than Min.", "Interval cannot be smaller or equals to zero.", "Please have at least two numeric columns.", "Please have unique column names."];
 /********End OF Declaration*********/
-$scope.output={};
+$scope.output = {};
+/********Check Numeric Columns*********/
+$scope.colOptions = [];
+checkNumCol();
+function checkNumCol() {
+  var col, row;
+  for(col = 0; col < numCol; col++) {
+    for(row = 0; row < numRecords; row++) {
+      if(!isNumber(records[row][col])) {
+        break;
+      }
+      records[row][col] = parseFloat(records[row][col]);
+    }
+    if(row==numRecords)
+      $scope.colOptions.push({colIndex:col, colName:colNames[col]});
+  }
+}
+/********End OF Check Numeric Columns*********/
+
+/********Find Selected Y axisesColumns*********/
+$scope.yAxisOptions = [];
+initializeYAxisOptions();
+function initializeYAxisOptions(){
+  for(var i = 0; i < $scope.colOptions.length; i++)
+    $scope.yAxisOptions.push({colIndex:$scope.colOptions[i].colIndex, colName:$scope.colOptions[i].colName, colSelected:false, colLabel:undefined});
+}
+/********End OF Find Selected Y axisesColumns*********/
+
+
 /********Error Checking*********/
 $scope.initReadyToGraph = function(){
   var opt;
-  if($scope.colOptions.length==1) {
+  if($scope.colOptions.length<2) {
     $scope.hideOrShowConf = " Hide ";
     $scope.displayConf = "display:none;";
     $scope.readyToGraph = false;
@@ -64,8 +99,16 @@ $scope.initReadyToGraph = function(){
     $scope.readyToGraph = false;
     return errors[6];
   }
-  else
+  else {
     $scope.readyToGraph = true;
+  }
+}
+defaultGraph();
+function defaultGraph() {
+  if($scope.colOptions.length>=2) {
+    $scope.xaxis = $scope.colOptions[0];
+    $scope.yAxisOptions[1].colSelected = true;
+  }
 }
 function uniqueColumnNames() {
   for(var i = 0; i < colNames.length; i++) {
@@ -135,6 +178,7 @@ function checkMinMaxError (min, max) {
 /********Auto Range Functions*********/
 $scope.autoRange = true;
 setDefaultRange();
+$scope.displayBoundConf = "display:none;";
 function setDefaultRange() {
   $scope.xmin = currXMin;
   $scope.xmax = currXMax;
@@ -147,6 +191,10 @@ function setDefaultRange() {
 $scope.toggleAutoRange = function(){
   if($scope.autoRange) {
     setDefaultRange();
+    $scope.displayBoundConf = "display:none;";
+  }
+  else{
+    $scope.displayBoundConf = "display:block;";
   }
 }
 
@@ -186,32 +234,6 @@ $scope.toggleConf = function() {
 }
 /********End OF Show/Hide Configuration*********/
 
-/********Check Numeric Columns*********/
-$scope.colOptions = [];
-checkNumCol();
-function checkNumCol() {
-  var col, row;
-  for(col = 0; col < numCol; col++) {
-    for(row = 0; row < numRecords; row++) {
-      if(!isNumber(records[row][col])) {
-        break;
-      }
-    }
-    if(row==numRecords)
-      $scope.colOptions.push({colIndex:col, colName:colNames[col]});
-  }
-}
-/********End OF Check Numeric Columns*********/
-
-/********Find Selected Y axisesColumns*********/
-$scope.yAxisOptions = [];
-initializeYAxisOptions();
-function initializeYAxisOptions(){
-  for(var i = 0; i < $scope.colOptions.length; i++)
-    $scope.yAxisOptions.push({colIndex:$scope.colOptions[i].colIndex, colName:$scope.colOptions[i].colName, colSelected:false, colLabel:undefined});
-}
-/********End OF Find Selected Y axisesColumns*********/
-
 /********Helper Functions*********/
 function isNumber(n) {
   return n!=undefined && !isNaN(parseFloat(n)) && isFinite(n);
@@ -247,7 +269,7 @@ function getOneLineData(x, y) {
     row;
 
   for(row = 0; row < numRecords; row++) {
-    data.push([records[row][x], records[row][y]]);
+    data.push([ records[row][x], records[row][y] ]);
   }
   return data;
 }
@@ -261,7 +283,6 @@ $scope.showGraph=function(autoRange) {
       currXTick = Math.ceil(Math.abs($scope.xmax - $scope.xmin) / $scope.xinterval);
       currYTick = Math.ceil(Math.abs($scope.ymax - $scope.ymin) / $scope.yinterval);
     }
-    console.log("Calling getOutputDisplay!");
     getOutputDisplay();
   }
 }
@@ -304,7 +325,7 @@ function getOutputDisplay(){
     }
   };
 
-  var container = document.getElementById('container');
+  var container = element.find('#container')[0];
   var graph = Flotr.draw(container, $scope.output.processedData, $scope.output.graphSetting);
   
 }
