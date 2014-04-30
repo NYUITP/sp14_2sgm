@@ -1,6 +1,4 @@
 //author: Di Wu
-//Need to check empty input, then correct calculateAutoRange()
-//checkUserInput();
 (function () {
     'use strict';
     beaker.bkoDirective("flotr2Line", function () {
@@ -196,6 +194,7 @@ function checkNumCol() {
       if(!isNumber(records[row][col])) {
         break;
       }
+      records[row][col] = parseFloat(records[row][col]);
     }
     if(row==numRecords)
       $scope.colOptions.push({colIndex:col, colName:colNames[col]});
@@ -247,7 +246,7 @@ function getOneLineData(x, y) {
     row;
 
   for(row = 0; row < numRecords; row++) {
-    data.push([records[row][x], records[row][y]]);
+    data.push([ records[row][x], records[row][y] ]);
   }
   return data;
 }
@@ -261,7 +260,6 @@ $scope.showGraph=function(autoRange) {
       currXTick = Math.ceil(Math.abs($scope.xmax - $scope.xmin) / $scope.xinterval);
       currYTick = Math.ceil(Math.abs($scope.ymax - $scope.ymin) / $scope.yinterval);
     }
-    console.log("Calling getOutputDisplay!");
     getOutputDisplay();
   }
 }
@@ -304,8 +302,8 @@ function getOutputDisplay(){
     }
   };
 
-  var container = document.getElementById('container');
-  var graph = Flotr.draw(container, $scope.output.processedData, $scope.output.graphSetting);
+  //var container = document.getElementById('container');
+  //var graph = Flotr.draw(container, $scope.output.processedData, $scope.output.graphSetting);
   
 }
 /********End of Graph Functions*********/
