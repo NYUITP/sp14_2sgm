@@ -6,8 +6,8 @@
             template: 
               '<div class="MyLineClass">'
             + '<div class="row-fluid">'
-            +   '<div class="span6" id="container" style="height:384px;">{{showGraph(autoRange)}}</div>'
-            +   '<div class="span6">' 
+            +   '<div id="container" class="span8" style="display:block;height:384px;margin:8px auto">{{showGraph(autoRange)}}</div>'
+            +   '<div class="span4">' 
             +     '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Configuration&nbsp;</button>'
             +     '<span class="label label-important">{{initReadyToGraph()}}</span>'
             +     '<div id="configuration" style={{displayConf}}>'
@@ -42,12 +42,11 @@
             +     '</div>'
             +   '</div>'
             + '</div>'
-            //+ '<div class="row-fluid"><div class="span6">Fluid 6</div><div class="span6">Fluid 6</div></div>'
             + '</div>',
-controller: function($scope) {
+link: function(scope, element, attrs) {
 /********Var Declaration*********/
 var
-    jsObj = $scope.model.getCellModel(),
+    jsObj = scope.model.getCellModel(),
     colNames = jsObj.columnNames,
     numCol = colNames.length,
     records = jsObj.values,
@@ -55,9 +54,9 @@ var
     currXMin=-10, currXMax=10, currYMin=-10, currYMax=10, currXTick=5, currYTick=5, //test which columns are numerical (numerical: true)
     errors = ["Please select the X axis.", "Please select at least one Y axis.", "Please enter numeric values.", "Max is smaller than Min.", "Interval cannot be smaller or equals to zero.", "Please have at least two numeric columns.", "Please have unique column names."];
 /********End OF Declaration*********/
-$scope.output = {};
+scope.output = {};
 /********Check Numeric Columns*********/
-$scope.colOptions = [];
+scope.colOptions = [];
 checkNumCol();
 function checkNumCol() {
   var col, row;
@@ -69,45 +68,47 @@ function checkNumCol() {
       records[row][col] = parseFloat(records[row][col]);
     }
     if(row==numRecords)
-      $scope.colOptions.push({colIndex:col, colName:colNames[col]});
+      scope.colOptions.push({colIndex:col, colName:colNames[col]});
   }
 }
 /********End OF Check Numeric Columns*********/
 
 /********Find Selected Y axisesColumns*********/
-$scope.yAxisOptions = [];
+scope.yAxisOptions = [];
 initializeYAxisOptions();
 function initializeYAxisOptions(){
-  for(var i = 0; i < $scope.colOptions.length; i++)
-    $scope.yAxisOptions.push({colIndex:$scope.colOptions[i].colIndex, colName:$scope.colOptions[i].colName, colSelected:false, colLabel:undefined});
+  for(var i = 0; i < scope.colOptions.length; i++) {
+    var yoption = {colIndex:scope.colOptions[i].colIndex, colName:scope.colOptions[i].colName, colSelected:true, colLabel:undefined};
+    scope.yAxisOptions.push(yoption);
+    if(i===0) yoption.colSelected = false;
+  }
 }
 /********End OF Find Selected Y axisesColumns*********/
 
 
 /********Error Checking*********/
-$scope.initReadyToGraph = function(){
+scope.initReadyToGraph = function(){
   var opt;
-  if($scope.colOptions.length<2) {
-    $scope.hideOrShowConf = " Hide ";
-    $scope.displayConf = "display:none;";
-    $scope.readyToGraph = false;
+  if(scope.colOptions.length<2) {
+    scope.hideOrShowConf = " Hide ";
+    scope.displayConf = "display:none;";
+    scope.readyToGraph = false;
     return errors[5];
   }
   else if (!uniqueColumnNames()) {
-    $scope.hideOrShowConf = " Hide ";
-    $scope.displayConf = "display:none;";
-    $scope.readyToGraph = false;
+    scope.hideOrShowConf = " Hide ";
+    scope.displayConf = "display:none;";
+    scope.readyToGraph = false;
     return errors[6];
   }
   else {
-    $scope.readyToGraph = true;
+    scope.readyToGraph = true;
   }
 }
 defaultGraph();
 function defaultGraph() {
-  if($scope.colOptions.length>=2) {
-    $scope.xaxis = $scope.colOptions[0];
-    $scope.yAxisOptions[1].colSelected = true;
+  if(scope.colOptions.length>=2) {
+    scope.xaxis = scope.colOptions[0];
   }
 }
 function uniqueColumnNames() {
@@ -119,47 +120,47 @@ function uniqueColumnNames() {
   }
   return true;
 }
-$scope.checkXaxis = function(x) {
+scope.checkXaxis = function(x) {
   if(x===undefined) {
-    $scope.readyToGraph = false;
+    scope.readyToGraph = false;
     return errors[0];
   }
   return "";
 }
-$scope.yaxis;
-$scope.checkYAxis = function(ys) {
-  $scope.yaxis = [];
-  for(var i in $scope.yAxisOptions) {
-    if($scope.yAxisOptions[i].colSelected)
-      $scope.yaxis.push($scope.yAxisOptions[i]);
+scope.yaxis;
+scope.checkYAxis = function(ys) {
+  scope.yaxis = [];
+  for(var i in scope.yAxisOptions) {
+    if(scope.yAxisOptions[i].colSelected)
+      scope.yaxis.push(scope.yAxisOptions[i]);
   }
-  if($scope.yaxis.length==0) {
-    $scope.readyToGraph = false;
+  if(scope.yaxis.length==0) {
+    scope.readyToGraph = false;
     return errors[1];
   }
   else return "";
 }
-$scope.checkMinMax = function(axisName, input) {
+scope.checkMinMax = function(axisName, input) {
   if(!isNumber(input)){
-    $scope.readyToGraph = false;
+    scope.readyToGraph = false;
     return [errors[2],"control-group error"];
   }
   else if(axisName==1) {
-    return checkMinMaxError($scope.xmin, $scope.xmax);
+    return checkMinMaxError(scope.xmin, scope.xmax);
   }
   else if(axisName==2) {
-    return checkMinMaxError($scope.ymin, $scope.ymax);
+    return checkMinMaxError(scope.ymin, scope.ymax);
   }
   else
     return ["",""];
 }
-$scope.checkInterval = function(interval) {
+scope.checkInterval = function(interval) {
   if(!isNumber(interval)){
-    $scope.readyToGraph = false;
+    scope.readyToGraph = false;
     return [errors[2],"control-group error"];
   }
   else if(parseFloat(interval)<=0) {
-    $scope.readyToGraph = false;
+    scope.readyToGraph = false;
     return [errors[4],"control-group error"];
   }
   else
@@ -167,7 +168,7 @@ $scope.checkInterval = function(interval) {
 }
 function checkMinMaxError (min, max) {
   if(isNumber(min) && isNumber(max) && parseFloat(max) < parseFloat(min) ) {
-    $scope.readyToGraph = false;
+    scope.readyToGraph = false;
     return [errors[3],"control-group error"];
   }
   else
@@ -176,37 +177,37 @@ function checkMinMaxError (min, max) {
 /********End OF Error Checking*********/
 
 /********Auto Range Functions*********/
-$scope.autoRange = true;
+scope.autoRange = true;
 setDefaultRange();
-$scope.displayBoundConf = "display:none;";
+scope.displayBoundConf = "display:none;";
 function setDefaultRange() {
-  $scope.xmin = currXMin;
-  $scope.xmax = currXMax;
-  $scope.xinterval = (currXMax-currXMin)/currXTick;
-  $scope.ymin = currYMin;
-  $scope.ymax = currYMax;
-  $scope.yinterval = (currYMax-currYMin)/currYTick;
+  scope.xmin = currXMin;
+  scope.xmax = currXMax;
+  scope.xinterval = (currXMax-currXMin)/currXTick;
+  scope.ymin = currYMin;
+  scope.ymax = currYMax;
+  scope.yinterval = (currYMax-currYMin)/currYTick;
 }
 
-$scope.toggleAutoRange = function(){
-  if($scope.autoRange) {
+scope.toggleAutoRange = function(){
+  if(scope.autoRange) {
     setDefaultRange();
-    $scope.displayBoundConf = "display:none;";
+    scope.displayBoundConf = "display:none;";
   }
   else{
-    $scope.displayBoundConf = "display:block;";
+    scope.displayBoundConf = "display:block;";
   }
 }
 
-$scope.calculateAutoRange = function(xaxis, yaxis) {
-  if($scope.readyToGraph && $scope.autoRange) {
+scope.calculateAutoRange = function(xaxis, yaxis) {
+  if(scope.readyToGraph && scope.autoRange) {
     currXTick=5;
     currYTick=5;
 
-    var xMinMax = getColMinMax($scope.xaxis.colIndex);
-    var yMinMax = getColMinMax($scope.yaxis[0].colIndex);
-    for(var i = 1; i < $scope.yaxis.length; i++) {
-      var tmpYMinMax = getColMinMax($scope.yaxis[i].colIndex);
+    var xMinMax = getColMinMax(scope.xaxis.colIndex);
+    var yMinMax = getColMinMax(scope.yaxis[0].colIndex);
+    for(var i = 1; i < scope.yaxis.length; i++) {
+      var tmpYMinMax = getColMinMax(scope.yaxis[i].colIndex);
       yMinMax[0] = Math.min(yMinMax[0], tmpYMinMax[0]);
       yMinMax[1] = Math.max(yMinMax[1], tmpYMinMax[1]);
     }
@@ -220,16 +221,16 @@ $scope.calculateAutoRange = function(xaxis, yaxis) {
 /********End OF Auto Range Functions*********/
 
 /********Show/Hide Configuration*********/
-$scope.hideOrShowConf = " Hide ";
-$scope.displayConf = "display:block;";
-$scope.toggleConf = function() {
-  if($scope.displayConf=="display:block;") {
-    $scope.displayConf = "display:none;";
-    $scope.hideOrShowConf = "Show ";
+scope.hideOrShowConf = " Hide ";
+scope.displayConf = "display:block;";
+scope.toggleConf = function() {
+  if(scope.displayConf=="display:block;") {
+    scope.displayConf = "display:none;";
+    scope.hideOrShowConf = "Show ";
   }
   else {
-    $scope.displayConf = "display:block;";
-    $scope.hideOrShowConf = " Hide ";
+    scope.displayConf = "display:block;";
+    scope.hideOrShowConf = " Hide ";
   }
 }
 /********End OF Show/Hide Configuration*********/
@@ -255,10 +256,10 @@ function getColMinMax(col) {
 function getData() {
   var data = [];
 
-  for (var i = 0; i < $scope.yaxis.length; i++) {
-    var lb = $scope.yaxis[i].colLabel;
-    if(needReset(lb)) lb = $scope.yaxis[i].colName;
-    data.push( {data:getOneLineData($scope.xaxis.colIndex, $scope.yaxis[i].colIndex), label: lb, lines:{show:true}, points:{show:true}});
+  for (var i = 0; i < scope.yaxis.length; i++) {
+    var lb = scope.yaxis[i].colLabel;
+    if(needReset(lb)) lb = scope.yaxis[i].colName;
+    data.push( {data:getOneLineData(scope.xaxis.colIndex, scope.yaxis[i].colIndex), label: lb, lines:{show:true}, points:{show:true}});
   }
   return data;
 }
@@ -276,12 +277,12 @@ function getOneLineData(x, y) {
 /********End OF Helper Functions*********/
 
 /********Graph Functions*********/
-$scope.showGraph=function(autoRange) {
-  if($scope.readyToGraph) {
+scope.showGraph=function(autoRange) {
+  if(scope.readyToGraph) {
     if(!autoRange) {
-      currXMin=$scope.xmin, currXMax=$scope.xmax, currYMin=$scope.ymin, currYMax=$scope.ymax,
-      currXTick = Math.ceil(Math.abs($scope.xmax - $scope.xmin) / $scope.xinterval);
-      currYTick = Math.ceil(Math.abs($scope.ymax - $scope.ymin) / $scope.yinterval);
+      currXMin=scope.xmin, currXMax=scope.xmax, currYMin=scope.ymin, currYMax=scope.ymax,
+      currXTick = Math.ceil(Math.abs(scope.xmax - scope.xmin) / scope.xinterval);
+      currYTick = Math.ceil(Math.abs(scope.ymax - scope.ymin) / scope.yinterval);
     }
     getOutputDisplay();
   }
@@ -292,17 +293,17 @@ function getOutputDisplay(){
     data = getData(), // First data series
     finalTitle, finalXTitle, finalYTitle; 
 
-  var xaxis = $scope.xaxis;
+  var xaxis = scope.xaxis;
   //Set title
-  if(needReset($scope.title)) finalTitle="Line Graph";
-  else finalTitle=$scope.title;
-  if(needReset($scope.xtitle)) finalXTitle=$scope.xaxis.colName;
-  else finalXTitle=$scope.xtitle;
-  if(needReset($scope.ytitle)) finalYTitle="Y";
-  else finalYTitle=$scope.ytitle;
-  $scope.output.inObj = jsObj;
-  $scope.output.processedData = data;
-  $scope.output.graphSetting = 
+  if(needReset(scope.title)) finalTitle="Line Graph";
+  else finalTitle=scope.title;
+  if(needReset(scope.xtitle)) finalXTitle=scope.xaxis.colName;
+  else finalXTitle=scope.xtitle;
+  if(needReset(scope.ytitle)) finalYTitle="Y";
+  else finalYTitle=scope.ytitle;
+  scope.output.inObj = jsObj;
+  scope.output.processedData = data;
+  scope.output.graphSetting = 
   {
     title: finalTitle,
     xaxis: {
@@ -325,8 +326,9 @@ function getOutputDisplay(){
     }
   };
 
-  var container = document.getElementById('container');
-  var graph = Flotr.draw(container, $scope.output.processedData, $scope.output.graphSetting);
+  var container = element.find('#container')[0];
+  scope.checkContainer = container;
+  var graph = Flotr.draw(container, scope.output.processedData, scope.output.graphSetting);
   
 }
 /********End of Graph Functions*********/
