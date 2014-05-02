@@ -6,7 +6,7 @@
             template: 
               '<div class="MyLineClass">'
             + '<div class="row-fluid">'
-            +   '<div id="container" class="span8" style="display:block;height:384px;margin:8px auto">{{showGraph(autoRange)}}</div>'
+            +   '<div class="span8"><span id="container" style="width:600px;height:384px;margin:8px auto">{{showGraph(autoRange)}}</span></div>'
             +   '<div class="span4">' 
             +     '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Configuration&nbsp;</button>'
             +     '<span class="label label-important">{{initReadyToGraph()}}</span>'
@@ -55,6 +55,7 @@ var
     errors = ["Please select the X axis.", "Please select at least one Y axis.", "Please enter numeric values.", "Max is smaller than Min.", "Interval cannot be smaller or equals to zero.", "Please have at least two numeric columns.", "Please have unique column names."];
 /********End OF Declaration*********/
 scope.output = {};
+console.log(jsObj);
 /********Check Numeric Columns*********/
 scope.colOptions = [];
 checkNumCol();
@@ -329,8 +330,8 @@ function getOutputDisplay(){
   var container = element.find('#container')[0];
   scope.checkContainer = container;
   var graph = Flotr.draw(container, scope.output.processedData, scope.output.graphSetting);
-  
 }
+
 /********End of Graph Functions*********/
 
 
