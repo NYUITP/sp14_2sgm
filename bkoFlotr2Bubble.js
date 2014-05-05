@@ -1,32 +1,36 @@
 //Author: Pallavi Mane
-//Date: 04/28/2014
+//Date: 05/04/2014
 (function () {
     'use strict';
-    beaker.bkoDirective("flotr2Bubble", function () {
+    beaker.bkoDirective("flotr2Bubble",function () {
  return {
 	template:'<span id="inputerror" class="label label-important"></span><br>'
-	    + '<div id="allcontent">'
-	    + '<input type="button" id="button" value="Show/Hide Configuration" class="btn btn-primary"><br><br>'
-	    + '<div id="main" style="border:1.5px solid"><br>'
-            + '<b>Title</b> <input type="text" id="title" size="15"><br>'
-            + '<b>X Axis</b>'
-            + '<select id=selectX>'
-            + '</select>&nbsp;'
-            + '<b>Y Axis</b>'
-            + '<select id=selectY>'
-            + '</select>&nbsp;'
-	    + '<b>Bubble Size</b>'
-            + '<select id=selectZ>'
-            + '</select><br>'
-	    + '<b><i><u>Set X-Y Bounds</u></i></b><br>'
-            + '<b>X Bound</b> Min: <input type="text" id="xmin" style="width:50px"><span id="errorxmin" class="label label-important"></span>    Max: <input type="text" id="xmax" style="width:50px"><span id="errorxmax" class="label label-important"></span> Interval: <input type="text" id="xinterval" style="width:50px"><span id="errorxinterval" class="label label-important"></span><br>'
-            + '<b>Y Bound</b>     Min: <input type="text" id="ymin" style="width:50px"><span id="errorymin" class="label label-important"></span>     Max: <input type="text" id="ymax" style="width:50px"><span id="errorymax" class="label label-important"></span> Interval: <input type="text" id="yinterval" style="width:50px"><span id="erroryinterval" class="label label-important"></span><br>'
-            + 'Automatic Bounds&nbsp;&nbsp;<input type="checkbox" id="autoRange" checked="checked"><br></div>'
-            + '<div id="container" style="width:600px;height:384px;margin:8px auto"></div></div>',
+	    + '<div id="container" style="width:600px;height:384px;margin-right:250px auto;float:left;display:inline-block"></div>'
+	    + '<div id="allcontent" style="width:600px;height:384px;display: inline-block;float:right;margin-left:5px"><div id="toDisplay">'
+	    + '<button id="button" class="btn btn-primary">Hide Configuration</button></div>'
+	    + '<div id="main">'
+	    + '<table cellpadding="2">'
+            + '<tr><td><b>X Axis</b></td>'
+            + '<td><select id=selectX>'
+            + '</select></td></tr>'
+            + '<tr><td><b>Y Axis</b></td>'
+            + '<td><select id=selectY>'
+            + '</select></td></tr>'
+	    + '<tr><td><b>Bubble Size</b></td>'
+            + '<td><select id=selectZ>'
+            + '</select></td></tr>'
+            + '<tr><td><b>Title</b></td><td><input type="text" id="title" size="15"><br></td><tr>'
+            + '<tr><td><b>Automatic Bounds</b></td><td><input type="checkbox" id="autoRange" checked="checked"><br></td></tr></table><br>'
+	    + '<div id="subcontent"><table cellpadding="2">'
+            + '<tr><td><b>X Bound</b></td></tr> <tr><td>Min:</td><td> <input type="text" id="xmin" style="width:50px"><span id="errorxmin" class="label label-important"></span></td></tr>   <tr><td>Max:</td><td> <input type="text" id="xmax" style="width:50px"><span id="errorxmax" class="label label-important"></span></td></tr> <tr><td>Interval:</td><td> <input type="text" id="xinterval" style="width:50px"><span id="errorxinterval" class="label label-important"></span><br></td></tr>'
+            + '<tr><td><b>Y Bound</b> </td></tr><tr><td>Min:</td><td> <input type="text" id="ymin" style="width:50px"><span id="errorymin" class="label label-important"></span></td></tr>  <tr><td>Max:</td><td> <input type="text" id="ymax" style="width:50px"><span id="errorymax" class="label label-important"></span</td></tr> <tr><td>Interval:</td><td> <input type="text" id="yinterval" style="width:50px"><span id="erroryinterval" class="label label-important"></span><br></td></tr></table></div></div></div>',
 	link: function (scope) {
 
-			$("#button").click(function(){
-	   			$("#main").toggle(1000);
+			$("#toDisplay #button").click(function(){
+	   			$("#allcontent #main").toggle(800);
+				$(this).text(function(i, text){
+					  return text === "Hide Configuration" ? "Show Configuration" : "Hide Configuration";
+				})
 		   	});
 
 /********************** Initialization and Data Validation ************************************/
@@ -103,6 +107,7 @@
 		fillDropdown("selectY");
 		fillDropdown("selectZ");
 		textDisable();
+		$('#subcontent').hide();
 
 
 		function fillDropdown(id) {
@@ -111,14 +116,23 @@
 		    html = '',
 		    i;
 
+		  var temp = [], k;
+		  k = 0;
+
         	    for(i = 0; i < numCol; i++) {
 		        if(isNumCol[i]){
 				html = html + '<option value="' + i + '">' + colNames[i] + '</option>';
+				temp[k] = colNames[i];
+				k++;
 			}
 		      }
 		   element.innerHTML = html;
 		 }
 	    
+		$('#selectX').find('option:eq(1)').prop("selected", "selected");
+		$('#selectY').find('option:eq(2)').prop("selected", "selected");
+		$('#selectZ').find('option:eq(3)').prop("selected", "selected");
+		getOutputDisplay();
 
 
 		function dataToChart(x, y, z) {
@@ -198,6 +212,7 @@
 	
 		$('#autoRange').change(function(){
 		if($('#autoRange').is(':checked')){
+			$('#subcontent').hide();
 			if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "")){
 				errortextHide();
 				textDisable();
@@ -205,14 +220,11 @@
 			}
 		    }
 		else{
+			$('#subcontent').show();
 			if(($("#selectX :selected").text() != "") && ($("#selectZ :selected").text() != "") && ($("#selectZ :selected").text() != "")){
 				$('#inputerror').hide();
 				textEnable();
 				getOutputDisplay();
-			}
-			else{
-				$('#inputerror').html("Please select X-Y bounds and Bubble Size to proceed");
-				$('#inputerror').show();
 			}
 		 }
 
