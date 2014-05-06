@@ -14,7 +14,7 @@
         {
             "name": "IPython",
             "plugin": "IPython",
-            "shellID": "8A226E33A1064E6796F2FA811AC75289",
+            "shellID": "320E6E0CD16B4861A1ACA9E6E22DE0C9",
             "imports": "",
             "supplementalClassPath": ""
         },
@@ -28,7 +28,7 @@
         {
             "name": "R",
             "plugin": "R",
-            "shellID": "c133054b-1e60-44a1-bb4a-32ff442e018d"
+            "shellID": "1cfef762-a229-4bfe-8875-7ccdce9e82f4"
         },
         {
             "name": "Groovy",
@@ -48,15 +48,15 @@
             "id": "section001",
             "type": "section",
             "level": 1,
-            "title": "Flotr2 Tutorial",
-            "collapsed": true
+            "title": "Tutorial for New Output Types",
+            "collapsed": false
         },
         {
             "id": "codefE5W8q",
             "type": "code",
             "evaluator": "Html",
             "input": {
-                "body": "<div class=\"row-fluid\">\n\n  <div class=\"span9\">\n\n    <h1>Overview</h1>\n\n\t\t<p>Use the open source Canvas graphing library Flotr2 to display data in line diagram.</p>\n\n    <h2>Language support</h2>\n\n    <p><strong>Code:</strong> Python (DataFrame in Pandas), R (Data Frame)</p>\n\n    <h2>Plugins</h2>\n\n\t<p>All of the flotr2 table display types can be accessed by loading corresponding JavaScript plugins.</p>\n    <p>Line Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2Line.js\">bkoFlotr2Line.js</a></p>\n    <p>Bubble Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2Bubble.js\">bkoFlotr2Bubble.js</a></p>\n    <p>Pie Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2pie.js\">bkoFlotr2Pie.js</a></p>\n\n    <h1>How to Set Up</h1>\n    <p>1. Load Java Script file(s) in JavaScript Console using command:</br>bkHelper.loadJS( &lt;URL of the file&gt; ); </p></br>\n<p>2. Register flotr2 type(s) as the output display type(s) for tables using command:</br> \n\tLine: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Line'], &lt;Index of new display type&gt;);</br>\n\tBubble: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Bubble'], &lt;Index of new display type&gt;);</br>\n\tPie: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Pie'], &lt;Index of new display type&gt;);\n\n</p>\n  </div>  \n  \n\n  \n</div>",
+                "body": "<div class=\"row-fluid\">\n\n  <div class=\"span9\">\n\n    <h1>Overview</h1>\n\n\t\t<p>Beaker supports new output types such as Pie Chart, Line Chart and Bubble Chart. User has the flexibility to use the Automatic Bounds or configure\n    \this own Bounds for the different charts. Multiple Pie charts and multiple Line charts are supported. This version consists of better user experience which allows user to hide the \n    \tconfiguration to get a better view of the chart.</p>\n\n    <h2>Language support</h2>\n    \n    <h3> Plugins</h3>\n    <p>Plugins for the output types are available in the project GitHub link </p>\n\n    <p><strong>Code:</strong> Python (IPython), R</p>\n\n    <h1>How to Set Up</h1>\n    <p>Load Java Script file(s) in JavaScript Console using a new cell as shown below</p>\n  </div>\n</div>",
                 "hidden": true
             },
             "output": {
@@ -64,15 +64,57 @@
                 "result": {
                     "type": "BeakerDisplay",
                     "innertype": "Html",
-                    "object": "<div class=\"row-fluid\">\n\n  <div class=\"span9\">\n\n    <h1>Overview</h1>\n\n\t\t<p>Use the open source Canvas graphing library Flotr2 to display data in line diagram.</p>\n\n    <h2>Language support</h2>\n\n    <p><strong>Code:</strong> Python (DataFrame in Pandas), R (Data Frame)</p>\n\n    <h2>Plugins</h2>\n\n\t<p>All of the flotr2 table display types can be accessed by loading corresponding JavaScript plugins.</p>\n    <p>Line Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2Line.js\">bkoFlotr2Line.js</a></p>\n    <p>Bubble Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2Bubble.js\">bkoFlotr2Bubble.js</a></p>\n    <p>Pie Chart: <a href=\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2pie.js\">bkoFlotr2Pie.js</a></p>\n\n    <h1>How to Set Up</h1>\n    <p>1. Load Java Script file(s) in JavaScript Console using command:</br>bkHelper.loadJS( &lt;URL of the file&gt; ); </p></br>\n<p>2. Register flotr2 type(s) as the output display type(s) for tables using command:</br> \n\tLine: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Line'], &lt;Index of new display type&gt;);</br>\n\tBubble: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Bubble'], &lt;Index of new display type&gt;);</br>\n\tPie: beaker.registerOutputDisplay(\"TableDisplay\", ['flotr2Pie'], &lt;Index of new display type&gt;);\n</p>\n  </div>  \n  \n\n  \n</div>"
+                    "object": "<div class=\"row-fluid\">\n\n  <div class=\"span9\">\n\n    <h1>Overview</h1>\n\n\t\t<p>Beaker supports new output types such as Pie Chart, Line Chart and Bubble Chart. User has the flexibility to use the Automatic Bounds or configure\n    \this own Bounds for the different charts. Multiple Pie charts and multiple Line charts are supported. This version consists of better user experience which allows user to hide the \n    \tconfiguration to get a better view of the chart.</p>\n\n    <h2>Language support</h2>\n    \n    <h3> Plugins</h3>\n    <p>Plugins for the output types are available in the project GitHub link </p>\n\n    <p><strong>Code:</strong> Python (IPython), R</p>\n\n    <h1>How to Set Up</h1>\n    <p>Load Java Script file(s) in JavaScript Console using a new cell as shown below</p>\n  </div>\n</div>"
                 },
-                "elapsedTime": 0
+                "elapsedTime": 1
+            }
+        },
+        {
+            "id": "codev77Zhl",
+            "type": "code",
+            "evaluator": "JavaScript",
+            "input": {
+                "body": "bkHelper.loadJS(\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2Line.js\");\nbkHelper.loadJS(\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2pie.js\");\nbkHelper.loadJS(\"https://raw.githubusercontent.com/NYUITP/sp14_2sgm/master/bkoFlotr2Bubble.js\");"
+            },
+            "output": {
+                "selectedType": "Text",
+                "result": "undefined"
+            }
+        },
+        {
+            "id": "codeoeg4dw",
+            "type": "code",
+            "evaluator": "Html",
+            "input": {
+                "body": "<div class=\"row-fluid\">\n\n  <div class=\"span9\">\n       <p>Register the output types using a new cell as shown below</p>\n  </div>\n</div>",
+                "hidden": true
+            },
+            "output": {
+                "selectedType": "BeakerDisplay",
+                "result": {
+                    "type": "BeakerDisplay",
+                    "innertype": "Html",
+                    "object": "<div class=\"row-fluid\">\n\n  <div class=\"span9\">\n       <p>Register the output types using a new cell as shown below</p>\n  </div>\n</div>"
+                },
+                "elapsedTime": 1
+            }
+        },
+        {
+            "id": "codejUEkhV",
+            "type": "code",
+            "evaluator": "JavaScript",
+            "input": {
+                "body": "beaker.registerOutputDisplay(\"TableDisplay\", [\"flotr2Line\"], 0);\nPie: beaker.registerOutputDisplay(\"TableDisplay\", [\"flotr2Pie\"], 1);\nbeaker.registerOutputDisplay(\"TableDisplay\", [\"flotr2Bubble\"], 2);"
+            },
+            "output": {
+                "selectedType": "Text",
+                "result": "undefined"
             }
         },
         {
             "id": "sectionH6W1ik",
             "type": "section",
-            "title": "Input Codes",
+            "title": "Input-Output Display",
             "level": 1,
             "collapsed": false
         },
@@ -81,26 +123,14 @@
             "type": "section",
             "title": "iPython",
             "level": 2,
-            "collapsed": true
-        },
-        {
-            "id": "sectionInjZlN",
-            "type": "section",
-            "title": "Info on pandas.DataFrame",
-            "level": 3,
-            "collapsed": true
-        },
-        {
-            "id": "textlbFmvX",
-            "type": "text",
-            "body": "<h1 style=\"font-family: Arial, sans-serif; background-color: rgb(190, 212, 235); font-weight: normal; color: rgb(33, 34, 36); margin-top: 0px; padding: 5px 0px 5px 10px; text-shadow: white 0px 1px 0px; border-top-width: 20px; border-top-style: solid; border-top-color: white; font-size: 29px; line-height: normal;\">pandas.DataFrame<a class=\"headerlink\" href=\"http://pandas.pydata.org/pandas-docs/version/0.13.1/generated/pandas.DataFrame.html#pandas-dataframe\" title=\"Permalink to this headline\" style=\"color: rgb(198, 15, 15); visibility: hidden; font-size: 0.8em; padding: 0px 4px;\"></a></h1><h1 style=\"font-family: Arial, sans-serif; background-color: rgb(190, 212, 235); font-weight: normal; color: rgb(33, 34, 36); margin-top: 0px; padding: 5px 0px 5px 10px; text-shadow: white 0px 1px 0px; border-top-width: 20px; border-top-style: solid; border-top-color: white; font-size: 29px; line-height: normal;\"><dl class=\"class\" style=\"margin-bottom: 15px; color: rgb(62, 67, 73); font-size: 14px; background-color: rgb(255, 255, 255);\"><dt id=\"pandas.DataFrame\"><em class=\"property\">class&nbsp;</em><tt class=\"descclassname\" style=\"background-color: transparent; color: rgb(34, 34, 34); font-size: 1.1em;\">pandas.</tt><tt class=\"descname\" style=\"background-color: transparent; color: rgb(34, 34, 34); font-size: 1.2em;\">DataFrame</tt><big>(</big><em>data=None</em>,&nbsp;<em>index=None</em>,&nbsp;<em>columns=None</em>,&nbsp;<em>dtype=None</em>,&nbsp;<em>copy=False</em><big>)</big><a class=\"headerlink\" href=\"http://pandas.pydata.org/pandas-docs/version/0.13.1/generated/pandas.DataFrame.html#pandas.DataFrame\" title=\"Permalink to this definition\" style=\"color: rgb(198, 15, 15); visibility: hidden; font-size: 0.8em; padding: 0px 4px;\"></a></dt><dd style=\"margin-top: 3px; margin-bottom: 10px; margin-left: 30px; line-height: 1.5em;\"><p style=\"line-height: 1.5em;\">Two-dimensional size-mutable, potentially heterogeneous tabular data structure with labeled axes (rows and columns). Arithmetic operations align on both row and column labels. Can be thought of as a dict-like container for Series objects. The primary pandas data structure</p><table class=\"docutils field-list\" frame=\"void\" rules=\"none\" style=\"margin-bottom: 10px; border: 0px; border-collapse: separate; border-spacing: 10px; margin-left: 1px;\"><colgroup><col class=\"field-name\"><col class=\"field-body\"></colgroup><tbody valign=\"top\"><tr class=\"field-odd field\"><th class=\"field-name\" style=\"padding: 1px 8px 1px 5px; white-space: nowrap; background-color: rgb(238, 238, 238); border: 0px !important;\">Parameters :</th><td class=\"field-body\" style=\"padding: 1px 8px 1px 5px; border: 0px !important;\"><p class=\"first\" style=\"margin-bottom: 0px; line-height: 1.5em; font-style: italic;\"><strong style=\"font-style: normal;\">data</strong>&nbsp;: numpy ndarray (structured or homogeneous), dict, or DataFrame</p><blockquote style=\"border-left-style: none; margin: 0em 0em 0.3em; padding-left: 30px;\"><p style=\"line-height: 1.5em;\">Dict can contain Series, arrays, constants, or list-like objects</p></blockquote><p style=\"margin-bottom: 0px; line-height: 1.5em; font-style: italic;\"><strong style=\"font-style: normal;\">index</strong>&nbsp;: Index or array-like</p><blockquote style=\"border-left-style: none; margin: 0em 0em 0.3em; padding-left: 30px;\"><p style=\"line-height: 1.5em;\">Index to use for resulting frame. Will default to np.arange(n) if no indexing information part of input data and no index provided</p></blockquote><p style=\"margin-bottom: 0px; line-height: 1.5em; font-style: italic;\"><strong style=\"font-style: normal;\">columns</strong>&nbsp;: Index or array-like</p><blockquote style=\"border-left-style: none; margin: 0em 0em 0.3em; padding-left: 30px;\"><p style=\"line-height: 1.5em;\">Column labels to use for resulting frame. Will default to np.arange(n) if no column labels are provided</p></blockquote><p style=\"margin-bottom: 0px; line-height: 1.5em; font-style: italic;\"><strong style=\"font-style: normal;\">dtype</strong>&nbsp;: dtype, default None</p><blockquote style=\"border-left-style: none; margin: 0em 0em 0.3em; padding-left: 30px;\"><p style=\"line-height: 1.5em;\">Data type to force, otherwise infer</p></blockquote><p style=\"margin-bottom: 0px; line-height: 1.5em; font-style: italic;\"><strong style=\"font-style: normal;\">copy</strong>&nbsp;: boolean, default False</p><blockquote class=\"last\" style=\"border-left-style: none; margin: 0em 0em 0.3em; padding-left: 30px;\"><p style=\"line-height: 1.5em;\">Copy data from inputs. Only affects DataFrame / 2d ndarray input</p></blockquote></td></tr></tbody></table></dd></dl></h1>"
+            "collapsed": false
         },
         {
             "id": "sectionf6bX6o",
             "type": "section",
-            "title": "Code Examples -- iPython",
+            "title": "Input Examples -- iPython",
             "level": 3,
-            "collapsed": true
+            "collapsed": false
         },
         {
             "id": "codecT0KJd",
@@ -112,7 +142,7 @@
             "output": {
                 "selectedType": "Hidden",
                 "outputArrived": true,
-                "elapsedTime": 114
+                "elapsedTime": 364
             }
         },
         {
@@ -125,60 +155,28 @@
             "output": {
                 "selectedType": "Hidden",
                 "outputArrived": true,
-                "elapsedTime": 131
+                "elapsedTime": 656
             }
         },
         {
-            "id": "codebyVDlv",
+            "id": "codeTZXNuE",
             "type": "code",
             "evaluator": "IPython",
             "input": {
-                "body": "import pandas as pd\ndf = pd.DataFrame([['USA'], ['India'], ['China'], ['Japan'], ['Australia']], columns=['Country'])\ndf\n"
+                "body": "import pandas as pd\ndf = pd.DataFrame([[\"New York\", 25], [\"Los Angeles\", 30], [\"Seattle\", 45]], columns=['City', 'Employees'])\ndf"
             },
             "output": {
                 "selectedType": "Hidden",
                 "outputArrived": true,
-                "elapsedTime": 414
+                "elapsedTime": 446
             }
-        },
-        {
-            "id": "codelsVol6",
-            "type": "code",
-            "evaluator": "IPython",
-            "input": {
-                "body": "import pandas as pd\ndf = pd.DataFrame([['USA', 'North America'], ['India', 'Asia'], ['China', 'Asia'], ['Japan', 'Asia'], ['Australia', 'Australia']], columns=['Country', 'Continent'])\ndf\n"
-            },
-            "output": {
-                "selectedType": "Hidden",
-                "outputArrived": true,
-                "elapsedTime": 71
-            }
-        },
-        {
-            "id": "sectionEf0c1x",
-            "type": "section",
-            "title": "R",
-            "level": 2,
-            "collapsed": true
-        },
-        {
-            "id": "sectionlL0sMD",
-            "type": "section",
-            "title": "Info on R DataFrame",
-            "level": 3,
-            "collapsed": true
-        },
-        {
-            "id": "textGTWR6A",
-            "type": "text",
-            "body": "<h1 style=\"padding: 0px 0px 5px; margin-top: 0px; margin-right: 15px; margin-bottom: 20px; font-weight: normal; font-size: 2em; line-height: normal; font-family: Georgia, 'Times New Roman', Times, serif; color: rgb(17, 17, 17); letter-spacing: -1px; background-image: url(http://www.r-tutor.com/sites/www.r-tutor.com/themes/elitecircle/images/bk_dotted.gif); background-position: 0% 100%; background-repeat: repeat no-repeat;\">Data Frame</h1><div id=\"node-10\" class=\"node\" style=\"padding: 0px; margin: 0px;\"><div class=\"submitted\" style=\"padding: 0px; margin: 0px;\"></div><div class=\"content clear-block\" style=\"padding: 0px; margin: 0px;\"><p class=\"noindent\" style=\"padding: 0px; margin-top: 10px; margin-right: 15px; color: rgb(68, 68, 68); font-family: Verdana, 'Trebuchet MS', Tahoma, sans-serif; font-size: 12px; line-height: 19.200000762939453px;\">A&nbsp;<span class=\"ecbx-1000\" style=\"padding: 0px; margin: 0px; font-weight: bold;\">data frame&nbsp;</span>is used for storing data tables. It is a list of vectors of equal length. For example, the following variable&nbsp;<span class=\"ecss-1000\" style=\"padding: 0px; margin: 0px; font-family: sans-serif; font-size: 12px;\">df&nbsp;</span>is a data frame containing three vectors&nbsp;<span class=\"ecss-1000\" style=\"padding: 0px; margin: 0px; font-family: sans-serif; font-size: 12px;\">n</span>,&nbsp;<span class=\"ecss-1000\" style=\"padding: 0px; margin: 0px; font-family: sans-serif; font-size: 12px;\">s</span>,&nbsp;<span class=\"ecss-1000\" style=\"padding: 0px; margin: 0px; font-family: sans-serif; font-size: 12px;\">b</span>.</p><div class=\"lstlisting\" style=\"padding: 0.5em; margin: 0.5em 0px; font-family: 'Lucida Console', 'courier new', monospace; white-space: nowrap; background-color: rgb(252, 252, 249); border-left-width: 2px; border-left-style: solid; border-left-color: rgb(239, 239, 239); color: rgb(68, 68, 68); font-size: 12px; line-height: 19.200000762939453px;\"><span class=\"label\" style=\"padding: 0px; margin: 0px 0.5em 0px 0px;\"><a id=\"x12-31001r1\" style=\"padding: 0px; margin: 0px; color: rgb(203, 71, 33); background-color: inherit;\"></a></span>&gt;&nbsp;n&nbsp;=&nbsp;c(2,&nbsp;3,&nbsp;5)&nbsp;<br style=\"padding: 0px; margin: 0px;\"><span class=\"label\" style=\"padding: 0px; margin: 0px 0.5em 0px 0px;\"><a id=\"x12-31002r2\" style=\"padding: 0px; margin: 0px; color: rgb(203, 71, 33); background-color: inherit;\"></a></span>&gt;&nbsp;s&nbsp;=&nbsp;c(\"aa\",&nbsp;\"bb\",&nbsp;\"cc\")&nbsp;<br style=\"padding: 0px; margin: 0px;\"><span class=\"label\" style=\"padding: 0px; margin: 0px 0.5em 0px 0px;\"><a id=\"x12-31003r3\" style=\"padding: 0px; margin: 0px; color: rgb(203, 71, 33); background-color: inherit;\"></a></span>&gt;&nbsp;b&nbsp;=&nbsp;c(TRUE,&nbsp;FALSE,&nbsp;TRUE)&nbsp;<br style=\"padding: 0px; margin: 0px;\"><span class=\"label\" style=\"padding: 0px; margin: 0px 0.5em 0px 0px;\"><a id=\"x12-31004r4\" style=\"padding: 0px; margin: 0px; color: rgb(203, 71, 33); background-color: inherit;\"></a></span>&gt;&nbsp;df&nbsp;=&nbsp;data.frame(n,&nbsp;s,&nbsp;b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;df&nbsp;is&nbsp;a&nbsp;data&nbsp;frame</div><p class=\"noindent\" style=\"padding: 0px; margin-top: 10px; margin-right: 15px; color: rgb(68, 68, 68); font-family: Verdana, 'Trebuchet MS', Tahoma, sans-serif; font-size: 12px; line-height: 19.200000762939453px;\"></p></div></div>"
         },
         {
             "id": "section7vzKW2",
             "type": "section",
-            "title": "Code Example -- R",
+            "title": "Input Examples -- R",
             "level": 3,
-            "collapsed": true
+            "collapsed": false
         },
         {
             "id": "codelo2LnR",
