@@ -1,76 +1,92 @@
-//Priyanka Inani 
-//code cleaning to be done
-//Values = int parse int, values=float, parse float
+//Priyanka Inani & Di Wu
 (function () {
     'use strict';
     beaker.bkoDirective("flotr2Pie", function () {
       return {
             template: 
-              '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Setting&nbsp;</button>'
-           // + '<button class="btn btn-primary" ng-click="toggleMsg()">&nbsp; {{hideOrShowMsg}} Error &nbsp;</button></br>'
-            + '<div class={{msgClass}} id="msg" style={{displayMsg}}><h4>{{msgType}}</h4><ul><li ng-repeat="err in currErrors">{{err}}</br></li></ul></div>'
-//+ '<span class="label label-important">{{initReadyToGraph()}}</span>'
-            + '<div id="configuration" style={{displayConf}}>'
-            +   '</br><b>Number of Pie: &nbsp;</b><input type="text" name="pienum" class="input-medium" ng-model="numPie" placeholder="Enter number of pie"><span class="label label-important">{{countPie(numPie)}}</span></br>'
-            +   '<b>Pie Setting&nbsp;</b>'
-            +     '<div id="pieSetting" style={{checkNumPie()}}>'
-            +       '<table>' 
-            +         '<tr><th>Title</th><th>Data</th><th>Label</th></tr>'
-            +         '<tr ng-repeat="pie in getPieGroup(numPie)">'
-            +           '<td><input type="text" class="input-medium" ng-model="pie.title" placeholder="Enter pie title"></td>'
-            +           '<td><select ng-model="pie.data" ng-options="dataOption.colName for dataOption in dataOptions"><option value="-- choose data --"></option></select><span class="label label-important">{{checkData(pie.data)}}</span></td>'
-            +           '<td><select ng-model="pie.label" ng-options="labelOption.colName for labelOption in labelOptions"><option value="-- choose label --"></option></select><span class="label label-important">{{checkLabel(pie.label)}}</span></td>'
-            +         '</tr>'
-            +       '</table>'
+              '<div class="MyPieClass">'
+            +   '<div class="row-fluid">'
+            +     '<div class="span8">'
+            +       '<span id="graphs">'
+            +         '<ul class="unstyled"><li ng-repeat="pie in pieGroup track by $index"><div id="{{pie.id}}" style="width:600px;height:384px;margin:8px auto">{{showGraph(pie)}}</div></li></ul>'
+            +       '</span>'
             +     '</div>'
-            + '</div>'
-            + '<div id="graphs" style={{initReadyToGraph()}}>'
-            +   '<ul class="unstyled"><li ng-repeat="pie in pieGroup"><div id="{{pie.id}}" style="width:600px;height:384px;margin:8px auto">{{showGraph(pie)}}</div></li></ul>'
+            +     '<div class="span4">'
+            +       '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Configuration&nbsp;</button>'
+            +       '<div class="label label-important">{{initReadyToGraph()}}</div>'
+            +       '<div id="configuration" style={{displayConf}}>'
+            +           '<span style="font-weight:bold;font-size:150%">Pie Setting</span></br>'
+            +           '<button class="btn btn btn-mini btn-success" ng-click="addPie()"><i class="icon-plus"></i>Add Pie</button>'
+            +           '<table>'
+            +             '<tbody style="width:600px;" ng-repeat="pie in pieGroup track by $index">' 
+            +               '<tr><td><b>Pie {{pie.id}}</b></td> <td><button class="btn btn btn-mini btn-danger" ng-click="removePie(pie)"><i class="icon-minus"></i>Remove Pie</button></td></tr>'
+            +               '<tr><td><b>Category&nbsp;</b></td> <td><select ng-model="pie.category" ng-options="categoryOption.colName for categoryOption in categoryOptions"><option value="-- choose category --"></option></select></br><span class="label label-important">{{checkCategory(pie.category)}}</span></td></tr>'
+            +               '<tr><td><b>Size&nbsp;</b></td>     <td><select ng-model="pie.size" ng-options="sizeOption.colName for sizeOption in sizeOptions"><option value="-- choose size --"></option></select></br><span class="label label-important">{{checkSize(pie.size)}}</span></td></tr>'  
+            +               '<tr><td><b>Title&nbsp;</b></td>    <td><input ng-model="pie.title" type="text" class="input-medium" placeholder="Enter pie title"></td></tr>'
+            +               '<tr><td></br></br></br></br></br></br></br></br></br></br></br></td></tr>'
+            +             '</tbody>'
+            +           '</table>'
+            +       '</div>'
+            +     '</div>'
+            +   '</div>'
             + '</div>',
-controller: function($scope) {
-
+link: function(scope, element, attrs) {
 /*Variable Declaration*/
 var
-    jsObj = $scope.model.getCellModel(),
+    jsObj = scope.model.getCellModel(),
     colNames = jsObj.columnNames,
     numCol = colNames.length,
     records = jsObj.values,
     numRecords = records.length,
-    errors = ["Please enter valid input: at least two columns.", "At least one column should be numeric." ,"Please enter how many pies do you need.", "Please enter numeric value greater than 0 for the number of pies.", "Please select the 'Data' for pie chart","Please select  'Label' for pie chart","Please have unique columns name"];
-$scope.pieGroup = [];
-    //commitErrors = [0, 0, 0, 0, 0];
-
+    errors = ["Please have at least two columns.", "At least one column should be numeric.","Please have unique columns name", "Please select Category.", "Please select Size."];
+scope.pieGroup = [];
+scope.output = {};
+scope.categoryOptions = [];
+scope.sizeOptions = [];
+scope.readyToGraph = true;
+scope.defaultPie;
 /*Variable declaration end*/
 
-/*new error handling*/
-$scope.initReadyToGraph = function(){
+/*Get/Organize User Input*/
+checkCol();
+function checkCol() {
+  var col, row;
+  for(col = 0; col < numCol; col++) {
+    scope.categoryOptions.push({colIndex:col, colName:colNames[col]});
+    for(row = 0; row < numRecords; row++) {
+      if(!isNumber(records[row][col])) {
+        break;
+      }
+    }
+    if(row==numRecords)
+      scope.sizeOptions.push({colIndex:col, colName:colNames[col]});
+  }
+}
+/*Get/Organize User Input end*/
+
+/*Error Checking*/
+scope.initReadyToGraph = function(){
   var opt;
-  var outStyle = "display:block;"
-  if($scope.labelOptions.length<=2 || $scope.dataOptions.length<1) {
-    $scope.hideOrShowConf = " Hide ";
-    $scope.displayConf = "display:none;";
-    $scope.readyToGraph = false;
+  if(numCol<2) {
+    scope.hideOrShowConf = " Hide ";
+    scope.displayConf = "display:none;";
+    scope.readyToGraph = false;
     return errors[0];
   }
-  else if (!uniqueColumnNames()) {
-    $scope.hideOrShowConf = " Hide ";
-    $scope.displayConf = "display:none;";
-    $scope.readyToGraph = false;
-    return errors[6];
-  }
- else if ($scope.dataOptions.length<=1){
-	$scope.hideOrShowConf = " Hide ";
-    $scope.displayConf = "display:none;";
-    $scope.readyToGraph = false;
+  else if(scope.sizeOptions.length<1) {
+    scope.hideOrShowConf = " Hide ";
+    scope.displayConf = "display:none;";
+    scope.readyToGraph = false;
     return errors[1];
- }
+  }
+  else if (!uniqueColumnNames()) {
+    scope.hideOrShowConf = " Hide ";
+    scope.displayConf = "display:none;";
+    scope.readyToGraph = false;
+    return errors[2];
+  }
   else
-    $scope.readyToGraph = true;
-
-if(!$scope.readyToGraph) 
-    outStyle = "display:none;"
-
-  return outStyle;
+    scope.readyToGraph = true;
 }
 
 function uniqueColumnNames() {
@@ -82,247 +98,77 @@ function uniqueColumnNames() {
   }
   return true;
 }
-$scope.countPie = function(x) {
-  if(x== undefined) {
-    $scope.readyToGraph = false;
-    return errors[2];
-  }
-  else if (!isNormalInteger(x)){
- $scope.readyToGraph = false;
+
+scope.checkCategory = function(z) {
+  if(z== undefined) {
+    scope.readyToGraph = false;
     return errors[3];
- }
+  }
   return "";
 }
 
-$scope.checkData = function(y) {
-  if(y== undefined) {
-    $scope.readyToGraph = false;
+scope.checkSize = function(y) {
+  if(y == undefined) {
+    scope.readyToGraph = false;
     return errors[4];
   }
   return "";
 }
+/*Error Checking end*/
 
-$scope.checkLabel = function(z) {
-  if(z== undefined) {
-    $scope.readyToGraph = false;
-    return errors[5];
-  }
-  return "";
-}
-
-
-/*end of new error handling*/
-
-
-/*Show hide configuration*/
-
-$scope.hideOrShowConf = " Hide ";
-$scope.displayConf = "display:block;";
-$scope.toggleConf = function() {
-  if($scope.displayConf=="display:block;") {
-    $scope.displayConf = "display:none;";
-    $scope.hideOrShowConf = "Show";
-  }
-  else {
-    $scope.displayConf = "display:block;";
-    $scope.hideOrShowConf = " Hide ";
-  }
-}
-/*End of show hide configuration*/
-
-
-/*$scope.hideOrShowMsg = "Show ";
-$scope.displayMsg = "display:none;";
-$scope.toggleMsg = function() {
-  if($scope.displayMsg=="display:block;") {
-    $scope.displayMsg = "display:none;";
-    $scope.hideOrShowMsg = "Show ";
-  }
-  else {
-    generateMessages();
-    $scope.displayMsg = "display:block;";
-    $scope.hideOrShowMsg = " Hide ";
-  }
-}*/
-
-/*function generateMessages() {
-  $scope.currErrors = [];
-  for(var i = 0; i < errors.length; i++) {
-    if(commitErrors[i]==1) $scope.currErrors.push(errors[i]);
-  }
-  if($scope.currErrors.length==0) {
-    $scope.msgClass="alert alert-success";
-    $scope.msgType="Success!";
-  }
-  else {
-    $scope.msgClass="alert alert-error";
-    $scope.msgType="Error!";
-  }
-}*/
-
-/*Check data columns*/
-$scope.dataOptions = [];
-checkNumCol();
-function checkNumCol() {
-  var col, row;
-  for(col = 0; col < numCol; col++) {
-    for(row = 0; row < numRecords; row++) {
-      if(!isNumber(records[row][col])) {
+/*Default Graph*/
+defaultGraph();
+function defaultGraph() {
+  if(scope.readyToGraph) {
+    var size = scope.sizeOptions[0];
+    var category;
+    for(var i = 0; i < scope.categoryOptions.length; i++){
+      var cat = scope.categoryOptions[i];
+      if(cat.colIndex != size.colIndex) {
+        category = cat;
         break;
       }
     }
-    if(row==numRecords)
-      $scope.dataOptions.push({colIndex:col, colName:colNames[col]});
+    var title = "[Category: " + category.colName + "]\t[Size: " + size.colName + "]";
+    scope.defaultPie = {id: 0, title: title, size: size, category: category};
+    scope.pieGroup = [clone(scope.defaultPie)];
   }
 }
-/*end of check data columns*/
+/*Default Graph end*/
 
-/*check label columns*/
-$scope.labelOptions = [];
-checkLabelCol();
-function checkLabelCol(){
-  var col;
-  for(col = 0; col < numCol; col++) {
-    $scope.labelOptions.push({colIndex:col, colName:colNames[col]});
+/*Add/Remove Pie*/
+scope.addPie = function() {
+  scope.pieGroup.unshift( clone(scope.defaultPie) );
+  for(var i = 1; i < scope.pieGroup.length; i++) {
+    scope.pieGroup[i].id = i;
   }
-}
-/*end of check label columns*/
-
-/*helper functions*/
-function isNumber(n) {
-  return n!=undefined && !isNaN(parseFloat(n)) && isFinite(n);
+  console.log(scope.pieGroup);
 }
 
-var validUserInput = checkUserInput();
-function checkUserInput() {
-  if($scope.labelOptions.length<=2 || $scope.dataOptions.length<1) {
-    return false;
+scope.removePie = function(pie) {
+  var index = scope.pieGroup.indexOf(pie);
+  scope.pieGroup.splice(index, 1);
+  for(var i = 0; i < scope.pieGroup.length; i++) {
+    scope.pieGroup[i].id = i;
   }
-  return true;
+  console.log(scope.pieGroup);
 }
+/**/
 
-$scope.getPieGroup=function(numPie) {
-  if(!validUserInput || needReset(numPie) || !isNormalInteger(numPie)) {
-    $scope.pieGroup = [];
-    return $scope.pieGroup;
-  }
-  numPie = parseInt(numPie);
-  if($scope.pieGroup.length==0) {
-    $scope.pieGroup = [];
-    for(var i = 0; i < numPie; i++)
-      $scope.pieGroup.push({id:i, title:undefined, data:undefined, label:undefined});
-    return $scope.pieGroup;
-  }
-  if($scope.pieGroup.length>numPie) {
-    $scope.pieGroup = $scope.pieGroup.slice(0, numPie);
-    return $scope.pieGroup;
-  }
-  if($scope.pieGroup.length<numPie) {
-    var currID = $scope.pieGroup.length;
-    while($scope.pieGroup.length<numPie) {
-      $scope.pieGroup.push({id:currID, title:undefined, data:undefined, label:undefined});
-      currID = currID+1;
-    }
-    return $scope.pieGroup;
-  }
-  return $scope.pieGroup;
-}
-
-function needReset(varStr) {
-  return (varStr==undefined||varStr==null||varStr=="");
-}
-
-function isNormalInteger(str) {
-    var n = ~~Number(str);
-    return String(n) === str && n > 0;
-}
-
-$scope.checkNumPie = function() {
-  if($scope.pieGroup.length==0)
-    return "display:none;"
-  else
-    return "display:block;"
-}
-
-/*end of helper functions*/
-
-
-/*old error handling
-var readyToGraph;
-$scope.checkError=function() {
-  readyToGraph = true;
-  var outStyle = "display:block;"
-  commitErrors = [0, 0, 0, 0, 0];
-  //error handling 
-  if(!validUserInput){
-    commitErrors[0] = 1;
-    readyToGraph = false;
-  }
-  if(readyToGraph){
-     if($scope.dataOptions.length <=1){
-	commitErrors[1] = 1;
-        readyToGraph = false;
-	}
-  }
-  if(readyToGraph) {
-    if(needReset($scope.numPie)) {
-      commitErrors[2] = 1;
-      readyToGraph = false;
-    }
-    else {
-      if(!isNormalInteger($scope.numPie)) {
-        commitErrors[3] = 1;
-        readyToGraph = false;
-      }
-    }
-  }
-  if(readyToGraph) {
-    var pie;
-    for(var i = 0; i < $scope.pieGroup.length; i++) {
-      pie = $scope.pieGroup[i];
-      if(pie.data==undefined || pie.label==undefined) {
-        commitErrors[4] = 1;
-        readyToGraph = false;
-        break;
-      }
-    }
-  }
-  if($scope.displayMsg=="display:block;")
-    generateMessages(); 
-
-  if(!readyToGraph) 
-    outStyle = "display:none;"
-
-  return outStyle;
-}
-*/
-
-/*Pie Chart function*/
-$scope.showGraph=function(pie) {
-  if($scope.readyToGraph) {
+/*Pie Graph Functions*/
+scope.showGraph=function(pie) {
+  if(scope.readyToGraph) {
     getOutputDisplay(pie);
   }
 }
 
-
-function getOnePieData(dt, label) {
-  
-  var
-    finalData = [], row;
-
-  for(row = 0; row < numRecords; row++) {
-    finalData.push( { data: [[ 0, parseFloat(records[row][dt]) ]], label:records[row][label] } );
-  }
-  return finalData;
-  
-}
-
-
 function getOutputDisplay(pie){
   var data, finalTitle, container, graph;
-  data = getOnePieData(pie.data.colIndex, pie.label.colIndex);
 
-  if(needReset(pie.title)) finalTitle="Pie Graph " + pie.id;
+  data = getOnePieData(pie.size.colIndex, pie.category.colIndex);
+
+  if(needReset(pie.title)) 
+    finalTitle = "[Category: " + pie.category.colName + "]\t[Size: " + pie.size.colName + "]";
   else finalTitle=pie.title;
 
   container = document.getElementById(pie.id);
@@ -335,10 +181,10 @@ function getOutputDisplay(pie){
       explode: 6
     },
     xaxis: {
-      showLabels: false
+      showLabels: true
     }, 
     yaxis: {
-      showLabels: false
+      showLabels: true
     },
     grid: {
       verticalLines: false,
@@ -354,9 +200,57 @@ function getOutputDisplay(pie){
   });
 }
 
-/*end of pie chart function*/
+function getOnePieData(size, category) {
+  var
+    finalData = [], row;
 
+  for(row = 0; row < numRecords; row++) {
+    finalData.push( { data: [[ 0, parseFloat(records[row][size]) ]], label:records[row][category] } );
+  }
+  return finalData;
+  
+}
 
+/*Pie Graph Functions End*/
+
+/*Show hide configuration*/
+scope.hideOrShowConf = " Hide ";
+scope.displayConf = "display:block;";
+scope.toggleConf = function() {
+  if(scope.displayConf=="display:block;") {
+    scope.displayConf = "display:none;";
+    scope.hideOrShowConf = "Show";
+  }
+  else {
+    scope.displayConf = "display:block;";
+    scope.hideOrShowConf = " Hide ";
+  }
+}
+/*End of show hide configuration*/
+
+/*helper functions*/
+function isNumber(n) {
+  return n!=undefined && !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function needReset(varStr) {
+  return (varStr==undefined||varStr==null||varStr=="");
+}
+
+function isNormalInteger(str) {
+    var n = ~~Number(str);
+    return String(n) === str && n > 0;
+}
+
+function clone(obj) {
+    if (null == obj || "object" != typeof obj) return obj;
+    var copy = obj.constructor();
+    for (var attr in obj) {
+        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+    }
+    return copy;
+}
+/*end of helper functions*/
 
         }
       };
