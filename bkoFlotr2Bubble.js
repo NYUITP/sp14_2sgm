@@ -116,14 +116,10 @@
 		    html = '',
 		    i;
 
-		  var temp = [], k;
-		  k = 0;
 
         	    for(i = 0; i < numCol; i++) {
 		        if(isNumCol[i]){
 				html = html + '<option value="' + i + '">' + colNames[i] + '</option>';
-				temp[k] = colNames[i];
-				k++;
 			}
 		      }
 		   element.innerHTML = html;
