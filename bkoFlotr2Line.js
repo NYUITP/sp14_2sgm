@@ -302,6 +302,13 @@ function getOneLineData(x, y) {
 $(window).resize(function() {
     scope.showGraph(scope.autoRange);
 });
+
+function calculateNewTick(min, max, interval) {
+  if(scope.autoRange) return 5;
+  else{
+    return Math.ceil(Math.abs(max - min)/interval);
+  }
+}
 /********End OF Helper Functions*********/
 
 /********Graph Functions*********/
@@ -319,9 +326,14 @@ scope.showGraph=function(autoRange) {
 function getOutputDisplay(){
   var 
     data = getData(), // First data series
-    finalTitle, finalXTitle, finalYTitle; 
+    finalTitle, finalXTitle, finalYTitle,
+    graph; 
 
   var xaxis = scope.xaxis;
+
+  var container = document.getElementById(scope.randID + 'container');
+  scope.checkContainer = container;
+
   //Set title
   if(needReset(scope.title)) finalTitle="Line Graph";
   else finalTitle=scope.title;
@@ -331,6 +343,7 @@ function getOutputDisplay(){
   else finalYTitle=scope.ytitle;
   scope.output.inObj = jsObj;
   scope.output.processedData = data;
+
   scope.output.graphSetting = 
   {
     title: finalTitle,
@@ -351,12 +364,48 @@ function getOutputDisplay(){
     },
     mouse: {
       track: true
-    }
+    },
+    selection: { mode : 'x', fps : 30 }
   };
 
-  var container = document.getElementById(scope.randID + 'container');
-  scope.checkContainer = container;
-  var graph = Flotr.draw(container, scope.output.processedData, scope.output.graphSetting);
+  // Draw graph with default options, overwriting with passed options
+  function drawGraph (opts) {
+
+    // Clone the options, so the 'options' variable always keeps intact.
+    var o = Flotr._.extend(Flotr._.clone(scope.output.graphSetting), opts || {});
+
+    // Return a new graph.
+    return Flotr.draw(
+      container,
+      scope.output.processedData,
+      o
+    );
+  }
+  // Actually draw the graph.
+  graph = drawGraph(); 
+
+  // Hook into the 'flotr:select' event.
+  Flotr.EventAdapter.observe(container, 'flotr:select', function (area) {
+
+    // Draw graph with new area
+    graph = drawGraph({
+      xaxis: {
+        title: finalXTitle,
+        min:area.x1, 
+        max:area.x2,
+        noTicks: calculateNewTick(area.x1, area.x2, scope.xinterval)
+      },
+      yaxis: {
+        title: finalYTitle,
+        min:area.y1, 
+        max:area.y2,
+        noTicks: calculateNewTick(area.y1, area.y2, scope.yinterval)
+      }
+    });
+  });
+
+  // When graph is clicked, draw the graph with default area.  
+  Flotr.EventAdapter.observe(container, 'flotr:click', function () { drawGraph(); });
 }
 
 /********End of Graph Functions*********/

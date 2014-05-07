@@ -7,30 +7,32 @@
             template: 
               '<div class="MyPieClass">'
             +   '<div class="row-fluid">'
-            +     '<div class="span8">'
-            +       '<span id="{{randID}}graphs">'
-            +         '<ul class="unstyled"><li ng-repeat="pie in pieGroup track by $index"><div id="{{randID}}{{pie.id}}" style="height:384px;margin:8px auto">{{showGraph(pie)}}</div></li></ul>'
-            +       '</span>'
-            +     '</div>'
+            +     '<div class="span8"></div>'
             +     '<div class="span4">'
             +       '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Configuration&nbsp;</button>'
             +       '<div class="label label-important">{{initReadyToGraph()}}</div>'
-            +       '<div id="{{randID}}configuration" style={{displayConf}}>'
-            +           '<span style="font-weight:bold;font-size:150%">Pie Setting</span></br>'
-            +           '<button class="btn btn-mini btn-success" ng-click="addPie()"><i class="icon-plus"></i>Add Pie</button>'
-            +           '<table>'
-            +             '<tbody style="width:600px;" ng-repeat="pie in pieGroup track by $index">' 
-            +               '<tr><td><b>Pie {{pie.id}}</b></td> <td><button class="btn btn-mini btn-danger" ng-click="removePie(pie)"><i class="icon-minus"></i>Remove Pie</button></td></tr>'
-            +               '<tr><td><b>Category&nbsp;</b></td> <td><select ng-model="pie.category" ng-options="categoryOption.colName for categoryOption in categoryOptions"><option value="-- choose category --"></option></select></br><span class="label label-important">{{checkCategory(pie.category)}}</span></td></tr>'
-            +               '<tr><td><b>Size&nbsp;</b></td>     <td><select ng-model="pie.size" ng-options="sizeOption.colName for sizeOption in sizeOptions"><option value="-- choose size --"></option></select></br><span class="label label-important">{{checkSize(pie.size)}}</span></td></tr>'  
-            +               '<tr><td><b>Title&nbsp;</b></td>    <td><input ng-model="pie.title" type="text" class="input-medium" placeholder="Enter pie title"></td></tr>'
-            +               '<tr><td></br></br></br></br></br></br></br></br></br></br></br></td></tr>'
-            +             '</tbody>'
-            +           '</table>'
-            +       '</div>'
             +     '</div>'
             +   '</div>'
-            + '</div>',
+            +   '<ul class="unstyled">'
+            +     '<li ng-repeat="pie in pieGroup track by $index">'
+            +       '<div class="row-fluid">'
+            +         '<div class="span8 {{randID}}graph">'
+            +           '<div id="{{randID}}{{pie.id}}" style="height:384px;margin:8px auto">{{showGraph(pie)}}</div>'
+            +         '</div>'
+            +         '<div class="span4 {{randID}}configuration" style="{{displayConf}}">'
+            +           '<button class="btn btn-mini btn-danger" ng-click="removePie(pie.id)"><i class="icon-minus"></i>Remove Pie</button>'
+            +           '<button class="btn btn-mini btn-success" ng-click="addPie(pie.id)"><i class="icon-plus"></i>Add Pie Above</button>'
+            +           '<table>'
+            +             '<tr><td><b>Category&nbsp;</b></td> <td><select ng-model="pie.category" ng-options="categoryOption.colName for categoryOption in categoryOptions"><option value="-- choose category --"></option></select></br><span class="label label-important">{{checkCategory(pie.category)}}</span></td></tr>'
+            +             '<tr><td><b>Size&nbsp;</b></td>     <td><select ng-model="pie.size" ng-options="sizeOption.colName for sizeOption in sizeOptions"><option value="-- choose size --"></option></select></br><span class="label label-important">{{checkSize(pie.size)}}</span></td></tr>'  
+            +             '<tr><td><b>Title&nbsp;</b></td>    <td><input ng-model="pie.title" type="text" class="input-medium" placeholder="Enter pie title"></td></tr>'     
+            +           '</table>'
+            +         '</div>'
+            +       '</div>'
+            +     '</li>'
+            +   '</ul>'
+            + '</div>'
+            ,
 link: function(scope, element, attrs) {
 /*Variable Declaration*/
 var
@@ -124,21 +126,18 @@ function defaultGraph() {
 /*Default Graph end*/
 
 /*Add/Remove Pie*/
-scope.addPie = function() {
-  scope.pieGroup.unshift( clone(scope.defaultPie) );
-  for(var i = 1; i < scope.pieGroup.length; i++) {
-    scope.pieGroup[i].id = i;
-  }
-  console.log(scope.pieGroup);
-}
-
-scope.removePie = function(pie) {
-  var index = scope.pieGroup.indexOf(pie);
-  scope.pieGroup.splice(index, 1);
+scope.addPie = function(currPieID) {
+  scope.pieGroup.splice(currPieID, 0, clone(scope.defaultPie) );
   for(var i = 0; i < scope.pieGroup.length; i++) {
     scope.pieGroup[i].id = i;
   }
-  console.log(scope.pieGroup);
+}
+
+scope.removePie = function(pieID) {
+  scope.pieGroup.splice(pieID, 1);
+  for(var i = 0; i < scope.pieGroup.length; i++) {
+    scope.pieGroup[i].id = i;
+  }
 }
 /**/
 
