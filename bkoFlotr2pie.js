@@ -1,4 +1,5 @@
 //Priyanka Inani & Di Wu
+//Limit 23 records
 (function () {
     'use strict';
     beaker.bkoDirective("flotr2Pie", function () {
@@ -7,19 +8,19 @@
               '<div class="MyPieClass">'
             +   '<div class="row-fluid">'
             +     '<div class="span8">'
-            +       '<span id="graphs">'
-            +         '<ul class="unstyled"><li ng-repeat="pie in pieGroup track by $index"><div id="{{pie.id}}" style="width:600px;height:384px;margin:8px auto">{{showGraph(pie)}}</div></li></ul>'
+            +       '<span id="{{randID}}graphs">'
+            +         '<ul class="unstyled"><li ng-repeat="pie in pieGroup track by $index"><div id="{{randID}}{{pie.id}}" style="width:600px;height:384px;margin:8px auto">{{showGraph(pie)}}</div></li></ul>'
             +       '</span>'
             +     '</div>'
             +     '<div class="span4">'
             +       '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Configuration&nbsp;</button>'
             +       '<div class="label label-important">{{initReadyToGraph()}}</div>'
-            +       '<div id="configuration" style={{displayConf}}>'
+            +       '<div id="{{randID}}configuration" style={{displayConf}}>'
             +           '<span style="font-weight:bold;font-size:150%">Pie Setting</span></br>'
-            +           '<button class="btn btn btn-mini btn-success" ng-click="addPie()"><i class="icon-plus"></i>Add Pie</button>'
+            +           '<button class="btn btn-mini btn-success" ng-click="addPie()"><i class="icon-plus"></i>Add Pie</button>'
             +           '<table>'
             +             '<tbody style="width:600px;" ng-repeat="pie in pieGroup track by $index">' 
-            +               '<tr><td><b>Pie {{pie.id}}</b></td> <td><button class="btn btn btn-mini btn-danger" ng-click="removePie(pie)"><i class="icon-minus"></i>Remove Pie</button></td></tr>'
+            +               '<tr><td><b>Pie {{pie.id}}</b></td> <td><button class="btn btn-mini btn-danger" ng-click="removePie(pie)"><i class="icon-minus"></i>Remove Pie</button></td></tr>'
             +               '<tr><td><b>Category&nbsp;</b></td> <td><select ng-model="pie.category" ng-options="categoryOption.colName for categoryOption in categoryOptions"><option value="-- choose category --"></option></select></br><span class="label label-important">{{checkCategory(pie.category)}}</span></td></tr>'
             +               '<tr><td><b>Size&nbsp;</b></td>     <td><select ng-model="pie.size" ng-options="sizeOption.colName for sizeOption in sizeOptions"><option value="-- choose size --"></option></select></br><span class="label label-important">{{checkSize(pie.size)}}</span></td></tr>'  
             +               '<tr><td><b>Title&nbsp;</b></td>    <td><input ng-model="pie.title" type="text" class="input-medium" placeholder="Enter pie title"></td></tr>'
@@ -36,7 +37,7 @@ var
     jsObj = scope.model.getCellModel(),
     colNames = jsObj.columnNames,
     numCol = colNames.length,
-    records = jsObj.values,
+    records = jsObj.values.splice(0,23),
     numRecords = records.length,
     errors = ["Please have at least two columns.", "At least one column should be numeric.","Please have unique columns name", "Please select Category.", "Please select Size."];
 scope.pieGroup = [];
@@ -45,6 +46,7 @@ scope.categoryOptions = [];
 scope.sizeOptions = [];
 scope.readyToGraph = true;
 scope.defaultPie;
+scope.randID = bkHelper.generateID();
 /*Variable declaration end*/
 
 /*Get/Organize User Input*/
@@ -58,7 +60,7 @@ function checkCol() {
         break;
       }
     }
-    if(row==numRecords)
+    if(row===numRecords)
       scope.sizeOptions.push({colIndex:col, colName:colNames[col]});
   }
 }
@@ -79,28 +81,13 @@ scope.initReadyToGraph = function(){
     scope.readyToGraph = false;
     return errors[1];
   }
-  else if (!uniqueColumnNames()) {
-    scope.hideOrShowConf = " Hide ";
-    scope.displayConf = "display:none;";
-    scope.readyToGraph = false;
-    return errors[2];
-  }
   else
     scope.readyToGraph = true;
 }
 
-function uniqueColumnNames() {
-  for(var i = 0; i < colNames.length; i++) {
-    for(var j = i+1; j < colNames.length; j++) {
-      if(colNames[i]==colNames[j])
-        return false;
-    }
-  }
-  return true;
-}
 
 scope.checkCategory = function(z) {
-  if(z== undefined) {
+  if(z=== undefined) {
     scope.readyToGraph = false;
     return errors[3];
   }
@@ -108,7 +95,7 @@ scope.checkCategory = function(z) {
 }
 
 scope.checkSize = function(y) {
-  if(y == undefined) {
+  if(y === undefined) {
     scope.readyToGraph = false;
     return errors[4];
   }
@@ -171,7 +158,7 @@ function getOutputDisplay(pie){
     finalTitle = "[Category: " + pie.category.colName + "]\t[Size: " + pie.size.colName + "]";
   else finalTitle=pie.title;
 
-  container = document.getElementById(pie.id);
+  container = document.getElementById(scope.randID+pie.id);
 
   graph = Flotr.draw(container, data, {
     title: finalTitle,
@@ -181,10 +168,10 @@ function getOutputDisplay(pie){
       explode: 6
     },
     xaxis: {
-      showLabels: true
+      showLabels: false
     }, 
     yaxis: {
-      showLabels: true
+      showLabels: false
     },
     grid: {
       verticalLines: false,
@@ -205,7 +192,7 @@ function getOnePieData(size, category) {
     finalData = [], row;
 
   for(row = 0; row < numRecords; row++) {
-    finalData.push( { data: [[ 0, parseFloat(records[row][size]) ]], label:records[row][category] } );
+    finalData.push( { data: [[ 0, parseFloat(records[row][size]) ]], label: records[row][category] } );
   }
   return finalData;
   
@@ -217,7 +204,7 @@ function getOnePieData(size, category) {
 scope.hideOrShowConf = " Hide ";
 scope.displayConf = "display:block;";
 scope.toggleConf = function() {
-  if(scope.displayConf=="display:block;") {
+  if(scope.displayConf==="display:block;") {
     scope.displayConf = "display:none;";
     scope.hideOrShowConf = "Show";
   }
@@ -234,7 +221,7 @@ function isNumber(n) {
 }
 
 function needReset(varStr) {
-  return (varStr==undefined||varStr==null||varStr=="");
+  return (varStr===undefined||varStr===null||varStr==="");
 }
 
 function isNormalInteger(str) {
@@ -243,7 +230,7 @@ function isNormalInteger(str) {
 }
 
 function clone(obj) {
-    if (null == obj || "object" != typeof obj) return obj;
+    if (null === obj || "object" != typeof obj) return obj;
     var copy = obj.constructor();
     for (var attr in obj) {
         if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
