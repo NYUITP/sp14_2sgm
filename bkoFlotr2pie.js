@@ -9,7 +9,7 @@
             +   '<div class="row-fluid">'
             +     '<div class="span8">'
             +       '<span id="{{randID}}graphs">'
-            +         '<ul class="unstyled"><li ng-repeat="pie in pieGroup track by $index"><div id="{{randID}}{{pie.id}}" style="width:600px;height:384px;margin:8px auto">{{showGraph(pie)}}</div></li></ul>'
+            +         '<ul class="unstyled"><li ng-repeat="pie in pieGroup track by $index"><div id="{{randID}}{{pie.id}}" style="height:384px;margin:8px auto">{{showGraph(pie)}}</div></li></ul>'
             +       '</span>'
             +     '</div>'
             +     '<div class="span4">'
@@ -237,6 +237,14 @@ function clone(obj) {
     }
     return copy;
 }
+
+$(window).resize(function() {
+  var pie;
+  for(var i = 0; i < scope.pieGroup.length; i++) {
+    pie = scope.pieGroup[i];
+    scope.showGraph(pie);
+  }
+});
 /*end of helper functions*/
 
         }
