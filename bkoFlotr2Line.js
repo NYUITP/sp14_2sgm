@@ -70,7 +70,7 @@ var
     records = jsObj.values,
     numRecords = records.length,
     currXMin=-10, currXMax=10, currYMin=-10, currYMax=10, currXTick=5, currYTick=5, //test which columns are numerical (numerical: true)
-    errors = ["Select the X axis.", "Select at least one Y axis.", "Enter numeric values.", "Max is smaller than Min.", "Interval <= 0.", "Please have at least two numeric columns.", "Please have unique column names."],
+    errors = ["Select the X axis.", "Select at least one Y axis.", "Enter numeric values.", "Max is smaller than Min.", "Interval <= 0.", "Please have at least two numeric columns."],
     graph;
 /********End OF Declaration*********/
 scope.output = {};

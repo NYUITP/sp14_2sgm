@@ -45,7 +45,7 @@ var
     numCol = colNames.length,
     records = jsObj.values.splice(0,23),
     numRecords = records.length,
-    errors = ["Please have at least two columns.", "At least one column should be numeric.","Please have unique columns name", "Please select Category.", "Please select Size."],
+    errors = ["Please have at least two columns.", "At least one column should be numeric.", "Please select Category.", "Please select Size."],
     graphs = [];
 scope.pieGroup = [];
 scope.output = {};
@@ -107,7 +107,7 @@ scope.initReadyToGraph = function(){
 scope.checkCategory = function(z) {
   if(z=== undefined) {
     scope.readyToGraph = false;
-    return errors[3];
+    return errors[2];
   }
   return "";
 }
@@ -115,7 +115,7 @@ scope.checkCategory = function(z) {
 scope.checkSize = function(y) {
   if(y === undefined) {
     scope.readyToGraph = false;
-    return errors[4];
+    return errors[3];
   }
   return "";
 }
