@@ -17,6 +17,10 @@
             +     '<li ng-repeat="pie in pieGroup track by $index">'
             +       '<div class="row-fluid">'
             +         '<div class="span8 {{randID}}graph">'
+            +           '<div class="btn-group">'
+            +             '<button type="button" class="btn btn-mini" ng-click="downloadPic(\'jpeg\', pie.id)">JPEG</button>'
+            +             '<button type="button" class="btn btn-mini" ng-click="downloadPic(\'png\', pie.id)">PNG</button>'
+            +           '</div>'
             +           '<div id="{{randID}}{{pie.id}}" style="height:384px;margin:8px auto">{{showGraph(pie)}}</div>'
             +         '</div>'
             +         '<div class="span4 {{randID}}configuration" style="{{displayConf}}">'
@@ -41,7 +45,8 @@ var
     numCol = colNames.length,
     records = jsObj.values.splice(0,23),
     numRecords = records.length,
-    errors = ["Please have at least two columns.", "At least one column should be numeric.","Please have unique columns name", "Please select Category.", "Please select Size."];
+    errors = ["Please have at least two columns.", "At least one column should be numeric.","Please have unique columns name", "Please select Category.", "Please select Size."],
+    graphs = [];
 scope.pieGroup = [];
 scope.output = {};
 scope.categoryOptions = [];
@@ -50,6 +55,17 @@ scope.readyToGraph = true;
 scope.defaultPie;
 scope.randID = bkHelper.generateID();
 /*Variable declaration end*/
+
+scope.downloadPic = function(format, id) {
+  if (Flotr.isIE && Flotr.isIE < 9) {
+      alert(
+        "Your browser doesn't allow you to get a bitmap image from the plot, " +
+        "you can only get a VML image that you can use in Microsoft Office.<br />"
+      );
+  }
+  var graph = graphs[id];
+  graph.download.saveImage(format);
+}
 
 /*Get/Organize User Input*/
 checkCol();
@@ -184,6 +200,13 @@ function getOutputDisplay(pie){
       backgroundColor: '#D2E8FF'
     }
   });
+
+  if(pie.id >= graphs.length) {
+    graphs.splice(pie.id, 0, graph);
+  }
+  else {
+    graphs[pie.id] = graph;
+  }
 }
 
 function getOnePieData(size, category) {

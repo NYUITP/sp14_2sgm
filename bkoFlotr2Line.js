@@ -6,7 +6,13 @@
             template: 
               '<div class="MyLineClass">'
             +   '<div class="row-fluid">'
-            +     '<div class="span8"><div id="{{randID}}container" style="height:384px;margin:8px auto">{{showGraph(autoRange)}}</div></div>'
+            +     '<div class="span8">'
+            +       '<div class="btn-group">'
+            +         '<button type="button" class="btn btn-mini" ng-click="downloadPic(\'jpeg\')">JPEG</button>'
+            +         '<button type="button" class="btn btn-mini" ng-click="downloadPic(\'png\')">PNG</button>'
+            +       '</div>'
+            +       '<div id="{{randID}}container" style="height:384px;margin:8px auto">{{showGraph(autoRange)}}</div>'
+            +     '</div>'
             +     '<div class="span4">' 
             +       '<button class="btn btn-primary" ng-click="toggleConf()"><i class="icon-cog"></i>&nbsp; {{hideOrShowConf}} Configuration&nbsp;</button>'
             +       '<span class="label label-important">{{initReadyToGraph()}}</span>'
@@ -64,10 +70,21 @@ var
     records = jsObj.values,
     numRecords = records.length,
     currXMin=-10, currXMax=10, currYMin=-10, currYMax=10, currXTick=5, currYTick=5, //test which columns are numerical (numerical: true)
-    errors = ["Select the X axis.", "Select at least one Y axis.", "Enter numeric values.", "Max is smaller than Min.", "Interval <= 0.", "Please have at least two numeric columns.", "Please have unique column names."];
+    errors = ["Select the X axis.", "Select at least one Y axis.", "Enter numeric values.", "Max is smaller than Min.", "Interval <= 0.", "Please have at least two numeric columns.", "Please have unique column names."],
+    graph;
 /********End OF Declaration*********/
 scope.output = {};
 scope.randID = bkHelper.generateID();
+
+scope.downloadPic = function(format) {
+  if (Flotr.isIE && Flotr.isIE < 9) {
+      alert(
+        "Your browser doesn't allow you to get a bitmap image from the plot, " +
+        "you can only get a VML image that you can use in Microsoft Office.<br />"
+      );
+  }
+  graph.download.saveImage(format);
+}
 /********Check Numeric Columns*********/
 scope.colOptions = [];
 checkNumCol();
@@ -254,7 +271,7 @@ scope.toggleYAxis = function() {
   }
   else {
     scope.displayYAxis = "display:block;";
-    scope.hideOrShowConf = "Hide";
+    scope.hideOrShowYAxis = "Hide";
   }
 }
 /********End OF Show/Hide Configuration*********/
@@ -326,8 +343,7 @@ scope.showGraph=function(autoRange) {
 function getOutputDisplay(){
   var 
     data = getData(), // First data series
-    finalTitle, finalXTitle, finalYTitle,
-    graph; 
+    finalTitle, finalXTitle, finalYTitle; 
 
   var xaxis = scope.xaxis;
 
