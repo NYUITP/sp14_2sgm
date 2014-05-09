@@ -1,7 +1,7 @@
 //author: Di Wu
 (function () {
     'use strict';
-    beaker.bkoDirective("flotr2Line", function () {
+    beaker.bkoDirective("flotr2Line", ["generalUtils", function (generalUtils) {
       return {
             template: 
               '<div class="MyLineClass">'
@@ -74,7 +74,7 @@ var
     graph;
 /********End OF Declaration*********/
 scope.output = {};
-scope.randID = bkHelper.generateID();
+scope.randID = generalUtils.generateID(10);
 
 scope.downloadPic = function(format) {
   if (Flotr.isIE && Flotr.isIE < 9) {
@@ -431,5 +431,5 @@ function getOutputDisplay(){
 
         }
       };
-    });
+    }]);
 })(); 

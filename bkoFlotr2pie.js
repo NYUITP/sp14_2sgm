@@ -2,7 +2,7 @@
 //Limit 23 records
 (function () {
     'use strict';
-    beaker.bkoDirective("flotr2Pie", function () {
+    beaker.bkoDirective("flotr2Pie", ["generalUtils", function (generalUtils) {
       return {
             template: 
               '<div class="MyPieClass">'
@@ -53,7 +53,8 @@ scope.categoryOptions = [];
 scope.sizeOptions = [];
 scope.readyToGraph = true;
 scope.defaultPie;
-scope.randID = bkHelper.generateID();
+scope.randID = generalUtils.generateID(10);
+console.log(scope.randID);
 /*Variable declaration end*/
 
 scope.downloadPic = function(format, id) {
@@ -271,5 +272,5 @@ $(window).resize(function() {
 
         }
       };
-    });
+    }]);
 })(); 
