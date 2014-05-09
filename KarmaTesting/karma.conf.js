@@ -20,13 +20,17 @@ module.exports = function (config) {
             'src/main/web/vendor/bower_components/angular-mocks/angular-mocks.js',
             'src/main/web/vendor/bower_components/underscore/underscore.js',
             'src/main/web/js/module/bkOutputDisplay.js',
+            'src/main/web/js/module/generalUtils.js',
             'src/main/web/vendor/bower_components/q/q.js',
             'src/main/web/js/beaker.js',
             //'http://localhost:3000/Testing/bkoFlotr2Line.js',
             //'http://localhost:3000/Testing/bkoFlotr2Line.spec.js'
             'src/main/web/js/outputDisplay/bkoFlotr2Line.js',
             'test/unit/main/web/js/outputDisplay/bkoFlotr2Line.spec1.js',
-            'test/unit/main/web/js/outputDisplay/bkoFlotr2Line.spec2.js'
+            'test/unit/main/web/js/outputDisplay/bkoFlotr2Line.spec2.js',
+            'test/unit/main/web/js/outputDisplay/bkoFlotr2Line.spec3.js',
+            'test/unit/main/web/js/outputDisplay/bkoFlotr2Line.spec4.js',
+            'test/unit/main/web/js/outputDisplay/bkoFlotr2Line.spec5.js'
         ],
 
 
