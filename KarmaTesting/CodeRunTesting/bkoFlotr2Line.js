@@ -73,11 +73,9 @@ var
     errors = ["Select the X axis.", "Select at least one Y axis.", "Enter numeric values.", "Max is smaller than Min.", "Interval <= 0.", "Please have at least two numeric columns."],
     graph;
 /********End OF Declaration*********/
-console.log("Line");
-console.log(jsObj);
-
 scope.output = {};
 scope.randID = generalUtils.generateID(10);
+
 scope.downloadPic = function(format) {
   if (Flotr.isIE && Flotr.isIE < 9) {
       alert(
@@ -349,7 +347,7 @@ function getOutputDisplay(){
 
   var xaxis = scope.xaxis;
 
-  var container = document.getElementById(scope.randID + 'container');
+  var container = element.find('#' + scope.randID + 'container')[0]; //document.getElementById(scope.randID + 'container');
   scope.checkContainer = container;
 
   //Set title
@@ -400,30 +398,30 @@ function getOutputDisplay(){
     );
   }
   // Actually draw the graph.
-  graph = drawGraph(); 
+  //graph = drawGraph(); 
 
   // Hook into the 'flotr:select' event.
-  Flotr.EventAdapter.observe(container, 'flotr:select', function (area) {
+  // Flotr.EventAdapter.observe(container, 'flotr:select', function (area) {
 
-    // Draw graph with new area
-    graph = drawGraph({
-      xaxis: {
-        title: finalXTitle,
-        min:area.x1, 
-        max:area.x2,
-        noTicks: calculateNewTick(area.x1, area.x2, scope.xinterval)
-      },
-      yaxis: {
-        title: finalYTitle,
-        min:area.y1, 
-        max:area.y2,
-        noTicks: calculateNewTick(area.y1, area.y2, scope.yinterval)
-      }
-    });
-  });
+  //   // Draw graph with new area
+  //   graph = drawGraph({
+  //     xaxis: {
+  //       title: finalXTitle,
+  //       min:area.x1, 
+  //       max:area.x2,
+  //       noTicks: calculateNewTick(area.x1, area.x2, scope.xinterval)
+  //     },
+  //     yaxis: {
+  //       title: finalYTitle,
+  //       min:area.y1, 
+  //       max:area.y2,
+  //       noTicks: calculateNewTick(area.y1, area.y2, scope.yinterval)
+  //     }
+  //   });
+  // });
 
   // When graph is clicked, draw the graph with default area.  
-  Flotr.EventAdapter.observe(container, 'flotr:click', function () { drawGraph(); });
+  //Flotr.EventAdapter.observe(container, 'flotr:click', function () { drawGraph(); });
 }
 
 /********End of Graph Functions*********/

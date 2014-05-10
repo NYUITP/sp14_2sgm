@@ -21,7 +21,7 @@
             +             '<button type="button" class="btn btn-mini" ng-click="downloadPic(\'jpeg\', pie.id)">JPEG</button>'
             +             '<button type="button" class="btn btn-mini" ng-click="downloadPic(\'png\', pie.id)">PNG</button>'
             +           '</div>'
-            +           '<div id="{{randID}}{{pie.id}}" style="height:384px;margin:8px auto">{{showGraph(pie)}}</div>'
+            +           '<div id="{{randID}}{{pie.id}}" style="height:384px;margin:8px auto">{{showGraph(pie, readyToGraph)}}</div>'
             +         '</div>'
             +         '<div class="span4 {{randID}}configuration" style="{{displayConf}}">'
             +           '<button class="btn btn-mini btn-danger" ng-click="removePie(pie.id)"><i class="icon-minus"></i>Remove Pie</button>'
@@ -29,7 +29,7 @@
             +           '<table>'
             +             '<tr><td><b>Category&nbsp;</b></td> <td><select ng-model="pie.category" ng-options="categoryOption.colName for categoryOption in categoryOptions"></select></td></tr>'
             +             '<tr><td><b>Size&nbsp;</b></td>     <td><select ng-model="pie.size" ng-options="sizeOption.colName for sizeOption in sizeOptions"></select></td></tr>'  
-            +             '<tr><td><b>Title&nbsp;</b></td>    <td><input ng-model="pie.title" type="text" class="input-medium" placeholder="Enter pie title"></td></tr>'     
+            +             '<tr><td><b>Title&nbsp;</b></td>    <td><input ng-model="pie.title" type="text" class="input-medium" placeholder="Enter pie title"></td></tr>'   
             +           '</table>'
             +         '</div>'
             +       '</div>'
@@ -54,8 +54,6 @@ scope.sizeOptions = [];
 scope.defaultPie;
 scope.randID = generalUtils.generateID(10);
 /*Variable declaration end*/
-console.log("Pie");
-console.log(jsObj);
 
 scope.downloadPic = function(format, id) {
   if (Flotr.isIE && Flotr.isIE < 9) {
@@ -88,6 +86,7 @@ function checkCol() {
 /*Error Checking*/
 scope.initReadyToGraph = function(){
   var opt;
+
   if(numCol<2) {
     scope.hideOrShowConf = " Hide ";
     scope.displayConf = "display:none;";
@@ -109,6 +108,7 @@ scope.initReadyToGraph = function(){
 /*Default Graph*/
 defaultGraph();
 function defaultGraph() {
+
   if(numCol>=2 && scope.sizeOptions.length>=1) {
     var size = scope.sizeOptions[0];
     var category;
@@ -143,17 +143,18 @@ scope.removePie = function(pieID) {
 /**/
 
 /*Pie Graph Functions*/
-scope.showGraph=function(pie) {
-  if(scope.readyToGraph) {
+scope.showGraph=function(pie, readyToGraph) {
+  if(readyToGraph) {
     getOutputDisplay(pie);
   }
 }
 
 function getOutputDisplay(pie){
   var data, finalTitle, container, graph;
-   data = getOnePieData(pie.size.colIndex, pie.category.colIndex);
-   var id = pie.id;
-   scope.output[id] = {};
+
+  data = getOnePieData(pie.size.colIndex, pie.category.colIndex);
+  var id = pie.id;
+  scope.output[id] = {};
   scope.output[id].inObj = jsObj;
   scope.output[id].processedData = data;
 
@@ -190,7 +191,7 @@ function getOutputDisplay(pie){
   };
 
 
-  graph = Flotr.draw(container, data, scope.output[id].graphSetting);
+  //graph = Flotr.draw(container, data, scope.output[i].graphSetting);
 
   if(pie.id >= graphs.length) {
     graphs.splice(pie.id, 0, graph);
@@ -198,7 +199,6 @@ function getOutputDisplay(pie){
   else {
     graphs[pie.id] = graph;
   }
-
 }
 
 function getOnePieData(size, category) {
@@ -262,7 +262,7 @@ $(window).resize(function() {
   var pie;
   for(var i = 0; i < scope.pieGroup.length; i++) {
     pie = scope.pieGroup[i];
-    scope.showGraph(pie);
+    scope.showGraph(pie, scope.readyToGraph);
   }
 });
 /*end of helper functions*/

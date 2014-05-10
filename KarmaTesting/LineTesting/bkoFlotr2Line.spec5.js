@@ -98,9 +98,12 @@ describe("Beaker Line: Working iPython input (Large # Of Numeric Columns)", func
   }));
 
     it("number of y options limit 15", function() {
-
-      expect(myScope.yAxisOptions.length).toBe(15);
-      expect(myScope.yAxisOptions[14].colName).toEqual("a14");
+      var numSelected = 0;
+      for(var i = 0; i < myScope.yAxisOptions.length; i++) {
+        if(myScope.yAxisOptions[i].colSelected===true)
+          numSelected+=1;
+      }
+      expect(numSelected).toBe(15);
 
     });
 

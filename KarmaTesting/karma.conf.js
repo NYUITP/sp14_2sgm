@@ -23,14 +23,20 @@ module.exports = function (config) {
             'src/main/web/js/module/generalUtils.js',
             'src/main/web/vendor/bower_components/q/q.js',
             'src/main/web/js/beaker.js',
-            //'http://localhost:3000/Testing/bkoFlotr2Line.js',
-            //'http://localhost:3000/Testing/bkoFlotr2Line.spec.js'
+            //Line testing
             'src/main/web/js/outputDisplay/bkoFlotr2Line.js',
             'test/unit/main/web/js/outputDisplay/bkoFlotr2Line.spec1.js',
             'test/unit/main/web/js/outputDisplay/bkoFlotr2Line.spec2.js',
             'test/unit/main/web/js/outputDisplay/bkoFlotr2Line.spec3.js',
             'test/unit/main/web/js/outputDisplay/bkoFlotr2Line.spec4.js',
-            'test/unit/main/web/js/outputDisplay/bkoFlotr2Line.spec5.js'
+            'test/unit/main/web/js/outputDisplay/bkoFlotr2Line.spec5.js',
+            //Pie testing
+            'src/main/web/js/outputDisplay/bkoFlotr2Pie.js',
+            'test/unit/main/web/js/outputDisplay/bkoFlotr2Pie.spec1.js',
+            'test/unit/main/web/js/outputDisplay/bkoFlotr2Pie.spec2.js',
+            'test/unit/main/web/js/outputDisplay/bkoFlotr2Pie.spec3.js',
+            'test/unit/main/web/js/outputDisplay/bkoFlotr2Pie.spec4.js',
+            'test/unit/main/web/js/outputDisplay/bkoFlotr2Pie.spec5.js'
         ],
 
 
